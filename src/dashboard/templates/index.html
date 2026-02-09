@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TelePhisDebate Dashboard</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/iconoir-icons/iconoir@7.11.0/css/iconoir.css" />
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <span class="nav-icon"><i class="iconoir-shield"></i></span>
+            <span class="nav-title">TelePhisDebate</span>
+        </div>
+        <div class="nav-right">
+            <a href="/evaluation" class="nav-link" title="Evaluation Results">
+                <i class="iconoir-clipboard-check"></i>
+                <span>Evaluation</span>
+            </a>
+            <div class="nav-status">
+                <span class="status-dot"></span>
+                <span id="lastUpdate">Loading...</span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- Stats Cards -->
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon safe"><i class="iconoir-shield-check"></i></div>
+                <div class="stat-content">
+                    <h3 id="statSafe">0</h3>
+                    <p>Safe Messages</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon suspicious"><i class="iconoir-warning-triangle"></i></div>
+                <div class="stat-content">
+                    <h3 id="statSuspicious">0</h3>
+                    <p>Suspicious</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon phishing"><i class="iconoir-shield-xmark"></i></div>
+                <div class="stat-content">
+                    <h3 id="statPhishing">0</h3>
+                    <p>Phishing</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon total"><i class="iconoir-graph-up"></i></div>
+                <div class="stat-content">
+                    <h3 id="statTotal">0</h3>
+                    <p>Total Messages</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Charts Row -->
+        <section class="charts-row">
+            <div class="chart-card">
+                <h3>Classification Distribution</h3>
+                <canvas id="classificationChart" width="150" height="150"></canvas>
+                <div class="chart-legend">
+                    <span><i class="dot safe"></i> Safe</span>
+                    <span><i class="dot suspicious"></i> Suspicious</span>
+                    <span><i class="dot phishing"></i> Phishing</span>
+                </div>
+            </div>
+            <div class="chart-card">
+                <h3>Detection by Stage</h3>
+                <canvas id="stageChart" width="150" height="150"></canvas>
+                <div class="chart-legend">
+                    <span><i class="dot triage"></i> Triage</span>
+                    <span><i class="dot single-shot"></i> Single-Shot</span>
+                    <span><i class="dot mad"></i> MAD</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Activity Chart -->
+        <section class="chart-card full-width">
+            <div class="chart-header">
+                <h3 id="activityTitle">Activity (Last 24 Hours)</h3>
+                <div class="range-selector">
+                    <button class="range-btn active" data-range="24h">24 Jam</button>
+                    <button class="range-btn" data-range="7d">1 Minggu</button>
+                    <button class="range-btn" data-range="30d">1 Bulan</button>
+                </div>
+            </div>
+            <canvas id="hourlyChart"></canvas>
+        </section>
+
+        <!-- Stage Performance -->
+        <section class="stage-performance">
+            <h2><i class="iconoir-stats-report"></i> Stage Performance</h2>
+            <div class="stage-grid">
+                <div class="stage-card triage">
+                    <h4><i class="iconoir-filter-list"></i> Triage</h4>
+                    <div class="stage-stats">
+                        <div>
+                            <span class="stage-value" id="triageCount">0</span>
+                            <span class="stage-label">Messages</span>
+                        </div>
+                        <div>
+                            <span class="stage-value" id="triageTime">0ms</span>
+                            <span class="stage-label">Avg Time</span>
+                        </div>
+                        <div>
+                            <span class="stage-value" id="triageTokens">0</span>
+                            <span class="stage-label">Tokens</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="stage-card single-shot">
+                    <h4><i class="iconoir-cpu"></i> Single-Shot LLM</h4>
+                    <div class="stage-stats">
+                        <div>
+                            <span class="stage-value" id="singleShotCount">0</span>
+                            <span class="stage-label">Messages</span>
+                        </div>
+                        <div>
+                            <span class="stage-value" id="singleShotTime">0ms</span>
+                            <span class="stage-label">Avg Time</span>
+                        </div>
+                        <div>
+                            <span class="stage-value" id="singleShotTokens">0</span>
+                            <span class="stage-label">Avg Tokens</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="stage-card mad">
+                    <h4><i class="iconoir-chat-bubble"></i> Multi-Agent Debate</h4>
+                    <div class="stage-stats">
+                        <div>
+                            <span class="stage-value" id="madCount">0</span>
+                            <span class="stage-label">Messages</span>
+                        </div>
+                        <div>
+                            <span class="stage-value" id="madTime">0ms</span>
+                            <span class="stage-label">Avg Time</span>
+                        </div>
+                        <div>
+                            <span class="stage-value" id="madTokens">0</span>
+                            <span class="stage-label">Avg Tokens</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Detections -->
+        <section class="recent-section">
+            <h2><i class="iconoir-warning-hexagon"></i> RECENT PHISHING DETECTIONS</h2>
+            <div class="table-container">
+                <table id="phishingTable">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Stage</th>
+                            <th>Confidence</th>
+                            <th>Flags</th>
+                        </tr>
+                    </thead>
+                    <tbody id="phishingTableBody">
+                        <tr>
+                            <td colspan="4" class="loading">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Agent Debates Section -->
+        <section class="debates-section">
+            <h2><i class="iconoir-strategy"></i> MULTI-AGENT DEBATE HISTORY</h2>
+            <p class="section-desc">Percakapan antar agent dalam menganalisis pesan mencurigakan — klik untuk expand</p>
+            
+            <div class="debates-scroll-container">
+                <div id="debatesContainer" class="debates-container">
+                    <div class="loading-placeholder">Loading debates...</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Messages -->
+        <section class="recent-section">
+            <h2><i class="iconoir-page"></i> RECENT PROCESSED MESSAGES</h2>
+            <div class="table-container messages-scroll-container">
+                <table id="messagesTable">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Content</th>
+                            <th>Classification</th>
+                            <th>Confidence</th>
+                        </tr>
+                    </thead>
+                    <tbody id="messagesTableBody">
+                        <tr>
+                            <td colspan="4" class="loading">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- API Usage -->
+        <section class="api-usage">
+            <h2><i class="iconoir-dollar-circle"></i> API USAGE & COST</h2>
+            <div class="usage-grid">
+                <div class="usage-card">
+                    <span class="usage-value" id="tokensInput">0</span>
+                    <span class="usage-label">Input Tokens</span>
+                </div>
+                <div class="usage-card">
+                    <span class="usage-value" id="tokensOutput">0</span>
+                    <span class="usage-label">Output Tokens</span>
+                </div>
+                <div class="usage-card">
+                    <span class="usage-value" id="totalRequests">0</span>
+                    <span class="usage-label">API Requests</span>
+                </div>
+                <div class="usage-card">
+                    <span class="usage-value" id="totalCost">$0.00</span>
+                    <span class="usage-label">Estimated Cost</span>
+                </div>
+            </div>
+            <div class="usage-pricing-info">
+                <span id="pricingInfo">Model: deepseek-chat | Input: $0.28/1M tokens | Output: $0.42/1M tokens</span>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>TelePhisDebate Dashboard | Multi-Agent Debate Phishing Detection</p>
+        <p>Auto-refresh every 30 seconds</p>
+    </footer>
+
+    <!-- Floating Detection Rate -->
+    <div class="detection-rate-float">
+        <span class="detection-rate-label">DETECTION</span>
+        <div class="detection-rate-value"><span id="detectionRate">0</span><small>%</small></div>
+    </div>
+
+    <script src="/static/js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluation Results — TelePhisDebate</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/iconoir-icons/iconoir@7.11.0/css/iconoir.css" />
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a href="/" class="nav-back" title="Back to Dashboard">
+                <i class="iconoir-arrow-left"></i>
+            </a>
+            <span class="nav-icon"><i class="iconoir-shield"></i></span>
+            <span class="nav-title">TelePhisDebate</span>
+            <span class="nav-separator">/</span>
+            <span class="nav-page-title">Evaluation</span>
+        </div>
+        <div class="nav-status">
+            <span id="evalTimestamp">Loading...</span>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- Header -->
+        <section class="eval-header">
+            <h1><i class="iconoir-clipboard-check"></i> EVALUATION RESULTS</h1>
+            <p class="section-desc">Hasil evaluasi pipeline deteksi phishing terhadap dataset uji</p>
+        </section>
+
+        <!-- Primary Metrics Cards -->
+        <section class="eval-metrics-grid">
+            <div class="eval-metric-card highlight">
+                <span class="eval-metric-value" id="metricAccuracy">—</span>
+                <span class="eval-metric-label">Accuracy</span>
+                <div class="eval-metric-bar">
+                    <div class="eval-metric-bar-fill" id="barAccuracy"></div>
+                </div>
+            </div>
+            <div class="eval-metric-card">
+                <span class="eval-metric-value" id="metricPrecision">—</span>
+                <span class="eval-metric-label">Precision</span>
+                <div class="eval-metric-bar">
+                    <div class="eval-metric-bar-fill" id="barPrecision"></div>
+                </div>
+            </div>
+            <div class="eval-metric-card">
+                <span class="eval-metric-value" id="metricRecall">—</span>
+                <span class="eval-metric-label">Recall</span>
+                <div class="eval-metric-bar">
+                    <div class="eval-metric-bar-fill" id="barRecall"></div>
+                </div>
+            </div>
+            <div class="eval-metric-card">
+                <span class="eval-metric-value" id="metricF1">—</span>
+                <span class="eval-metric-label">F1-Score</span>
+                <div class="eval-metric-bar">
+                    <div class="eval-metric-bar-fill" id="barF1"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Summary Stats Row -->
+        <section class="eval-summary-grid">
+            <div class="eval-summary-card">
+                <span class="eval-summary-icon"><i class="iconoir-page"></i></span>
+                <span class="eval-summary-value" id="summaryTotal">0</span>
+                <span class="eval-summary-label">Total Messages</span>
+            </div>
+            <div class="eval-summary-card correct">
+                <span class="eval-summary-icon"><i class="iconoir-check-circle"></i></span>
+                <span class="eval-summary-value" id="summaryCorrect">0</span>
+                <span class="eval-summary-label">Correct</span>
+            </div>
+            <div class="eval-summary-card wrong">
+                <span class="eval-summary-icon"><i class="iconoir-xmark-circle"></i></span>
+                <span class="eval-summary-value" id="summaryWrong">0</span>
+                <span class="eval-summary-label">Wrong</span>
+            </div>
+            <div class="eval-summary-card">
+                <span class="eval-summary-icon"><i class="iconoir-percentage"></i></span>
+                <span class="eval-summary-value" id="summaryDetectionRate">0%</span>
+                <span class="eval-summary-label">Detection Rate</span>
+            </div>
+        </section>
+
+        <!-- Charts Row: Confusion Matrix + Stage Distribution -->
+        <section class="eval-charts-row">
+            <!-- Confusion Matrix -->
+            <div class="eval-chart-card">
+                <h3><i class="iconoir-table-2-columns"></i> Confusion Matrix</h3>
+                <div class="confusion-matrix">
+                    <div class="cm-corner"></div>
+                    <div class="cm-header">Predicted PHISHING</div>
+                    <div class="cm-header">Predicted SAFE</div>
+                    <div class="cm-row-label">Actual PHISHING</div>
+                    <div class="cm-cell tp" id="cmTP">
+                        <span class="cm-value">0</span>
+                        <span class="cm-label">TP</span>
+                    </div>
+                    <div class="cm-cell fn" id="cmFN">
+                        <span class="cm-value">0</span>
+                        <span class="cm-label">FN</span>
+                    </div>
+                    <div class="cm-row-label">Actual SAFE</div>
+                    <div class="cm-cell fp" id="cmFP">
+                        <span class="cm-value">0</span>
+                        <span class="cm-label">FP</span>
+                    </div>
+                    <div class="cm-cell tn" id="cmTN">
+                        <span class="cm-value">0</span>
+                        <span class="cm-label">TN</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stage Distribution -->
+            <div class="eval-chart-card">
+                <h3><i class="iconoir-stats-report"></i> Stage Distribution</h3>
+                <canvas id="stageDistChart" width="130" height="130"></canvas>
+                <div class="stage-accuracy-grid" id="stageAccuracyGrid">
+                    <!-- Filled by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Prediction Distribution Charts -->
+        <section class="eval-charts-row">
+            <div class="eval-chart-card">
+                <h3><i class="iconoir-pie-chart"></i> Expected Distribution</h3>
+                <canvas id="expectedDistChart" width="110" height="110"></canvas>
+            </div>
+            <div class="eval-chart-card">
+                <h3><i class="iconoir-pie-chart"></i> Predicted Distribution</h3>
+                <canvas id="predictedDistChart" width="110" height="110"></canvas>
+            </div>
+        </section>
+
+        <!-- Performance Stats -->
+        <section class="eval-performance">
+            <h2><i class="iconoir-timer"></i> PERFORMANCE & COST</h2>
+            <div class="eval-perf-grid">
+                <div class="eval-perf-card">
+                    <span class="eval-perf-value" id="perfTotalTime">—</span>
+                    <span class="eval-perf-label">Total Time</span>
+                </div>
+                <div class="eval-perf-card">
+                    <span class="eval-perf-value" id="perfAvgTime">—</span>
+                    <span class="eval-perf-label">Avg per Message</span>
+                </div>
+                <div class="eval-perf-card">
+                    <span class="eval-perf-value" id="perfMinTime">—</span>
+                    <span class="eval-perf-label">Min Time</span>
+                </div>
+                <div class="eval-perf-card">
+                    <span class="eval-perf-value" id="perfMaxTime">—</span>
+                    <span class="eval-perf-label">Max Time</span>
+                </div>
+                <div class="eval-perf-card">
+                    <span class="eval-perf-value" id="perfTokensTotal">—</span>
+                    <span class="eval-perf-label">Total Tokens</span>
+                </div>
+                <div class="eval-perf-card">
+                    <span class="eval-perf-value" id="perfTokensIn">—</span>
+                    <span class="eval-perf-label">Input Tokens</span>
+                </div>
+                <div class="eval-perf-card">
+                    <span class="eval-perf-value" id="perfTokensOut">—</span>
+                    <span class="eval-perf-label">Output Tokens</span>
+                </div>
+                <div class="eval-perf-card highlight">
+                    <span class="eval-perf-value" id="perfCost">—</span>
+                    <span class="eval-perf-label">Total Cost</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Misclassifications Section -->
+        <section class="eval-misclass" id="misclassSection">
+            <h2><i class="iconoir-xmark-circle"></i> MISCLASSIFICATIONS (<span id="misclassCount">0</span>)</h2>
+            <p class="section-desc">Pesan yang salah diklasifikasi oleh pipeline</p>
+            <div class="table-container">
+                <table id="misclassTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Message</th>
+                            <th>Expected</th>
+                            <th>Predicted</th>
+                            <th>Stage</th>
+                            <th>Risk Score</th>
+                        </tr>
+                    </thead>
+                    <tbody id="misclassTableBody">
+                        <tr><td colspan="6" class="loading">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Per-Message Results Table -->
+        <section class="eval-details">
+            <h2><i class="iconoir-list"></i> ALL RESULTS (<span id="detailsCount">0</span>)</h2>
+            <p class="section-desc">Hasil evaluasi per pesan — scroll horizontal untuk detail lengkap</p>
+            <div class="table-container messages-scroll-container eval-table-scroll">
+                <table id="detailsTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Message</th>
+                            <th>Expected</th>
+                            <th>Predicted</th>
+                            <th>Result</th>
+                            <th>Confidence</th>
+                            <th>Stage</th>
+                            <th>Time (ms)</th>
+                            <th>Tokens</th>
+                            <th>Triage Flags</th>
+                        </tr>
+                    </thead>
+                    <tbody id="detailsTableBody">
+                        <tr><td colspan="10" class="loading">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>TelePhisDebate Evaluation | Multi-Agent Debate Phishing Detection</p>
+        <p id="evalFileInfo">—</p>
+    </footer>
+
+    <script src="/static/js/evaluation.js"></script>
+</body>
+</html>

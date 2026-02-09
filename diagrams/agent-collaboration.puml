@@ -1,0 +1,35 @@
+@startuml
+title Multi-Agent Collaboration (Dynamic Relations)
+
+left to right direction
+skinparam linetype ortho
+skinparam componentStyle rectangle
+
+component "Orchestrator\nMultiAgentDebate" as Orchestrator
+component "ContentAnalyzer\nAgent" as Content
+component "SecurityValidator\nAgent" as Security
+component "SocialContextEvaluator\nAgent" as Social
+component "VotingAggregator" as Aggregator
+
+Orchestrator --> Content : round 1 analyze()
+Orchestrator --> Security : round 1 analyze()
+Orchestrator --> Social : round 1 analyze()
+
+Content --> Aggregator : stance + arguments
+Security --> Aggregator : stance + arguments
+Social --> Aggregator : stance + arguments
+Aggregator --> Orchestrator : consensus?
+
+note "Round 2 optional:\nAgents receive peer summaries\nand may revise stance" as R2
+R2 .. Content
+R2 .. Security
+R2 .. Social
+
+Content ..> Security : peer context
+Content ..> Social : peer context
+Security ..> Content : peer context
+Security ..> Social : peer context
+Social ..> Content : peer context
+Social ..> Security : peer context
+
+@enduml

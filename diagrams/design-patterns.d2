@@ -1,0 +1,29 @@
+direction: right
+
+Triage: "Rule-Based Triage"
+Router: "Single-Shot LLM\n(LLM as Router)"
+MAD: "Multi-Agent Debate\n(Orchestration)"
+Agents: "Agents x3\n(Parallelization)"
+Reflect: "Round 2 Deliberation\n(Reflect & Critique)"
+Aggregator: "Voting Aggregator"
+Actions: "Actions"
+
+Triage -> Router: "risk signal"
+Router -> Actions: "final decision"
+Router -> MAD: "escalate when ambiguous"
+
+MAD -> Agents: "round 1 analyze (parallel)"
+Agents -> Reflect: "share arguments"
+Reflect -> Agents: "revise stance"
+Agents -> Aggregator: "votes"
+Aggregator -> Actions: "final decision"
+
+NoteRouter: "Pattern: LLM-as-router" { shape: note }
+NoteAgents: "Pattern: parallelization" { shape: note }
+NoteReflect: "Pattern: reflect-and-critique" { shape: note }
+NoteMAD: "Pattern: multi-agent orchestration" { shape: note }
+
+NoteRouter -> Router { style: { dashed: true } }
+NoteAgents -> Agents { style: { dashed: true } }
+NoteReflect -> Reflect { style: { dashed: true } }
+NoteMAD -> MAD { style: { dashed: true } }

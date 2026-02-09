@@ -1,0 +1,29 @@
+flowchart LR
+  %% Core actors
+  O["Orchestrator<br/>MultiAgentDebate"]
+  A["VotingAggregator"]
+  C["ContentAnalyzer<br/>Agent"]
+  S["SecurityValidator<br/>Agent"]
+  SC["SocialContextEvaluator<br/>Agent"]
+
+  %% Round 1: independent analysis
+  subgraph R1["Round 1: Independent Analysis"]
+    O -->|analyze| C
+    O -->|analyze| S
+    O -->|analyze| SC
+  end
+
+  %% Aggregation & consensus
+  C -->|stance + arguments| A
+  S -->|stance + arguments| A
+  SC -->|stance + arguments| A
+  A -->|consensus?| O
+
+  %% Round 2: optional peer context (virtual, dynamic)
+  subgraph R2["Round 2 (Optional): Peer Context Exchange"]
+    P["Peer Context<br/>(summaries + critiques)"]
+    O -.->|share summaries| P
+    P -.->|context| C
+    P -.->|context| S
+    P -.->|context| SC
+  end

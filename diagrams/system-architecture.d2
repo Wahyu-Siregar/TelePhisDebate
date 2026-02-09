@@ -1,0 +1,35 @@
+direction: right
+
+User: "Telegram User" { shape: circle }
+Telegram: "Telegram API" { shape: cloud }
+DeepSeek: "DeepSeek API\n(LLM)" { shape: cloud }
+Supabase: "Supabase" { shape: cylinder }
+
+"TelePhisDebate Runtime": {
+  Bot: "TelePhisBot\n(src/bot/bot.py)"
+  Handler: "MessageHandler\n(src/bot/handlers.py)"
+  Pipeline: "Detection Pipeline\n(src/detection/pipeline.py)"
+  Triage: "Rule-Based Triage\n(src/detection/triage/*)"
+  SingleShot: "Single-Shot LLM\n(src/detection/single_shot/classifier.py)"
+  MAD: "Multi-Agent Debate\n(src/detection/mad/*)"
+  Actions: "BotActions\n(src/bot/actions.py)"
+  Dashboard: "Dashboard (Flask)\n(src/dashboard/app.py)"
+}
+
+User -> Telegram: "send message"
+Telegram -> Bot: "update"
+Bot -> Handler: "dispatch update"
+Handler -> Pipeline: "process_message()"
+
+Pipeline -> Triage: "analyze()"
+Pipeline -> SingleShot: "classify()"
+SingleShot -> DeepSeek: "chat_completion()"
+Pipeline -> MAD: "run_debate()"
+MAD -> DeepSeek: "agent analysis (3x)"
+
+Pipeline -> Actions: "action decision"
+Actions -> Telegram: "warn/delete/notify"
+
+Handler -> Supabase: "log detection + messages"
+Dashboard -> Supabase: "read stats/logs"
+Telegram -> User: "warnings/status"

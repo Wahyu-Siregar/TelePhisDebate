@@ -1,0 +1,33 @@
+sequenceDiagram
+  actor User
+  participant Telegram as Telegram API
+  participant Bot as TelePhisBot
+  participant Handler as MessageHandler
+  participant Pipeline as DetectionPipeline
+  participant Triage as RuleBasedTriage
+  participant SingleShot as SingleShotClassifier
+  participant MAD as MultiAgentDebate
+  participant Actions as BotActions
+  participant DB as Supabase
+
+  User->>Telegram: send message
+  Telegram->>Bot: update
+  Bot->>Handler: handle_message()
+  Handler->>Pipeline: process_message(text, metadata)
+  Pipeline->>Triage: analyze()
+
+  alt Triage skip_llm = true
+    Pipeline-->>Handler: result SAFE
+  else Continue
+    Pipeline->>SingleShot: classify()
+    alt High confidence decision
+      SingleShot-->>Pipeline: classification + confidence
+    else Escalate to MAD
+      Pipeline->>MAD: run_debate()
+      MAD-->>Pipeline: decision + confidence
+    end
+  end
+
+  Pipeline->>Actions: execute_action()
+  Actions->>Telegram: warn/delete/notify
+  Handler->>DB: log detection + message

@@ -1,0 +1,48 @@
+direction: down
+
+"L1 Input / Perception": {
+  Msg: "Telegram Message"
+}
+
+"L2 Preprocessing & Features": {
+  Handler: "MessageHandler\nText + Sender Info"
+}
+
+"L3 Rule-Based Screening": {
+  Triage: "RuleBasedTriage\nWhitelist/Blacklist/Behavioral"
+}
+
+"L4 LLM Routing": {
+  SingleShot: "Single-Shot Classifier"
+}
+
+"L5 Agent Analysis": {
+  Content: "ContentAnalyzer"
+  Security: "SecurityValidator"
+  Social: "SocialContextEvaluator"
+}
+
+"L6 Multi-Agent Synthesis": {
+  Orchestrator: "Debate Orchestrator"
+  Aggregator: "VotingAggregator\nConsensus"
+}
+
+"L7 Action & Observability": {
+  Actions: "BotActions\nWarnings/Delete/Admin"
+  Logs: "Supabase Logs"
+  Dashboard: "Dashboard"
+}
+
+Msg -> Handler
+Handler -> Triage
+Triage -> SingleShot
+SingleShot -> Content
+SingleShot -> Security
+SingleShot -> Social
+Content -> Orchestrator
+Security -> Orchestrator
+Social -> Orchestrator
+Orchestrator -> Aggregator
+Aggregator -> Actions
+Handler -> Logs
+Dashboard -> Logs

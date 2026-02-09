@@ -1,0 +1,48 @@
+@startuml
+title Seven-Layer Architecture
+
+skinparam componentStyle rectangle
+skinparam linetype ortho
+top to bottom direction
+
+package "L7 Action & Observability" as L7 {
+  component "BotActions\nWarnings/Delete/Admin"
+  database "Supabase Logs"
+  component "Dashboard"
+}
+
+package "L6 Multi-Agent Synthesis" as L6 {
+  component "VotingAggregator\nConsensus"
+  component "Debate Orchestrator"
+}
+
+package "L5 Agent Analysis" as L5 {
+  component "ContentAnalyzer"
+  component "SecurityValidator"
+  component "SocialContextEvaluator"
+}
+
+package "L4 LLM Routing" as L4 {
+  component "Single-Shot Classifier"
+}
+
+package "L3 Rule-Based Screening" as L3 {
+  component "RuleBasedTriage\nWhitelist/Blacklist/Behavioral"
+}
+
+package "L2 Preprocessing & Features" as L2 {
+  component "MessageHandler\nText + Sender Info"
+}
+
+package "L1 Input / Perception" as L1 {
+  component "Telegram Message"
+}
+
+L1 --> L2
+L2 --> L3
+L3 --> L4
+L4 --> L5
+L5 --> L6
+L6 --> L7
+
+@enduml

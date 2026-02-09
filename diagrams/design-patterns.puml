@@ -1,0 +1,30 @@
+@startuml
+title Design Patterns in TelePhisDebate
+
+skinparam componentStyle rectangle
+skinparam linetype ortho
+
+component "Rule-Based Triage" as Triage
+component "Single-Shot LLM\n(LLM as Router)" as Router
+component "Multi-Agent Debate\n(Orchestration)" as MAD
+component "Agents x3\n(Parallelization)" as Agents
+component "Round 2 Deliberation\n(Reflect & Critique)" as Reflect
+component "Voting Aggregator" as Aggregator
+component "Actions" as Actions
+
+Triage --> Router : risk signal
+Router --> Actions : finalize decision
+Router --> MAD : escalate when ambiguous
+
+MAD --> Agents : round 1 analyze (parallel)
+Agents --> Reflect : share arguments
+Reflect --> Agents : revise stance
+Agents --> Aggregator : votes
+Aggregator --> Actions : final decision
+
+note right of Router : Pattern: LLM-as-router
+note right of Agents : Pattern: parallelization
+note right of Reflect : Pattern: reflect-and-critique
+note right of MAD : Pattern: multi-agent orchestration
+
+@enduml

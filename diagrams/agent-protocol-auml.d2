@@ -1,0 +1,40 @@
+direction: down
+
+Orchestrator: "Orchestrator\n<<agent>>"
+Content: "ContentAnalyzer\n<<agent>>"
+Security: "SecurityValidator\n<<agent>>"
+Social: "SocialContextEvaluator\n<<agent>>"
+Aggregator: "VotingAggregator\n<<agent>>"
+
+Orchestrator -> Aggregator: "init_debate()"
+Orchestrator -> Content: "analyze(message, context, single_shot)"
+Orchestrator -> Security: "analyze(message, context, single_shot)"
+Orchestrator -> Social: "analyze(message, context, single_shot)"
+
+Content -> Orchestrator: "vote + args"
+Security -> Orchestrator: "vote + args"
+Social -> Orchestrator: "vote + args"
+
+Orchestrator -> Aggregator: "check_consensus(votes)"
+Consensus: "Consensus?" { shape: diamond }
+Aggregator -> Consensus
+
+Consensus -> AggregateR1: "Yes" 
+Consensus -> Round2: "No"
+
+AggregateR1: "aggregate(round1)"
+Round2: "deliberate(peers)"
+Round2 -> Content: "deliberate()"
+Round2 -> Security: "deliberate()"
+Round2 -> Social: "deliberate()"
+
+Content -> Orchestrator: "revised vote"
+Security -> Orchestrator: "revised vote"
+Social -> Orchestrator: "revised vote"
+
+Orchestrator -> AggregateR12: "aggregate(round1, round2)"
+AggregateR12: "aggregate(round1, round2)"
+
+AggregateR1 -> Final: "final decision + confidence"
+AggregateR12 -> Final: "final decision + confidence"
+Final: "Final decision"
