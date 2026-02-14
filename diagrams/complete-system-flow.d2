@@ -1,0 +1,540 @@
+# TelePhisDebate - Complete System Flow (D2 Diagram)
+
+# ============== INPUT LAYER ==============
+telegram_input: {
+  label: "📱 Pesan Telegram Masuk"
+  icon: https://icons8.com/icon/63306/telegram-app
+  style.fill: "#e1f5fe"
+  style.stroke: "#01579b"
+}
+
+bot_filter: {
+  label: "🤖 Bot Filter"
+  shape: diamond
+  icon: https://icons8.com/icon/104038/bot
+  style.fill: "#e1f5fe"
+  style.stroke: "#01579b"
+}
+
+skip_message: {
+  label: "❌ Skip"
+  icon: https://icons8.com/icon/83149/cancel
+  style.fill: "#ffcccb"
+  style.stroke: "#d32f2f"
+}
+
+extract_features: {
+  label: "🔍 Extract Features"
+  icon: https://icons8.com/icon/132/search
+  style.fill: "#e1f5fe"
+  style.stroke: "#01579b"
+}
+
+# ============== PREPROCESSING ==============
+content_analysis: {
+  label: "📝 Content Analysis"
+  icon: https://icons8.com/icon/86208/document
+  style.fill: "#e1f5fe"
+  style.stroke: "#01579b"
+}
+
+url_extraction: {
+  label: "🔗 URL Extraction"
+  icon: https://icons8.com/icon/25175/link
+  style.fill: "#e1f5fe"
+  style.stroke: "#01579b"
+}
+
+sender_info: {
+  label: "👤 Sender Info"
+  icon: https://icons8.com/icon/23264/user
+  style.fill: "#e1f5fe"
+  style.stroke: "#01579b"
+}
+
+timestamp_analysis: {
+  label: "⏰ Timestamp Analysis"
+  icon: https://icons8.com/icon/59997/time
+  style.fill: "#e1f5fe"
+  style.stroke: "#01579b"
+}
+
+message_data: {
+  label: "📊 Message Data Object"
+  icon: https://icons8.com/icon/43623/database
+  style.fill: "#e1f5fe"
+  style.stroke: "#01579b"
+}
+
+# ============== STAGE 1: RULE-BASED TRIAGE ==============
+triage_stage: {
+  label: "🚦 Stage 1: Rule-Based Triage"
+  icon: https://icons8.com/icon/73/traffic-light
+  style.fill: "#f3e5f5"
+  style.stroke: "#4a148c"
+}
+
+whitelist_check: {
+  label: "✅ Whitelist Check"
+  shape: diamond
+  icon: https://icons8.com/icon/82461/verified-account
+  style.fill: "#f3e5f5"
+  style.stroke: "#4a148c"
+}
+
+safe_quick: {
+  label: "✅ SAFE - Quick Pass"
+  icon: https://icons8.com/icon/63308/security-checked
+  style.fill: "#e8f5e8"
+  style.stroke: "#2e7d32"
+}
+
+risk_scoring: {
+  label: "⚠️ Risk Scoring"
+  icon: https://icons8.com/icon/78389/error
+  style.fill: "#f3e5f5"
+  style.stroke: "#4a148c"
+}
+
+blacklist_check: {
+  label: "🚨 Blacklist Check"
+  icon: https://icons8.com/icon/37784/high-priority
+  style.fill: "#f3e5f5"
+  style.stroke: "#4a148c"
+}
+
+url_analysis: {
+  label: "🔍 URL Analysis"
+  icon: https://icons8.com/icon/25175/link
+  style.fill: "#f3e5f5"
+  style.stroke: "#4a148c"
+}
+
+behavior_anomaly: {
+  label: "📈 Behavioral Anomalies"
+  icon: https://icons8.com/icon/43048/combo-chart
+  style.fill: "#f3e5f5"
+  style.stroke: "#4a148c"
+}
+
+urgency_keywords: {
+  label: "⚡ Urgency Keywords"
+  icon: https://icons8.com/icon/37819/lightning-bolt
+  style.fill: "#f3e5f5"
+  style.stroke: "#4a148c"
+}
+
+risk_decision: {
+  label: "📊 Risk Score Decision"
+  shape: diamond
+  icon: https://icons8.com/icon/43623/database
+  style.fill: "#f3e5f5"
+  style.stroke: "#4a148c"
+}
+
+high_risk: {
+  label: "🔴 HIGH_RISK (≥30)"
+  icon: https://icons8.com/icon/37784/high-priority
+  style.fill: "#ffcccb"
+  style.stroke: "#d32f2f"
+}
+
+low_risk: {
+  label: "🟡 LOW_RISK (<30)"
+  icon: https://icons8.com/icon/37746/medium-priority
+  style.fill: "#fff3c4"
+  style.stroke: "#f57f17"
+}
+
+# ============== STAGE 2: SINGLE-SHOT LLM ==============
+single_shot_stage: {
+  label: "🧠 Stage 2: Single-Shot LLM"
+  icon: https://icons8.com/icon/108652/artificial-intelligence
+  style.fill: "#e8f5e8"
+  style.stroke: "#1b5e20"
+}
+
+deepseek_api: {
+  label: "🤖 DeepSeek API Call"
+  icon: https://icons8.com/icon/104038/bot
+  style.fill: "#e8f5e8"
+  style.stroke: "#1b5e20"
+}
+
+classification_result: {
+  label: "📋 Classification Result"
+  icon: https://icons8.com/icon/86208/document
+  style.fill: "#e8f5e8"
+  style.stroke: "#1b5e20"
+}
+
+escalation_decision: {
+  label: "🎯 Escalation Decision"
+  shape: diamond
+  icon: https://icons8.com/icon/53372/decision
+  style.fill: "#e8f5e8"
+  style.stroke: "#1b5e20"
+}
+
+final_classification: {
+  label: "📝 Final Classification"
+  shape: diamond
+  icon: https://icons8.com/icon/86208/document
+  style.fill: "#e8f5e8"
+  style.stroke: "#1b5e20"
+}
+
+escalate_mad: {
+  label: "⬆️ Escalate to MAD"
+  icon: https://icons8.com/icon/100000/up-arrow
+  style.fill: "#fff3e0"
+  style.stroke: "#e65100"
+}
+
+# ============== STAGE 3: MULTI-AGENT DEBATE ==============
+mad_stage: {
+  label: "🤝 Stage 3: Multi-Agent Debate"
+  icon: https://icons8.com/icon/86875/conference-call
+  style.fill: "#fff3e0"
+  style.stroke: "#e65100"
+}
+
+round1_analysis: {
+  label: "🔄 Round 1: Independent Analysis"
+  icon: https://icons8.com/icon/59997/time
+  style.fill: "#fff3e0"
+  style.stroke: "#e65100"
+}
+
+content_agent: {
+  label: "📝 Content Analyzer"
+  icon: https://icons8.com/icon/86208/document
+  style.fill: "#fff3e0"
+  style.stroke: "#e65100"
+}
+
+security_agent: {
+  label: "🔒 Security Validator"
+  icon: https://icons8.com/icon/63308/security-checked
+  style.fill: "#fff3e0"
+  style.stroke: "#e65100"
+}
+
+social_agent: {
+  label: "👥 Social Context Evaluator"
+  icon: https://icons8.com/icon/23264/user
+  style.fill: "#fff3e0"
+  style.stroke: "#e65100"
+}
+
+agent_response1: {
+  label: "📄 Agent Response 1"
+  icon: https://icons8.com/icon/86208/document
+  style.fill: "#fff3e0"
+  style.stroke: "#e65100"
+}
+
+agent_response2: {
+  label: "🛡️ Agent Response 2"
+  icon: https://icons8.com/icon/63308/security-checked
+  style.fill: "#fff3e0"
+  style.stroke: "#e65100"
+}
+
+agent_response3: {
+  label: "🌐 Agent Response 3"
+  icon: https://icons8.com/icon/86875/conference-call
+  style.fill: "#fff3e0"
+  style.stroke: "#e65100"
+}
+
+consensus_check: {
+  label: "🤔 Consensus Check"
+  shape: diamond
+  icon: https://icons8.com/icon/53372/decision
+  style.fill: "#fff3e0"
+  style.stroke: "#e65100"
+}
+
+strong_consensus: {
+  label: "✅ Strong Consensus"
+  icon: https://icons8.com/icon/82461/verified-account
+  style.fill: "#e8f5e8"
+  style.stroke: "#2e7d32"
+}
+
+round2_deliberation: {
+  label: "🔄 Round 2: Deliberation"
+  icon: https://icons8.com/icon/59997/time
+  style.fill: "#fff3e0"
+  style.stroke: "#e65100"
+}
+
+updated_response1: {
+  label: "📄 Updated Response 1"
+  icon: https://icons8.com/icon/86208/document
+  style.fill: "#fff3e0"
+  style.stroke: "#e65100"
+}
+
+updated_response2: {
+  label: "🛡️ Updated Response 2"
+  icon: https://icons8.com/icon/63308/security-checked
+  style.fill: "#fff3e0"
+  style.stroke: "#e65100"
+}
+
+updated_response3: {
+  label: "🌐 Updated Response 3"
+  icon: https://icons8.com/icon/86875/conference-call
+  style.fill: "#fff3e0"
+  style.stroke: "#e65100"
+}
+
+weighted_aggregation: {
+  label: "⚖️ Weighted Aggregation"
+  icon: https://icons8.com/icon/37819/lightning-bolt
+  style.fill: "#fff3e0"
+  style.stroke: "#e65100"
+}
+
+# ============== FINAL ACTIONS ==============
+action_delete: {
+  label: "🗑️ Delete Message + Warn"
+  icon: https://icons8.com/icon/67884/trash
+  style.fill: "#ffebee"
+  style.stroke: "#b71c1c"
+}
+
+action_flag: {
+  label: "🏴 Flag for Admin Review"
+  icon: https://icons8.com/icon/37784/high-priority
+  style.fill: "#ffebee"
+  style.stroke: "#b71c1c"
+}
+
+action_safe: {
+  label: "💚 No Action Required"
+  icon: https://icons8.com/icon/82461/verified-account
+  style.fill: "#e8f5e8"
+  style.stroke: "#2e7d32"
+}
+
+delete_original: {
+  label: "❌ Delete Original Message"
+  icon: https://icons8.com/icon/67884/trash
+  style.fill: "#ffebee"
+  style.stroke: "#b71c1c"
+}
+
+send_warning: {
+  label: "⚠️ Send Warning to Group"
+  icon: https://icons8.com/icon/78389/error
+  style.fill: "#ffebee"
+  style.stroke: "#b71c1c"
+}
+
+notify_admin: {
+  label: "🔔 Notify Admin"
+  icon: https://icons8.com/icon/37819/lightning-bolt
+  style.fill: "#ffebee"
+  style.stroke: "#b71c1c"
+}
+
+log_incident: {
+  label: "🗂️ Log Incident"
+  icon: https://icons8.com/icon/43623/database
+  style.fill: "#ffebee"
+  style.stroke: "#b71c1c"
+}
+
+mark_suspicious: {
+  label: "🏷️ Mark as Suspicious"
+  icon: https://icons8.com/icon/37746/medium-priority
+  style.fill: "#ffebee"
+  style.stroke: "#b71c1c"
+}
+
+admin_queue: {
+  label: "👨‍💼 Send to Admin Queue"
+  icon: https://icons8.com/icon/23264/user
+  style.fill: "#ffebee"
+  style.stroke: "#b71c1c"
+}
+
+log_review: {
+  label: "📝 Log for Review"
+  icon: https://icons8.com/icon/43623/database
+  style.fill: "#ffebee"
+  style.stroke: "#b71c1c"
+}
+
+update_baseline: {
+  label: "📈 Update User Baseline"
+  icon: https://icons8.com/icon/43048/combo-chart
+  style.fill: "#e8f5e8"
+  style.stroke: "#2e7d32"
+}
+
+normal_logging: {
+  label: "✅ Normal Logging"
+  icon: https://icons8.com/icon/43623/database
+  style.fill: "#e8f5e8"
+  style.stroke: "#2e7d32"
+}
+
+# ============== DATABASE & MONITORING ==============
+supabase_db: {
+  label: "🗄️ Supabase Database"
+  shape: cylinder
+  icon: https://icons8.com/icon/43623/database
+  style.fill: "#f5f5f5"
+  style.stroke: "#424242"
+}
+
+monitoring_dashboard: {
+  label: "📊 Monitoring Dashboard"
+  icon: https://icons8.com/icon/43048/combo-chart
+  style.fill: "#f5f5f5"
+  style.stroke: "#424242"
+}
+
+performance_metrics: {
+  label: "📈 Performance Metrics"
+  icon: https://icons8.com/icon/43048/combo-chart
+  style.fill: "#f5f5f5"
+  style.stroke: "#424242"
+}
+
+cost_alerts: {
+  label: "🚨 Cost & Error Alerts"
+  icon: https://icons8.com/icon/37784/high-priority
+  style.fill: "#f5f5f5"
+  style.stroke: "#424242"
+}
+
+# ============== EXTERNAL SERVICES ==============
+virustotal_api: {
+  label: "🔍 VirusTotal API"
+  icon: https://icons8.com/icon/132/search
+  style.fill: "#e1f5fe"
+  style.stroke: "#01579b"
+  style.stroke-dash: 5
+}
+
+deepseek_external: {
+  label: "🧠 DeepSeek API"
+  icon: https://icons8.com/icon/108652/artificial-intelligence
+  style.fill: "#e8f5e8"
+  style.stroke: "#1b5e20"
+  style.stroke-dash: 5
+}
+
+# ============== CONNECTIONS ==============
+
+# Input Flow
+telegram_input -> bot_filter
+bot_filter -> skip_message: "Bot/Admin Command"
+bot_filter -> extract_features: "User Message"
+
+# Preprocessing Flow
+extract_features -> content_analysis
+extract_features -> url_extraction
+extract_features -> sender_info
+extract_features -> timestamp_analysis
+content_analysis -> message_data
+url_extraction -> message_data  
+sender_info -> message_data
+timestamp_analysis -> message_data
+
+# Stage 1: Triage Flow
+message_data -> triage_stage
+triage_stage -> whitelist_check
+whitelist_check -> safe_quick: "Trusted Domain"
+whitelist_check -> risk_scoring: "Not Whitelisted"
+safe_quick -> action_safe
+
+risk_scoring -> blacklist_check
+risk_scoring -> url_analysis  
+risk_scoring -> behavior_anomaly
+risk_scoring -> urgency_keywords
+
+blacklist_check -> risk_decision
+url_analysis -> risk_decision
+behavior_anomaly -> risk_decision  
+urgency_keywords -> risk_decision
+
+risk_decision -> high_risk: "Score ≥ 30"
+risk_decision -> low_risk: "Score < 30"
+
+# Stage 2: Single-Shot LLM Flow
+high_risk -> single_shot_stage
+low_risk -> single_shot_stage
+
+single_shot_stage -> deepseek_api
+deepseek_api -> classification_result
+classification_result -> escalation_decision
+
+escalation_decision -> final_classification: "High Confidence" 
+escalation_decision -> escalate_mad: "Low Confidence/Suspicious"
+
+# Stage 3: MAD Flow
+escalate_mad -> mad_stage
+mad_stage -> round1_analysis
+
+round1_analysis -> content_agent
+round1_analysis -> security_agent
+round1_analysis -> social_agent
+
+content_agent -> agent_response1
+security_agent -> agent_response2
+social_agent -> agent_response3
+
+agent_response1 -> consensus_check
+agent_response2 -> consensus_check
+agent_response3 -> consensus_check
+
+consensus_check -> strong_consensus: "Unanimous Agreement"
+consensus_check -> round2_deliberation: "Disagreement"
+
+round2_deliberation -> updated_response1
+round2_deliberation -> updated_response2  
+round2_deliberation -> updated_response3
+
+strong_consensus -> weighted_aggregation
+updated_response1 -> weighted_aggregation
+updated_response2 -> weighted_aggregation
+updated_response3 -> weighted_aggregation
+
+weighted_aggregation -> final_classification
+
+# Final Actions Flow
+final_classification -> action_delete: "PHISHING + High Conf"
+final_classification -> action_flag: "PHISHING + Low Conf"  
+final_classification -> action_flag: "SUSPICIOUS"
+final_classification -> action_safe: "LEGITIMATE"
+
+action_delete -> delete_original
+action_delete -> send_warning
+action_delete -> notify_admin
+action_delete -> log_incident
+
+action_flag -> mark_suspicious
+action_flag -> admin_queue
+action_flag -> log_review
+
+action_safe -> update_baseline
+action_safe -> normal_logging
+
+# Database Flow
+log_incident -> supabase_db
+log_review -> supabase_db  
+normal_logging -> supabase_db
+
+supabase_db -> monitoring_dashboard
+monitoring_dashboard -> performance_metrics
+monitoring_dashboard -> cost_alerts
+
+# External Services (Dotted Lines)
+url_analysis -> virustotal_api: "API Call" {style.stroke-dash: 5}
+deepseek_api -> deepseek_external: "API Call" {style.stroke-dash: 5}

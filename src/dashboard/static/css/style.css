@@ -802,7 +802,7 @@ tr:hover {
 }
 
 /* ============================================================
-   API USAGE
+   INFERENCE ACTIVITY
    ============================================================ */
 .api-usage {
     margin-bottom: 1.5rem;
@@ -818,7 +818,7 @@ tr:hover {
 
 .usage-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 0;
     border: var(--border);
 }
@@ -848,17 +848,6 @@ tr:hover {
     text-transform: uppercase;
     letter-spacing: 0.1em;
     font-weight: 600;
-}
-
-.usage-pricing-info {
-    padding: 0.5rem 0.75rem;
-    background: var(--gray-100);
-    border: var(--border);
-    border-top: none;
-    font-size: 0.625rem;
-    color: var(--gray-500);
-    font-weight: 500;
-    letter-spacing: 0.02em;
 }
 
 /* ============================================================
@@ -1416,6 +1405,185 @@ tr:hover {
 }
 
 /* ============================================================
+   MAD COMPARISON PAGE
+   ============================================================ */
+.compare-header {
+    margin-bottom: 1.5rem;
+}
+
+.compare-header h1 {
+    font-size: 1.125rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.compare-header code {
+    background: var(--gray-100);
+    border: var(--border-thin);
+    padding: 0.125rem 0.25rem;
+}
+
+.compare-controls {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    border: var(--border);
+    padding: 0.375rem 0.5rem;
+    background: var(--white);
+}
+
+.compare-controls label {
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.compare-controls select {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    border: var(--border-thin);
+    padding: 0.125rem 0.375rem;
+    background: var(--gray-100);
+}
+
+.compare-run-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    border: var(--border);
+    margin-bottom: 1.5rem;
+}
+
+.compare-run-card {
+    padding: 1rem;
+    border-right: var(--border);
+    background: var(--white);
+}
+
+.compare-run-card:last-child {
+    border-right: none;
+}
+
+.compare-run-card h3 {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.75rem;
+}
+
+.compare-run-card p {
+    font-size: 0.6875rem;
+    margin-bottom: 0.375rem;
+    color: var(--gray-700);
+}
+
+.compare-status {
+    display: inline-block;
+    padding: 0.0625rem 0.375rem;
+    font-size: 0.5625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    border: var(--border-thin);
+}
+
+.compare-status.ready {
+    background: var(--black);
+    color: var(--white);
+}
+
+.compare-status.missing {
+    background: var(--gray-200);
+    color: var(--black);
+}
+
+.compare-section {
+    margin-bottom: 1.5rem;
+}
+
+.compare-section h2 {
+    font-size: 0.875rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.compare-table {
+    border: var(--border);
+}
+
+.compare-table tbody tr td:first-child {
+    font-weight: 700;
+}
+
+.delta,
+.winner-tag {
+    display: inline-block;
+    padding: 0.125rem 0.375rem;
+    font-size: 0.625rem;
+    font-weight: 700;
+    border: var(--border-thin);
+}
+
+.delta.better,
+.winner-tag.better {
+    background: var(--black);
+    color: var(--white);
+}
+
+.delta.worse,
+.winner-tag.worse {
+    background: var(--gray-200);
+    color: var(--black);
+}
+
+.delta.neutral,
+.winner-tag.neutral {
+    background: var(--white);
+    color: var(--black);
+}
+
+.compare-summary {
+    border: var(--border);
+    background: var(--white);
+    padding: 1rem;
+    font-size: 0.75rem;
+    color: var(--gray-800);
+}
+
+.compare-summary p {
+    margin-bottom: 0.5rem;
+}
+
+.compare-summary p:last-child {
+    margin-bottom: 0;
+}
+
+.compare-empty {
+    color: var(--gray-600);
+}
+
+.compare-empty code {
+    display: block;
+    margin-top: 0.375rem;
+    margin-bottom: 0.375rem;
+    background: var(--gray-100);
+    border: var(--border-thin);
+    padding: 0.125rem 0.25rem;
+    font-size: 0.6875rem;
+}
+
+/* ============================================================
    RESPONSIVE
    ============================================================ */
 @media (max-width: 1024px) {
@@ -1428,6 +1596,9 @@ tr:hover {
     .eval-metrics-grid .eval-metric-card:nth-child(1),
     .eval-metrics-grid .eval-metric-card:nth-child(2) { border-bottom: var(--border); }
     .eval-perf-grid { grid-template-columns: repeat(2, 1fr); }
+    .compare-run-grid { grid-template-columns: 1fr; }
+    .compare-run-card { border-right: none; border-bottom: var(--border); }
+    .compare-run-card:last-child { border-bottom: none; }
 }
 
 @media (max-width: 768px) {
@@ -1446,8 +1617,11 @@ tr:hover {
     .usage-grid { grid-template-columns: repeat(2, 1fr); }
     .usage-card { border-bottom: var(--border); }
     .usage-card:nth-child(2) { border-right: none; }
-    .usage-card:nth-child(3) { border-bottom: none; }
-    .usage-card:nth-child(4) { border-right: none; border-bottom: none; }
+    .usage-card:nth-child(3) {
+        grid-column: 1 / -1;
+        border-right: none;
+        border-bottom: none;
+    }
     .navbar { padding: 0.5rem 0.75rem; }
     .footer { flex-direction: column; gap: 0.25rem; text-align: center; }
     .debates-scroll-container { max-height: 400px; }

@@ -8,7 +8,7 @@ import glob
 import json
 import csv
 from datetime import datetime, timedelta
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 from flask_cors import CORS
 
 from src.config import config
@@ -37,6 +37,178 @@ def create_app():
     
     # Initialize database
     db = get_supabase_client()
+
+    def _format_eval_timestamp(timestamp_str: str) -> str:
+        """Convert evaluation filename timestamp into display format."""
+        try:
+            return datetime.strptime(timestamp_str, "%Y%m%d_%H%M%S").strftime(
+                "%Y-%m-%d %H:%M:%S"
+            )
+        except ValueError:
+            return timestamp_str
+
+    def _load_eval_details(details_path: str | None) -> list[dict]:
+        """Load evaluation details CSV with encoding fallback."""
+        details: list[dict] = []
+        if not details_path or not os.path.exists(details_path):
+            return details
+
+        encodings = ["utf-8-sig", "utf-8", "latin-1"]
+        for enc in encodings:
+            try:
+                with open(details_path, "r", encoding=enc) as f:
+                    reader = csv.DictReader(f)
+                    for row in reader:
+                        details.append(
+                            {
+                                "index": int(row.get("index", 0)),
+                                "text": row.get("text", "")[:150],
+                                "expected": row.get("expected", ""),
+                                "predicted": row.get("predicted", ""),
+                                "correct": row.get("correct", "") == "True",
+                                "confidence": float(row.get("confidence", 0) or 0),
+                                "decided_by": row.get("decided_by", ""),
+                                "action": row.get("action", ""),
+                                "processing_time_ms": int(
+                                    row.get("processing_time_ms", 0) or 0
+                                ),
+                                "tokens_total": int(row.get("tokens_total", 0) or 0),
+                                "tokens_input": int(row.get("tokens_input", 0) or 0),
+                                "tokens_output": int(row.get("tokens_output", 0) or 0),
+                                "triage_risk_score": int(
+                                    row.get("triage_risk_score", 0) or 0
+                                ),
+                                "triage_flags": row.get("triage_flags", ""),
+                                "error": row.get("error", ""),
+                            }
+                        )
+                break
+            except (UnicodeDecodeError, KeyError):
+                continue
+        return details
+
+    def _metric_snapshot(eval_data: dict | None) -> dict | None:
+        """Extract compact metric view for comparison pages."""
+        if not eval_data:
+            return None
+        metrics = eval_data.get("metrics", {})
+        return {
+            "accuracy": metrics.get("accuracy", 0),
+            "precision": metrics.get("precision", 0),
+            "recall": metrics.get("recall", 0),
+            "f1_score": metrics.get("f1_score", 0),
+            "detection_rate": metrics.get("detection_rate", 0),
+            "avg_time_ms": metrics.get("avg_time_ms", 0),
+            "avg_tokens_per_msg": metrics.get("avg_tokens_per_msg", 0),
+            "total_cost_usd": metrics.get("total_cost_usd", 0),
+            "total": metrics.get("total", 0),
+            "correct": metrics.get("correct", 0),
+            "wrong": metrics.get("wrong", 0),
+            "stage_distribution": metrics.get("stage_distribution", {}),
+        }
+
+    def _load_evaluation_by_timestamp(
+        base_dir: str,
+        timestamp_str: str,
+        full_path: str | None = None
+    ) -> dict | None:
+        """Load one evaluation run from a directory and timestamp key."""
+        metrics_path = os.path.join(base_dir, f"eval_metrics_{timestamp_str}.json")
+        if not os.path.exists(metrics_path):
+            return None
+
+        details_path = os.path.join(base_dir, f"eval_details_{timestamp_str}.csv")
+        if not os.path.exists(details_path):
+            details_path = None
+
+        if not full_path:
+            candidate_full = os.path.join(base_dir, f"eval_full_{timestamp_str}.json")
+            full_path = candidate_full if os.path.exists(candidate_full) else None
+
+        with open(metrics_path, "r", encoding="utf-8") as f:
+            metrics = json.load(f)
+
+        details = _load_eval_details(details_path)
+        wrong_predictions = [d for d in details if not d["correct"]]
+
+        full_data = {}
+        if full_path and os.path.exists(full_path):
+            try:
+                with open(full_path, "r", encoding="utf-8") as f:
+                    full_data = json.load(f)
+            except Exception:
+                full_data = {}
+
+        return {
+            "metrics": metrics,
+            "details": details,
+            "wrong_predictions": wrong_predictions,
+            "eval_timestamp": _format_eval_timestamp(timestamp_str),
+            "eval_mode": full_data.get("eval_mode", "pipeline"),
+            "mad_mode": full_data.get("mad_mode"),
+            "run_dir": os.path.relpath(base_dir, project_root),
+            "timestamp_key": timestamp_str,
+            "files": {
+                "metrics": os.path.basename(metrics_path),
+                "details": os.path.basename(details_path) if details_path else None,
+                "full": os.path.basename(full_path) if full_path else None,
+            },
+        }
+
+    def _load_latest_evaluation(base_dir: str) -> dict | None:
+        """Load latest evaluation run from a specific directory."""
+        metrics_files = sorted(glob.glob(os.path.join(base_dir, "eval_metrics_*.json")))
+        if not metrics_files:
+            return None
+
+        latest_metrics = metrics_files[-1]
+        timestamp_str = os.path.basename(latest_metrics).replace(
+            "eval_metrics_", ""
+        ).replace(".json", "")
+
+        full_path = os.path.join(base_dir, f"eval_full_{timestamp_str}.json")
+        if not os.path.exists(full_path):
+            full_path = None
+
+        return _load_evaluation_by_timestamp(base_dir, timestamp_str, full_path=full_path)
+
+    def _find_latest_evaluation_recursive(
+        mad_mode: str | None = None,
+        eval_mode: str | None = None
+    ) -> dict | None:
+        """Find latest evaluation recursively in results/ filtered by modes."""
+        full_files = sorted(
+            glob.glob(os.path.join(results_dir, "**", "eval_full_*.json"), recursive=True),
+            key=os.path.getmtime,
+            reverse=True
+        )
+
+        for full_path in full_files:
+            try:
+                with open(full_path, "r", encoding="utf-8") as f:
+                    full_data = json.load(f)
+            except Exception:
+                continue
+
+            run_mad_mode = full_data.get("mad_mode")
+            run_eval_mode = full_data.get("eval_mode", "pipeline")
+
+            if mad_mode and run_mad_mode != mad_mode:
+                continue
+            if eval_mode and run_eval_mode != eval_mode:
+                continue
+
+            base_dir = os.path.dirname(full_path)
+            timestamp_str = os.path.basename(full_path).replace(
+                "eval_full_", ""
+            ).replace(".json", "")
+            run = _load_evaluation_by_timestamp(
+                base_dir, timestamp_str, full_path=full_path
+            )
+            if run:
+                return run
+
+        return None
     
     # ============================================================
     # Routes
@@ -51,76 +223,166 @@ def create_app():
     def evaluation():
         """Evaluation results page"""
         return render_template('evaluation.html')
+
+    @app.route('/evaluation/compare')
+    def evaluation_compare():
+        """MAD comparison page (mad3 vs mad5)."""
+        return render_template('mad_compare.html')
+
+    @app.route('/evaluation/modes')
+    def evaluation_modes():
+        """Pipeline vs MAD-only comparison page."""
+        return render_template('evaluation_modes.html')
     
     @app.route('/api/evaluation')
     def get_evaluation_data():
         """Get latest evaluation results from results/ directory"""
         try:
-            # Find latest metrics JSON
-            metrics_files = sorted(glob.glob(os.path.join(results_dir, 'eval_metrics_*.json')))
-            details_files = sorted(glob.glob(os.path.join(results_dir, 'eval_details_*.csv')))
-            
-            if not metrics_files:
+            eval_data = _load_latest_evaluation(results_dir)
+            if not eval_data:
+                eval_data = _find_latest_evaluation_recursive()
+            if not eval_data:
                 return jsonify({"error": "No evaluation results found"}), 404
+            return jsonify(eval_data)
             
-            # Read latest metrics
-            latest_metrics = metrics_files[-1]
-            with open(latest_metrics, 'r', encoding='utf-8') as f:
-                metrics = json.load(f)
-            
-            # Read latest details CSV
-            details = []
-            if details_files:
-                latest_details = details_files[-1]
-                encodings = ['utf-8-sig', 'utf-8', 'latin-1']
-                for enc in encodings:
-                    try:
-                        with open(latest_details, 'r', encoding=enc) as f:
-                            reader = csv.DictReader(f)
-                            for row in reader:
-                                details.append({
-                                    "index": int(row.get("index", 0)),
-                                    "text": row.get("text", "")[:150],
-                                    "expected": row.get("expected", ""),
-                                    "predicted": row.get("predicted", ""),
-                                    "correct": row.get("correct", "") == "True",
-                                    "confidence": float(row.get("confidence", 0) or 0),
-                                    "decided_by": row.get("decided_by", ""),
-                                    "action": row.get("action", ""),
-                                    "processing_time_ms": int(row.get("processing_time_ms", 0) or 0),
-                                    "tokens_total": int(row.get("tokens_total", 0) or 0),
-                                    "tokens_input": int(row.get("tokens_input", 0) or 0),
-                                    "tokens_output": int(row.get("tokens_output", 0) or 0),
-                                    "triage_risk_score": int(row.get("triage_risk_score", 0) or 0),
-                                    "triage_flags": row.get("triage_flags", ""),
-                                    "error": row.get("error", "")
-                                })
-                        break
-                    except (UnicodeDecodeError, KeyError):
-                        continue
-            
-            # Extract timestamp from filename
-            filename = os.path.basename(latest_metrics)
-            timestamp_str = filename.replace("eval_metrics_", "").replace(".json", "")
-            try:
-                eval_timestamp = datetime.strptime(timestamp_str, "%Y%m%d_%H%M%S").strftime("%Y-%m-%d %H:%M:%S")
-            except ValueError:
-                eval_timestamp = timestamp_str
-            
-            # Separate correct and wrong predictions
-            wrong_predictions = [d for d in details if not d["correct"]]
-            
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
+    @app.route('/api/evaluation/compare')
+    def get_evaluation_comparison():
+        """Compare latest MAD3 and MAD5 evaluation runs."""
+        try:
+            requested_eval_mode = request.args.get("eval_mode", "pipeline")
+            if requested_eval_mode not in {"pipeline", "mad_only"}:
+                return jsonify({"error": "eval_mode must be 'pipeline' or 'mad_only'"}), 400
+
+            if requested_eval_mode == "pipeline":
+                mad3_dir = os.path.join(results_dir, "mad3")
+                mad5_dir = os.path.join(results_dir, "mad5")
+            else:
+                mad3_dir = os.path.join(results_dir, "mad3_mad_only")
+                mad5_dir = os.path.join(results_dir, "mad5_mad_only")
+
+            mad3 = _load_latest_evaluation(mad3_dir) or _find_latest_evaluation_recursive(
+                mad_mode="mad3", eval_mode=requested_eval_mode
+            )
+            mad5 = _load_latest_evaluation(mad5_dir) or _find_latest_evaluation_recursive(
+                mad_mode="mad5", eval_mode=requested_eval_mode
+            )
+
+            if not mad3 and not mad5:
+                return jsonify({
+                    "error": (
+                        f"No MAD comparison runs found for eval_mode='{requested_eval_mode}'. "
+                        "Run evaluate.py first and save results."
+                    )
+                }), 404
+
+            mad3_metrics = _metric_snapshot(mad3)
+            mad5_metrics = _metric_snapshot(mad5)
+
+            deltas = {}
+            if mad3_metrics and mad5_metrics:
+                for key in [
+                    "accuracy",
+                    "precision",
+                    "recall",
+                    "f1_score",
+                    "detection_rate",
+                    "avg_time_ms",
+                    "avg_tokens_per_msg",
+                    "total_cost_usd",
+                ]:
+                    deltas[key] = mad5_metrics.get(key, 0) - mad3_metrics.get(key, 0)
+
             return jsonify({
-                "metrics": metrics,
-                "details": details,
-                "wrong_predictions": wrong_predictions,
-                "eval_timestamp": eval_timestamp,
-                "files": {
-                    "metrics": os.path.basename(latest_metrics),
-                    "details": os.path.basename(details_files[-1]) if details_files else None
-                }
+                "requested_eval_mode": requested_eval_mode,
+                "mad3": {
+                    "available": mad3 is not None,
+                    "eval_mode": mad3.get("eval_mode") if mad3 else None,
+                    "mad_mode": mad3.get("mad_mode") if mad3 else "mad3",
+                    "run_dir": mad3.get("run_dir") if mad3 else os.path.relpath(mad3_dir, project_root),
+                    "timestamp": mad3.get("eval_timestamp") if mad3 else None,
+                    "files": mad3.get("files") if mad3 else None,
+                    "metrics": mad3_metrics,
+                },
+                "mad5": {
+                    "available": mad5 is not None,
+                    "eval_mode": mad5.get("eval_mode") if mad5 else None,
+                    "mad_mode": mad5.get("mad_mode") if mad5 else "mad5",
+                    "run_dir": mad5.get("run_dir") if mad5 else os.path.relpath(mad5_dir, project_root),
+                    "timestamp": mad5.get("eval_timestamp") if mad5 else None,
+                    "files": mad5.get("files") if mad5 else None,
+                    "metrics": mad5_metrics,
+                },
+                "deltas": deltas,
             })
-            
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
+    @app.route('/api/evaluation/modes')
+    def get_evaluation_mode_comparison():
+        """Compare pipeline vs mad_only for a selected MAD variant."""
+        try:
+            mad_mode = request.args.get("mad_mode", "mad5")
+            if mad_mode not in {"mad3", "mad5"}:
+                return jsonify({"error": "mad_mode must be 'mad3' or 'mad5'"}), 400
+
+            default_pipeline_dir = os.path.join(results_dir, mad_mode)
+            default_mad_only_dir = os.path.join(results_dir, f"{mad_mode}_mad_only")
+
+            pipeline_run = _load_latest_evaluation(default_pipeline_dir) or _find_latest_evaluation_recursive(
+                mad_mode=mad_mode, eval_mode="pipeline"
+            )
+            mad_only_run = _load_latest_evaluation(default_mad_only_dir) or _find_latest_evaluation_recursive(
+                mad_mode=mad_mode, eval_mode="mad_only"
+            )
+
+            if not pipeline_run and not mad_only_run:
+                return jsonify({
+                    "error": (
+                        f"No runs found for {mad_mode}. "
+                        "Run evaluate.py for both eval modes first."
+                    )
+                }), 404
+
+            pipeline_metrics = _metric_snapshot(pipeline_run)
+            mad_only_metrics = _metric_snapshot(mad_only_run)
+
+            deltas = {}
+            if pipeline_metrics and mad_only_metrics:
+                for key in [
+                    "accuracy",
+                    "precision",
+                    "recall",
+                    "f1_score",
+                    "detection_rate",
+                    "avg_time_ms",
+                    "avg_tokens_per_msg",
+                    "total_cost_usd",
+                ]:
+                    deltas[key] = mad_only_metrics.get(key, 0) - pipeline_metrics.get(key, 0)
+
+            return jsonify({
+                "mad_mode": mad_mode,
+                "pipeline": {
+                    "available": pipeline_run is not None,
+                    "eval_mode": pipeline_run.get("eval_mode") if pipeline_run else "pipeline",
+                    "run_dir": pipeline_run.get("run_dir") if pipeline_run else os.path.relpath(default_pipeline_dir, project_root),
+                    "timestamp": pipeline_run.get("eval_timestamp") if pipeline_run else None,
+                    "files": pipeline_run.get("files") if pipeline_run else None,
+                    "metrics": pipeline_metrics,
+                },
+                "mad_only": {
+                    "available": mad_only_run is not None,
+                    "eval_mode": mad_only_run.get("eval_mode") if mad_only_run else "mad_only",
+                    "run_dir": mad_only_run.get("run_dir") if mad_only_run else os.path.relpath(default_mad_only_dir, project_root),
+                    "timestamp": mad_only_run.get("eval_timestamp") if mad_only_run else None,
+                    "files": mad_only_run.get("files") if mad_only_run else None,
+                    "metrics": mad_only_metrics,
+                },
+                "deltas": deltas,
+            })
         except Exception as e:
             return jsonify({"error": str(e)}), 500
     
@@ -128,17 +390,31 @@ def create_app():
     def list_evaluations():
         """List all available evaluation runs"""
         try:
-            metrics_files = sorted(glob.glob(os.path.join(results_dir, 'eval_metrics_*.json')))
-            
+            full_files = sorted(
+                glob.glob(os.path.join(results_dir, "**", "eval_full_*.json"), recursive=True),
+                key=os.path.getmtime,
+                reverse=True
+            )
+
             evaluations = []
-            for f in metrics_files:
-                filename = os.path.basename(f)
-                timestamp_str = filename.replace("eval_metrics_", "").replace(".json", "")
+            for full_path in full_files:
                 try:
-                    ts = datetime.strptime(timestamp_str, "%Y%m%d_%H%M%S").strftime("%Y-%m-%d %H:%M:%S")
-                except ValueError:
-                    ts = timestamp_str
-                evaluations.append({"file": filename, "timestamp": ts})
+                    with open(full_path, "r", encoding="utf-8") as f:
+                        full_data = json.load(f)
+                except Exception:
+                    continue
+
+                filename = os.path.basename(full_path)
+                timestamp_str = filename.replace("eval_full_", "").replace(".json", "")
+                evaluations.append(
+                    {
+                        "file": filename,
+                        "timestamp": _format_eval_timestamp(timestamp_str),
+                        "run_dir": os.path.relpath(os.path.dirname(full_path), project_root),
+                        "mad_mode": full_data.get("mad_mode"),
+                        "eval_mode": full_data.get("eval_mode", "pipeline"),
+                    }
+                )
             
             return jsonify(evaluations)
             
@@ -422,11 +698,7 @@ def create_app():
     
     @app.route('/api/usage')
     def get_api_usage():
-        """Get API usage statistics with cost breakdown"""
-        
-        # DeepSeek pricing per token (cache miss)
-        COST_PER_INPUT_TOKEN = 0.28 / 1_000_000   # $0.28 per 1M tokens
-        COST_PER_OUTPUT_TOKEN = 0.42 / 1_000_000   # $0.42 per 1M tokens
+        """Get inference activity statistics (tokens/requests/stage breakdown)."""
         
         try:
             # Try api_usage table first
@@ -436,7 +708,7 @@ def create_app():
             
             total_tokens_in = 0
             total_tokens_out = 0
-            total_cost = 0
+            total_cost_legacy = 0
             total_requests = 0
             stage_breakdown = {
                 "triage": {"requests": 0, "tokens": 0},
@@ -449,12 +721,12 @@ def create_app():
                 for record in usage.data:
                     tokens_in = record.get("total_tokens_input", 0) or 0
                     tokens_out = record.get("total_tokens_output", 0) or 0
-                    cost = float(record.get("estimated_cost_usd", 0) or 0)
+                    cost_legacy = float(record.get("estimated_cost_usd", 0) or 0)
                     requests = record.get("total_requests", 0) or 0
                     
                     total_tokens_in += tokens_in
                     total_tokens_out += tokens_out
-                    total_cost += cost
+                    total_cost_legacy += cost_legacy
                     total_requests += requests
                     
                     # Accumulate stage breakdown
@@ -468,11 +740,11 @@ def create_app():
                         "date": record.get("date", ""),
                         "tokens_input": tokens_in,
                         "tokens_output": tokens_out,
-                        "cost": round(cost, 6),
+                        "cost_legacy": round(cost_legacy, 6),
                         "requests": requests
                     })
             else:
-                # Fallback: calculate from detection_logs if api_usage is empty
+                # Fallback: aggregate from detection_logs if api_usage is empty
                 logs = db.table("detection_logs").select(
                     "stage, tokens_input, tokens_output"
                 ).limit(1000).execute()
@@ -489,25 +761,17 @@ def create_app():
                             stage_breakdown[stage]["requests"] += 1
                             stage_breakdown[stage]["tokens"] += t_in + t_out
                     
-                    total_cost = (
-                        total_tokens_in * COST_PER_INPUT_TOKEN +
-                        total_tokens_out * COST_PER_OUTPUT_TOKEN
-                    )
                     total_requests = len(logs.data)
             
             return jsonify({
                 "total_tokens": total_tokens_in + total_tokens_out,
                 "tokens_input": total_tokens_in,
                 "tokens_output": total_tokens_out,
-                "total_cost": round(total_cost, 6),
+                "total_cost_legacy": round(total_cost_legacy, 6),
                 "total_requests": total_requests,
                 "stage_breakdown": stage_breakdown,
                 "daily_records": daily_records[:30],
-                "pricing": {
-                    "input_per_1m": 0.28,
-                    "output_per_1m": 0.42,
-                    "model": "deepseek-chat (DeepSeek-V3.2)"
-                }
+                "pricing_legacy": None
             })
             
         except Exception as e:
@@ -638,11 +902,39 @@ def create_app():
 
 
 def run_dashboard(host="0.0.0.0", port=5000, debug=False):
-    """Run the dashboard server"""
+    """Run dashboard server with automatic fallback ports on bind failure."""
     app = create_app()
-    print(f"\n🌐 Dashboard running at http://{host}:{port}")
-    print("   Press Ctrl+C to stop\n")
-    app.run(host=host, port=port, debug=debug)
+    fallback_ports = [5001, 5050, 8000, 8080]
+    candidate_ports: list[int] = []
+
+    for candidate in [port, *fallback_ports]:
+        if candidate not in candidate_ports:
+            candidate_ports.append(candidate)
+
+    last_error: Exception | None = None
+
+    for selected_port in candidate_ports:
+        try:
+            print(f"\n🌐 Dashboard running at http://{host}:{selected_port}")
+            print("   Press Ctrl+C to stop\n")
+            app.run(host=host, port=selected_port, debug=debug)
+            return
+        except OSError as exc:
+            last_error = exc
+            err_text = str(exc).lower()
+            winerror = getattr(exc, "winerror", None)
+
+            is_blocked = winerror == 10013 or "forbidden by its access permissions" in err_text
+            is_in_use = winerror == 10048 or "address already in use" in err_text
+
+            if is_blocked or is_in_use:
+                reason = "forbidden" if is_blocked else "already in use"
+                print(f"⚠️  Port {selected_port} {reason}, trying next port...")
+                continue
+            raise
+
+    if last_error:
+        raise last_error
 
 
 if __name__ == "__main__":

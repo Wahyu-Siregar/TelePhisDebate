@@ -26,7 +26,7 @@ The system is designed for Indonesian academic Telegram groups, specifically tar
 - **URL Security Analysis** — VirusTotal integration, URL expansion, heuristic checks
 - **Web Dashboard** — Real-time monitoring with brutalism B&W design
 - **Evaluation Framework** — Built-in tools for accuracy/precision/recall/F1 testing
-- **Cost Efficient** — Trivial messages resolved at triage (no API cost), only ambiguous cases escalate
+- **Decision-Focused Pipeline** — Trivial messages resolved at triage, ambiguous cases escalated for deeper analysis
 
 ---
 
@@ -62,11 +62,11 @@ Supabase  VirusTotal  Dashboard
 
 ### Pipeline Stages
 
-| Stage | Method | Purpose | API Cost |
-|-------|--------|---------|----------|
-| **1. Triage** | Rule-based (whitelist, blacklist, behavioral, URL analysis) | Fast filter — safe messages skip LLM | Free |
-| **2. Single-Shot** | DeepSeek LLM classification | AI classification for non-trivial messages | ~2K tokens |
-| **3. MAD** | 3 agents × 2 rounds debate | Resolve ambiguous cases via consensus | ~6K tokens |
+| Stage | Method | Purpose |
+|-------|--------|---------|
+| **1. Triage** | Rule-based (whitelist, blacklist, behavioral, URL analysis) | Fast filter — safe messages skip LLM |
+| **2. Single-Shot** | DeepSeek LLM classification | AI classification for non-trivial messages |
+| **3. MAD** | 3 agents × 2 rounds debate | Resolve ambiguous cases via consensus |
 
 ### MAD Agents
 
@@ -95,8 +95,6 @@ Tested on a dataset of **56 phishing messages** from real Indonesian Telegram gr
 | False Negatives | 6 |
 | False Positives | 0 |
 | Avg Processing Time | 14.9s/msg |
-| Total Cost (56 msgs) | $0.011 |
-
 **Stage distribution:** MAD handled 89.3% of messages (100% accuracy), Triage handled 10.7%.
 
 ---
@@ -222,7 +220,7 @@ The web dashboard provides real-time monitoring at `http://localhost:5000`:
 - **Activity Chart** — Message activity over 24h/7d/30d
 - **Stage Performance** — Triage/Single-Shot/MAD stats
 - **Debate History** — Expandable agent conversation logs
-- **API Usage & Cost** — Token consumption, DeepSeek pricing
+- **Inference Activity** — Token and request profile per stage
 - **Evaluation Page** — Metrics, confusion matrix, per-message results
 
 ---
@@ -260,23 +258,19 @@ The web dashboard provides real-time monitoring at `http://localhost:5000`:
 | `users` | Registered user baselines |
 | `messages` | Processed messages with classification |
 | `detection_logs` | Full pipeline results per stage |
-| `api_usage` | Token consumption and cost tracking |
+| `api_usage` | Inference request and token tracking |
 | `url_cache` | Cached URL reputation scores |
 
 ---
 
-## Cost Efficiency
+## Detection Priorities
 
-Using DeepSeek V3 pricing ($0.28/1M input, $0.42/1M output):
+This project prioritizes:
 
-| Scenario | Cost per Message |
-|----------|-----------------|
-| Triage only (safe) | $0.000 |
-| Single-Shot resolve | ~$0.0001 |
-| Full MAD debate | ~$0.0002 |
-| **Average** | **$0.0002** |
-
-Estimated monthly cost for a 500-member group: **< $1.00**
+- Detection quality (precision, recall, F1-score)
+- Low false positives for legitimate academic messages
+- Explainable decisions from each stage and MAD agents
+- Stable response time for group moderation workflows
 
 ---
 

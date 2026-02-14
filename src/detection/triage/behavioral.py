@@ -39,14 +39,14 @@ class BehavioralAnomalyDetector:
         typical_hours: list[int]
     ) -> AnomalyResult | None:
         """
-        Check if message was sent at unusual time.
+        Periksa apakah pesan dikirim pada waktu yang tidak biasa.
         
         Args:
-            message_hour: Hour (0-23) when message was sent
-            typical_hours: List of hours when user typically posts
+            message_hour: Jam (0-23) saat pesan dikirim
+            typical_hours: Daftar jam ketika user biasanya posting
             
         Returns:
-            AnomalyResult if anomaly detected, None otherwise
+            AnomalyResult jika anomali terdeteksi, None sebaliknya
         """
         if not typical_hours:
             return None
@@ -83,15 +83,15 @@ class BehavioralAnomalyDetector:
         std_length: float = None
     ) -> AnomalyResult | None:
         """
-        Check if message length significantly deviates from baseline.
+        Periksa apakah panjang pesan signifikan menyimpang dari baseline.
         
         Args:
-            message_length: Length of current message
-            avg_length: User's average message length
-            std_length: Standard deviation (if not provided, uses 30% of avg)
+            message_length: Panjang pesan saat ini
+            avg_length: Rata-rata panjang pesan user
+            std_length: Standard deviation (jika tidak disediakan, gunakan 30% dari avg)
             
         Returns:
-            AnomalyResult if anomaly detected, None otherwise
+            AnomalyResult jika anomali terdeteksi, None sebaliknya
         """
         if not avg_length or avg_length == 0:
             return None
@@ -126,15 +126,15 @@ class BehavioralAnomalyDetector:
         total_messages: int
     ) -> AnomalyResult | None:
         """
-        Check if this is user's first time sharing a URL.
+        Periksa apakah ini adalah pertama kali user membagikan URL.
         
         Args:
-            has_url: Whether current message contains URL
-            url_sharing_rate: User's historical URL sharing rate
-            total_messages: Total messages from this user
+            has_url: Apakah pesan saat ini berisi URL
+            url_sharing_rate: Tingkat historical URL sharing dari user
+            total_messages: Total pesan dari user ini
             
         Returns:
-            AnomalyResult if this is unusual URL sharing
+            AnomalyResult jika sharing URL ini tidak biasa
         """
         if not has_url:
             return None
@@ -158,14 +158,14 @@ class BehavioralAnomalyDetector:
         baseline_emoji_rate: float
     ) -> AnomalyResult | None:
         """
-        Check if emoji usage significantly differs from baseline.
+        Periksa apakah penggunaan emoji signifikan berbeda dari baseline.
         
         Args:
-            current_emoji_rate: Emoji rate in current message
-            baseline_emoji_rate: User's typical emoji rate
+            current_emoji_rate: Emoji rate dalam pesan saat ini
+            baseline_emoji_rate: Typical emoji rate dari user
             
         Returns:
-            AnomalyResult if anomaly detected
+            AnomalyResult jika anomali terdeteksi
         """
         if baseline_emoji_rate == 0 and current_emoji_rate == 0:
             return None
@@ -196,16 +196,16 @@ class BehavioralAnomalyDetector:
         baseline_metrics: dict
     ) -> list[AnomalyResult]:
         """
-        Run all anomaly checks against user baseline.
+        Jalankan semua pengecekan anomali terhadap baseline user.
         
         Args:
-            message_text: The message content
-            message_timestamp: When message was sent
-            has_url: Whether message contains URLs
-            baseline_metrics: User's baseline metrics from database
+            message_text: Isi pesan
+            message_timestamp: Waktu pesan dikirim
+            has_url: Apakah pesan mengandung URLs
+            baseline_metrics: Metrik baseline user dari database
             
         Returns:
-            List of detected anomalies
+            Daftar anomali yang terdeteksi
         """
         anomalies = []
         

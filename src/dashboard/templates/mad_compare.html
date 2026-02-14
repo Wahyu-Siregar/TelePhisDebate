@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAD Comparison — TelePhisDebate</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/iconoir-icons/iconoir@7.11.0/css/iconoir.css" />
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a href="/" class="nav-back" title="Back to Dashboard">
+                <i class="iconoir-arrow-left"></i>
+            </a>
+            <span class="nav-icon"><i class="iconoir-shield"></i></span>
+            <span class="nav-title">TelePhisDebate</span>
+            <span class="nav-separator">/</span>
+            <span class="nav-page-title">MAD Comparison</span>
+        </div>
+        <div class="nav-right">
+            <a href="/evaluation" class="nav-link" title="Evaluation Results">
+                <i class="iconoir-clipboard-check"></i>
+                <span>Evaluation</span>
+            </a>
+            <a href="/evaluation/modes" class="nav-link" title="Mode Comparison">
+                <i class="iconoir-git-pull-request"></i>
+                <span>Mode Compare</span>
+            </a>
+            <div class="nav-status">
+                <span class="status-dot"></span>
+                <span id="compareTimestamp">Loading...</span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="compare-header">
+            <h1><i class="iconoir-stats-report"></i> MAD3 VS MAD5</h1>
+            <p class="section-desc">
+                Perbandingan metrik akurasi dan performa dari evaluasi terbaru di
+                <code>results/mad3</code> dan <code>results/mad5</code>.
+            </p>
+            <div class="compare-controls">
+                <label for="compareEvalMode">Eval Mode</label>
+                <select id="compareEvalMode">
+                    <option value="pipeline" selected>pipeline</option>
+                    <option value="mad_only">mad_only</option>
+                </select>
+            </div>
+        </section>
+
+        <section class="compare-run-grid">
+            <div class="compare-run-card">
+                <h3><i class="iconoir-brain"></i> MAD3</h3>
+                <p>Status: <span id="mad3Status" class="compare-status">—</span></p>
+                <p>Timestamp: <span id="mad3Timestamp">—</span></p>
+                <p>File: <span id="mad3File">—</span></p>
+            </div>
+            <div class="compare-run-card">
+                <h3><i class="iconoir-community"></i> MAD5</h3>
+                <p>Status: <span id="mad5Status" class="compare-status">—</span></p>
+                <p>Timestamp: <span id="mad5Timestamp">—</span></p>
+                <p>File: <span id="mad5File">—</span></p>
+            </div>
+        </section>
+
+        <section class="compare-section">
+            <h2><i class="iconoir-percentage"></i> METRICS COMPARISON</h2>
+            <div class="table-container">
+                <table class="compare-table">
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>MAD3</th>
+                            <th>MAD5</th>
+                            <th>Delta (MAD5 - MAD3)</th>
+                            <th>Winner</th>
+                        </tr>
+                    </thead>
+                    <tbody id="compareMetricsBody">
+                        <tr><td colspan="5" class="loading">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="compare-section">
+            <h2><i class="iconoir-pie-chart"></i> STAGE DISTRIBUTION (MAD STAGE ONLY)</h2>
+            <div class="compare-run-grid">
+                <div class="compare-run-card">
+                    <h3>MAD3 Stage</h3>
+                    <p>MAD Count: <strong id="mad3StageCount">—</strong></p>
+                    <p>Total Messages: <strong id="mad3Total">—</strong></p>
+                    <p>MAD Share: <strong id="mad3MadShare">—</strong></p>
+                </div>
+                <div class="compare-run-card">
+                    <h3>MAD5 Stage</h3>
+                    <p>MAD Count: <strong id="mad5StageCount">—</strong></p>
+                    <p>Total Messages: <strong id="mad5Total">—</strong></p>
+                    <p>MAD Share: <strong id="mad5MadShare">—</strong></p>
+                </div>
+            </div>
+        </section>
+
+        <section class="compare-section">
+            <h2><i class="iconoir-light-bulb"></i> QUICK SUMMARY</h2>
+            <div id="compareSummary" class="compare-summary">
+                Loading...
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>TelePhisDebate Evaluation Comparison</p>
+        <p id="compareFooterInfo">—</p>
+    </footer>
+
+    <script src="/static/js/mad_compare.js"></script>
+</body>
+</html>

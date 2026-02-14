@@ -1,0 +1,152 @@
+flowchart TD
+    %% TelePhisDebate - Complete System Flow (Modular)
+
+    subgraph INPUT_FILTERING["Input Filtering"]
+        A[Pesan Telegram Masuk] --> B{Filter Pesan}
+        B -->|Tidak ada teks| B1[Lewati Pesan]
+        B -->|Pengirim bot| B2[Lewati Pesan]
+        B -->|Perintah diawali slash| B3[Lewati Pesan]
+        B -->|Teks kurang dari 10| B4[Lewati Pesan]
+        B -->|Pesan user valid| C[Ekstrak Konten Teks]
+    end
+
+    subgraph CONTEXT_COLLECTION["Context Collection"]
+        C --> C1[Bangun Info Pengirim]
+        C1 --> C2[Muat Baseline User dari DB]
+        C2 --> C3[Pastikan Registrasi User]
+        C3 --> C4[Ekstrak URL dari Pesan]
+        C4 --> D{Ada URL}
+    end
+
+    subgraph URL_CHECKS["URL Checks"]
+        D -->|Tidak| D1[Set URL checks kosong]
+        D -->|Ya| D2[Jalankan Cek Keamanan URL Async]
+        D2 --> D21[Expand redirect shortener]
+        D21 --> D22{Domain tujuan tepercaya}
+        D22 -->|Ya| D23[Tandai source whitelist risiko nol]
+        D22 -->|Tidak| D24[Jalankan Cek Heuristik URL]
+        D24 --> D25{VirusTotal tersedia}
+        D25 -->|Ya| D26[Gabungkan hasil heuristik dan VirusTotal]
+        D25 -->|Tidak| D27[Gunakan hasil heuristik saja]
+        D23 --> D3[Bangun Map URL Checks]
+        D26 --> D3
+        D27 --> D3
+
+        D1 --> E[Siapkan Konteks Pipeline]
+        D3 --> E
+    end
+
+    subgraph STAGE_1_TRIAGE["Stage 1 - Triage (Rule Based)"]
+        E --> F[Tahap 1 Triage Rule Based]
+        F --> F1[Ekstrak URL pada Triage]
+        F1 --> F2[Integrasi URL tepercaya dan hasil URL Checks]
+        F2 --> F21[Simpan evidence expanded URL dan domain tujuan]
+        F21 --> F3[Jalankan Pemeriksa Whitelist]
+        F3 --> F4[Jalankan Pemeriksaan Blacklist URL]
+        F4 --> F5[Jalankan Pemeriksaan Red Flag Teks]
+        F5 --> F6[Jalankan Cek Anomali Perilaku]
+        F6 --> F7[Hitung Skor Risiko Nol Sampai Seratus]
+        F7 --> G{Keputusan Triage}
+        G -->|Risiko nol dan semua URL tepercaya atau tidak ada URL| G1[AMAN skip llm true]
+        G -->|Risiko kurang dari 30| G2[RISIKO_RENDAH lanjut]
+        G -->|Risiko 30 atau lebih| G3[RISIKO_TINGGI lanjut]
+
+        G1 --> H[Finalisasi hasil diputus triage]
+        G2 --> I[Tahap 2 Single Shot LLM]
+        G3 --> I
+    end
+
+    subgraph STAGE_2_SINGLE_SHOT["Stage 2 - Single Shot LLM"]
+        I --> I1[Bangun Prompt dari konteks dan evidence expanded URL]
+        I1 --> I2[Panggil DeepSeek Mode Json]
+        I2 --> I3[Parse Klasifikasi Confidence Reasoning]
+        I3 --> J{Aturan Eskalasi}
+        J -->|SAFE confidence 0.90 atau lebih| J1[Finalisasi AMAN oleh single shot]
+        J -->|PHISHING confidence berapa pun| K[Tahap 3 Multi Agent Debate]
+        J -->|SUSPICIOUS| K
+        J -->|Confidence kurang dari 0.70| K
+        J -->|Triage risk 50 atau lebih dan confidence kurang dari 0.80| K
+        J -->|Fallback karena llm error| K
+        J -->|Kondisi lainnya| J1
+    end
+
+    subgraph STAGE_3_MAD["Stage 3 - Multi Agent Debate (MAD)"]
+        K --> K0{URL checks tersedia}
+        K0 -->|Ya| K1[Round 1 Analisis Independen]
+        K0 -->|Tidak| K00[Jalankan URL checker sync expand VT heuristik]
+        K00 --> K1
+        K1 --> K11[Content Analyzer]
+        K1 --> K12[Security Validator]
+        K1 --> K13[Social Context Evaluator]
+        K12 --> K121[Gunakan expanded URL redirect chain source]
+        K11 --> K2[Kumpulkan Respons Round 1]
+        K121 --> K2
+        K13 --> K2
+        K2 --> K3{Cek Konsensus}
+        K3 -->|Unanimous atau mayoritas kuat dan skip aktif| K5[Lanjut ke Agregasi Akhir]
+        K3 -->|Tidak konsensus atau skip nonaktif| K4[Round 2 Deliberasi]
+        K4 --> K41[Agen revisi stance dan confidence]
+        K41 --> K5
+        K5 --> K6[Agregasi Voting Berbobot]
+        K6 --> K7[Keputusan PHISHING SUSPICIOUS LEGITIMATE]
+        K7 --> K8[Normalisasi LEGITIMATE jadi SAFE]
+        K8 --> K9[Finalisasi hasil diputus mad]
+    end
+
+    subgraph FINAL_CLASSIFICATION["Final Classification"]
+        H --> L{Klasifikasi Akhir}
+        J1 --> L
+        K9 --> L
+    end
+
+    subgraph ACTION_MAPPING["Action Mapping"]
+        L -->|SAFE| L1[Aksi none]
+        L -->|SUSPICIOUS confidence 0.60 atau lebih| L2[Aksi warn]
+        L -->|SUSPICIOUS confidence kurang dari 0.60| L3[Aksi flag review]
+        L -->|PHISHING selalu| L4[Aksi flag review]
+
+        L2 --> M1[Balas peringatan suspicious di grup]
+        M1 --> M2[Kirim notifikasi admin ringkas atau detail]
+        L3 --> M2
+        L4 --> M3[Balas alert phishing di grup]
+        M3 --> M4[Jadwalkan hapus otomatis balasan 600 detik]
+        M3 --> M2
+    end
+
+    subgraph LOGGING["Logging & Monitoring"]
+        L1 --> N[Tulis Tabel Messages]
+        M1 --> N
+        M2 --> N
+        N --> N1[Tulis Detection Logs Payload Stage]
+        N1 --> N2[Tulis API Usage Token dan Biaya]
+        N2 --> O[Database Supabase]
+        O --> P[Dashboard Monitoring]
+        P --> P1[Metrik Deteksi]
+        P --> P2[Penggunaan API dan Biaya]
+    end
+
+    subgraph EXTERNAL_SERVICES["External Services"]
+        D2 -.-> Q[API VirusTotal]
+        K00 -.-> Q
+        I2 -.-> R[API DeepSeek]
+        K1 -.-> R
+    end
+
+    %% ============== STYLING ==============
+    classDef inputLayer fill:#e1f5fe,stroke:#01579b,stroke-width:2px,color:#000
+    classDef triageLayer fill:#f3e5f5,stroke:#4a148c,stroke-width:2px,color:#000
+    classDef llmLayer fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px,color:#000
+    classDef madLayer fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#000
+    classDef actionLayer fill:#ffebee,stroke:#b71c1c,stroke-width:2px,color:#000
+    classDef safeLayer fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px,color:#000
+    classDef dbLayer fill:#f5f5f5,stroke:#424242,stroke-width:2px,color:#000
+    classDef externalLayer fill:#fafafa,stroke:#757575,stroke-width:1px,stroke-dasharray:5,color:#000
+
+    class A,B,B1,B2,B3,B4,C,C1,C2,C3,C4,D,D1,D2,D21,D22,D23,D24,D25,D26,D27,D3,E inputLayer
+    class F,F1,F2,F21,F3,F4,F5,F6,F7,G,G1,G2,G3,H triageLayer
+    class I,I1,I2,I3,J,J1 llmLayer
+    class K,K0,K00,K1,K11,K12,K121,K13,K2,K3,K4,K41,K5,K6,K7,K8,K9 madLayer
+    class L2,L3,L4,M1,M2,M3,M4 actionLayer
+    class L,L1 safeLayer
+    class N,N1,N2,O,P,P1,P2 dbLayer
+    class Q,R externalLayer

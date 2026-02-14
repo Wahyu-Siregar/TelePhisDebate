@@ -4,6 +4,8 @@ Handles bot responses: warn, notify admin, flag for review
 """
 
 import asyncio
+import html
+import re
 from datetime import datetime
 from telegram import Bot, Message
 from telegram.constants import ParseMode
@@ -15,13 +17,8 @@ from src.detection.pipeline import DetectionResult
 STAGE_DISPLAY = {
     "triage": "Rule-Based Triage",
     "single_shot": "Single-Shot LLM",
-    "mad": "Multi-Agent Debate (3 Agents)",
+    "mad": "Multi-Agent Debate",
 }
-
-# DeepSeek API pricing
-COST_PER_INPUT_TOKEN = 0.28 / 1_000_000
-COST_PER_OUTPUT_TOKEN = 0.42 / 1_000_000
-
 
 class BotActions:
     """
@@ -47,7 +44,7 @@ class BotActions:
 • Dianalisis oleh: {stage}
 • Risk Factors: {risk_factors}
 
-⛔ <b>JANGAN KLIK LINK APAPUN</b> dalam pesan tersebut!
+⛔ <b>{safety_warning}</b>
 
 📢 Admin telah diberitahu untuk review.
 Jika ini kesalahan, hubungi admin grup.""",
@@ -58,9 +55,21 @@ Pesan dari @{username} ditandai sebagai mencurigakan.
 
 🔍 <b>Perhatian:</b>
 - Jangan klik link sebelum dikonfirmasi aman
-- Admin akan review pesan ini
+- Jangan menghubungi nomor yang tertera pada chat phishing tersebut
+- Admin telah diberitahu untuk review
 
 Confidence: {confidence:.0%}""",
+        
+        "admin_warning_brief": """🔔 <b>Peringatan SUSPICIOUS</b>
+
+📩 <b>Pengirim:</b> @{username} ({user_id})
+💬 <b>Grup:</b> {group_name}
+🔍 <b>Hasil:</b> SUSPICIOUS ({confidence:.0%})
+🧩 <b>Tahap:</b> {stage}
+🔗 <b>Link:</b> {message_link}
+
+<b>Cuplikan:</b>
+<code>{message_text}</code>""",
         
         "admin_notification": """🔔 <b>Review Diperlukan</b>
 
@@ -80,7 +89,6 @@ Confidence: {confidence:.0%}""",
 ⚡ <b>Performance:</b>
 - Processing: {processing_time}ms
 - Tokens: {tokens_total} (in: {tokens_in}, out: {tokens_out})
-- Est. cost: ${cost:.6f}
 
 {stage_details}
 
@@ -164,6 +172,8 @@ Confidence: {confidence:.0%}""",
         }
         
         username = message.from_user.username or message.from_user.first_name
+        message_text = message.text or message.caption or ""
+        safe_message_text = html.escape(message_text)
         
         try:
             warning_text = self.TEMPLATES["suspicious_warning"].format(
@@ -176,6 +186,30 @@ Confidence: {confidence:.0%}""",
                 parse_mode=ParseMode.HTML
             )
             action_result["warning_sent"] = True
+            
+            if self.admin_chat_id:
+                if message.chat.username:
+                    message_link = f"https://t.me/{message.chat.username}/{message.message_id}"
+                else:
+                    message_link = f"https://t.me/c/{str(message.chat_id)[4:]}/{message.message_id}"
+                
+                group_name = message.chat.title or "Private Chat"
+                admin_text = self.TEMPLATES["admin_warning_brief"].format(
+                    username=username,
+                    user_id=message.from_user.id,
+                    group_name=group_name,
+                    confidence=result.confidence,
+                    stage=STAGE_DISPLAY.get(result.decided_by, result.decided_by),
+                    message_link=message_link,
+                    message_text=safe_message_text[:300] if safe_message_text else "[No text]"
+                )
+                
+                await self.bot.send_message(
+                    chat_id=self.admin_chat_id,
+                    text=admin_text,
+                    parse_mode=ParseMode.HTML
+                )
+                action_result["admin_notified"] = True
             
         except TelegramError as e:
             action_result["success"] = False
@@ -200,6 +234,8 @@ Confidence: {confidence:.0%}""",
         }
         
         username = message.from_user.username or message.from_user.first_name
+        message_text = message.text or message.caption or ""
+        safe_message_text = html.escape(message_text)
         
         # Get risk factors for alert
         risk_factors = []
@@ -213,7 +249,8 @@ Confidence: {confidence:.0%}""",
                     username=username,
                     confidence=result.confidence,
                     stage=STAGE_DISPLAY.get(result.decided_by, result.decided_by),
-                    risk_factors=", ".join(risk_factors) if risk_factors else "Suspicious patterns detected"
+                    risk_factors=", ".join(risk_factors) if risk_factors else "Suspicious patterns detected",
+                    safety_warning=self._build_safety_warning(result, message_text)
                 )
                 
                 warning_msg = await message.reply_text(
@@ -242,16 +279,12 @@ Confidence: {confidence:.0%}""",
                 message_link = f"https://t.me/c/{str(message.chat_id)[4:]}/{message.message_id}"
             
             try:
-                # Calculate cost for this detection
-                cost = (result.tokens_input * COST_PER_INPUT_TOKEN) + \
-                       (result.tokens_output * COST_PER_OUTPUT_TOKEN)
-                
                 notification_text = self.TEMPLATES["admin_notification"].format(
                     username=username,
                     user_id=message.from_user.id,
                     timestamp=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                     group_name=group_name,
-                    message_text=message.text[:500] if message.text else "[No text]",
+                    message_text=safe_message_text[:500] if safe_message_text else "[No text]",
                     classification=result.classification,
                     confidence=result.confidence,
                     stage=STAGE_DISPLAY.get(result.decided_by, result.decided_by),
@@ -260,7 +293,6 @@ Confidence: {confidence:.0%}""",
                     tokens_total=result.total_tokens_used,
                     tokens_in=result.tokens_input,
                     tokens_out=result.tokens_output,
-                    cost=cost,
                     stage_details=stage_details,
                     message_link=message_link
                 )
@@ -281,6 +313,25 @@ Confidence: {confidence:.0%}""",
         
         return action_result
     
+    def _build_safety_warning(self, result: DetectionResult, message_text: str) -> str:
+        has_url = False
+        if result.triage_result:
+            has_url = bool(result.triage_result.get("urls_found", []))
+        if not has_url and re.search(r"https?://|www\.", message_text, re.IGNORECASE):
+            has_url = True
+        
+        has_phone = bool(
+            re.search(r"(?<!\d)(?:\+?62|0)\d(?:[\s-]?\d){8,13}(?!\d)", message_text)
+        )
+        
+        if has_url and has_phone:
+            return "JANGAN KLIK LINK ATAU MENGHUBUNGI NOMOR APAPUN pada pesan tersebut!"
+        if has_url:
+            return "JANGAN KLIK LINK APAPUN dalam pesan tersebut!"
+        if has_phone:
+            return "JANGAN MENGHUBUNGI NOMOR APAPUN yang tertera pada pesan tersebut!"
+        return "JANGAN TINDAK LANJUTI instruksi apa pun dalam pesan tersebut!"
+    
     def _format_stage_details(self, result: DetectionResult) -> str:
         """Format detailed stage information for admin"""
         details = []
@@ -296,7 +347,8 @@ Confidence: {confidence:.0%}""",
             ss = result.single_shot_result
             details.append(f"🤖 <b>Single-Shot LLM:</b> {ss.get('classification')} ({ss.get('confidence', 0):.0%})")
             if ss.get('reasoning'):
-                details.append(f"   Reason: {str(ss['reasoning'])[:150]}")
+                reason_text = html.escape(str(ss["reasoning"]).strip())
+                details.append(f"   Reason: {reason_text}")
         
         if result.mad_result:
             mad = result.mad_result

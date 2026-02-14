@@ -53,26 +53,27 @@ class ClassificationResult:
 
 class SingleShotClassifier:
     """
-    Single-Shot LLM Classifier
+    Pengklasifikasi LLM Sekali Tembak (Single-Shot)
+
+    Tahap 2 dari pipeline deteksi phishing.  
+    Berperan sebagai ROUTER — menggunakan LLM DeepSeek untuk klasifikasi awal.
+
+    PENTING: Single-shot BUKAN penentu akhir untuk PHISHING.  
+    Tahap ini hanya boleh memfinalkan keputusan SAFE. Semua kasus PHISHING dan ambigu  
+    akan dieskalasi ke MAD (Tahap 3) untuk verifikasi.
+
+    Ini mencegah “yakin tapi salah” — label PHISHING dengan kepercayaan tinggi namun keliru  
+    yang akan menyebabkan peringatan palsu dan membanjiri admin dengan spam.
+
+    Eskalasikan ke MAD (Tahap 3) jika:
+    - Klasifikasi adalah PHISHING (selalu — perlu verifikasi MAD)
+    - Klasifikasi adalah SUSPICIOUS (selalu)
+    - Confidence < 0.70 (ambigu)
+    - Risiko triase tinggi + ketidakpastian LLM sedang
+
+    Hanya yang boleh difinalkan di tahap ini:
+    - SAFE dengan kepercayaan tinggi (≥90%)
     
-    Stage 2 of the phishing detection pipeline.
-    Acts as a ROUTER — uses DeepSeek LLM for initial classification.
-    
-    IMPORTANT: Single-shot is NOT the final judge for PHISHING.
-    It can only finalize SAFE decisions. All PHISHING and ambiguous
-    cases are escalated to MAD (Stage 3) for verification.
-    
-    This prevents "yakin tapi salah" — high confidence but wrong
-    PHISHING labels that would cause false alerts and spam admin.
-    
-    Escalation to MAD (Stage 3) occurs when:
-    - Classification is PHISHING (always — needs MAD verification)
-    - Classification is SUSPICIOUS (always)
-    - Confidence < 0.70 (ambiguous)
-    - High triage risk + moderate LLM uncertainty
-    
-    Only finalized at this stage:
-    - High confidence SAFE (≥90%)
     """
     
     # Thresholds for decision making
@@ -111,18 +112,18 @@ class SingleShotClassifier:
         triage_result: TriageResult | None = None
     ) -> ClassificationResult:
         """
-        Classify a message using Single-Shot LLM.
+        Klasifikasikan sebuah pesan menggunakan LLM Single-Shot.
         
-        Args:
-            message_text: The message to classify
-            message_timestamp: When the message was sent
-            sender_info: Information about the sender
-            baseline_metrics: User's baseline metrics
-            skip_triage: If True, skip triage stage
-            triage_result: Pre-computed triage result
+        Argumen:
+            message_text: Pesan yang akan diklasifikasikan
+            message_timestamp: Waktu ketika pesan dikirim
+            sender_info: Informasi tentang pengirim
+            baseline_metrics: Metrik baseline pengguna
+            skip_triage: Jika True, lewati tahap triase
+            triage_result: Hasil triase yang telah dihitung sebelumnya
             
-        Returns:
-            ClassificationResult with classification and escalation decision
+        Mengembalikan:
+            ClassificationResult dengan hasil klasifikasi dan keputusan eskalasi
         """
         start_time = time.time()
         
@@ -219,14 +220,14 @@ class SingleShotClassifier:
         triage_risk_score: int
     ) -> tuple[bool, str]:
         """
-        Determine if case should escalate to Multi-Agent Debate.
+        Tentukan apakah kasus perlu dieskalasi ke Multi-Agent Debate.
         
-        RULE: Single-shot NEVER finalizes PHISHING.
-        All PHISHING labels must be verified by MAD to prevent
-        false alerts ("yakin tapi salah" problem).
+        ATURAN: Single-shot TIDAK PERNAH memfinalisasi PHISHING.
+        Semua label PHISHING harus diverifikasi oleh MAD untuk mencegah
+        peringatan palsu (masalah "yakin tapi salah").
         
-        Returns:
-            Tuple of (should_escalate, reason)
+        Mengembalikan:
+            Tuple dari (should_escalate, reason)
         """
         # PHISHING always escalates — single-shot must not be final judge
         if classification == "PHISHING":

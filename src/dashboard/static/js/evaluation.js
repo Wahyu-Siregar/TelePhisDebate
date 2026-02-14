@@ -27,11 +27,6 @@ function formatTime(ms) {
     return ms + 'ms';
 }
 
-function formatCost(usd) {
-    if (usd == null) return '—';
-    return '$' + usd.toFixed(6);
-}
-
 const STAGE_NAMES = {
     'triage': 'Triage',
     'single_shot': 'Single-Shot',
@@ -78,6 +73,8 @@ function renderAll(data) {
 
     // Timestamp
     document.getElementById('evalTimestamp').textContent = data.eval_timestamp || '—';
+    document.getElementById('evalMetaInfo').textContent =
+        `Mode: ${data.eval_mode || 'pipeline'} | MAD: ${data.mad_mode || 'mad3'}`;
 
     // Primary Metrics
     renderMetricCard('metricAccuracy', 'barAccuracy', m.accuracy);
@@ -101,7 +98,7 @@ function renderAll(data) {
     renderDistributionChart('expectedDistChart', m.expected_distribution, 'expected');
     renderDistributionChart('predictedDistChart', m.predicted_distribution, 'predicted');
 
-    // Performance & Cost
+    // Performance & Resource Profile
     renderPerformance(m);
 
     // Misclassifications
@@ -114,7 +111,7 @@ function renderAll(data) {
     const fileInfo = data.files;
     if (fileInfo) {
         document.getElementById('evalFileInfo').textContent =
-            `Source: ${fileInfo.metrics || '—'}`;
+            `Source: ${fileInfo.metrics || '—'} | Dir: ${data.run_dir || 'results'}`;
     }
 }
 
@@ -278,7 +275,8 @@ function renderPerformance(m) {
     document.getElementById('perfTokensTotal').textContent = formatNumber(m.total_tokens);
     document.getElementById('perfTokensIn').textContent = formatNumber(m.total_tokens_input);
     document.getElementById('perfTokensOut').textContent = formatNumber(m.total_tokens_output);
-    document.getElementById('perfCost').textContent = formatCost(m.total_cost_usd);
+    document.getElementById('perfAvgTokens').textContent =
+        m.avg_tokens_per_msg != null ? Number(m.avg_tokens_per_msg).toFixed(1) : '—';
 }
 
 function renderMisclassifications(wrong) {

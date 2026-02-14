@@ -60,11 +60,11 @@ apiKey.txt
 .DS_Store
 Thumbs.db
 
-# Project specific
+Project specific
 data/raw/
 data/exports/
 *.csv
 !data/sample/*.csv
 
 # Documentation (internal only)
-docs/
+docs

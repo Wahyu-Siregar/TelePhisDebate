@@ -1,0 +1,5379 @@
+{
+  "results": [
+    {
+      "index": 1,
+      "text": "Assalamualaikum Warahmatullahi Wabarakatuh 🙏Di sampaikan Bantuan DTKS Rp.900.000 sd 2.000.000 tahun ini 2025 telah di cairkan, buruan daftar dan cek nama anda Berikut daftar penerima bantuan ● Guru ● Sd,smp,sma,mahasiswa ● Pekerja harian ● Bantuan keluarga ● Pegawai baru ● Lansia DLL CEK DAN DAFTAR PENERIMA👇 :https://portal19.rgester-now.web.id/",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 25316,
+      "tokens_total": 2831,
+      "tokens_input": 714,
+      "tokens_output": 166,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini mengandung indikator phishing yang kuat: URL mencurigakan dengan domain 'rgester-now.web.id' yang tidak terkait dengan institusi akademik, konteks tidak relevan dengan aktivitas mahasiswa Teknik Informatika UIR (berisi tawaran bantuan uang), dan menggunakan taktik social engineering dengan urgensi berlebihan ('buruan daftar').",
+        "risk_factors": [
+          "URL mencurigakan (domain aneh)",
+          "taktik social engineering (urgensi)",
+          "konteks tidak relevan dengan akademik",
+          "permintaan data sensitif implisit (daftar penerima)"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 714,
+        "tokens_output": 166,
+        "processing_time_ms": 7052
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "detector_agent": "SUSPICIOUS",
+          "judge_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Expecting property name enclosed in double quotes: line 37 column 8 (char 1865)"
+            ],
+            "evidence": {
+              "error": "Expecting property name enclosed in double quotes: line 37 column 8 (char 1865)"
+            }
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 20 column 9 (char 1718)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 20 column 9 (char 1718)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1951,
+        "total_processing_time_ms": 17550
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 2,
+      "text": "Assalamualaikum warahmatullahi wabarakatuh 🙏Alhamdulillah Bantuan MAKAN BERGIZI GRATIS (BMG), PROGRAM KELUARGA HARAPAN (PKH), IURAN JAMINAN KESEHATAN (IJK), dan BANTUAN PANGAN NON-TUNAI (BPNT) sudah cair awal Desember 2025 - akhir JANUARI 2026. INFORMASI SELENGKAPNYA SILAHKAN CEK DI WEBSITE DI BAWAH INI: https://portal19.rgester-now.web.id/ #infobansos #bansosindonesia #bansoskmp #bansospkh #bansosbpntpos",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 27062,
+      "tokens_total": 3861,
+      "tokens_input": 763,
+      "tokens_output": 245,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini mengumumkan bantuan sosial (bansos) seperti BMG, PKH, IJK, dan BPNT dengan klaim cair di Desember 2025-Januari 2026, yang tidak relevan dengan konteks grup akademik mahasiswa Teknik Informatika UIR. URL yang digunakan (portal19.rgester-now.web.id) mencurigakan karena domain tidak dikenal dan tidak terkait dengan institusi resmi seperti kampus atau pemerintah, serta mengandung kata-kata phishing seperti 'infobansos' dalam hashtag. Pesan ini menggunakan taktik social engineering dengan menciptakan urgensi dan otoritas palsu untuk mengarahkan ke situs yang mungkin meminta data sensitif.",
+        "risk_factors": [
+          "URL mencurigakan dengan domain tidak dikenal",
+          "Taktik social engineering (urgensi dan otoritas palsu)",
+          "Konteks tidak relevan dengan aktivitas akademik",
+          "Permintaan untuk mengunjungi situs yang mungkin meminta data sensitif"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 763,
+        "tokens_output": 245,
+        "processing_time_ms": 9620
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "judge_agent": "SUSPICIOUS",
+          "detector_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 18 column 9 (char 1670)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 18 column 9 (char 1670)"
+            }
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 2853,
+        "total_processing_time_ms": 17441
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 3,
+      "text": "Ass,,Bpk/Ibu\nTersedia Pinjmn\nTmpa Agunan\nDngn\nBung 2%/Thn\nMiniml 5 jt S/D 500jt\nUntuk Inf0 Chat\nWhatsap 081377738575",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 22036,
+      "tokens_total": 2401,
+      "tokens_input": 636,
+      "tokens_output": 137,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan menawarkan pinjaman tanpa agunan dengan bunga rendah, yang tidak relevan dengan konteks grup akademik Teknik Informatika UIR dan mengandung kata kunci phishing seperti 'Pinjmn' dan 'Bung 2%/Thn'.",
+        "risk_factors": [
+          "Konteks tidak relevan dengan aktivitas akademik",
+          "Taktik social engineering (penawaran pinjaman)",
+          "Permintaan kontak WhatsApp untuk informasi lebih lanjut",
+          "Kata kunci phishing terdeteksi"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 636,
+        "tokens_output": 137,
+        "processing_time_ms": 5473
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "detector_agent": "SUSPICIOUS",
+          "judge_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 18 column 9 (char 1701)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 18 column 9 (char 1701)"
+            }
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 24 column 29 (char 1379)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 24 column 29 (char 1379)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1628,
+        "total_processing_time_ms": 16562
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 4,
+      "text": "Selamat... Anda\nmndptkn hadiah\ndari shopee\ndgn kode\npin:AD25MD47\nuntk info klick:\nbit.ly/supershoppingday99-2020",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 24176,
+      "tokens_total": 2562,
+      "tokens_input": 704,
+      "tokens_output": 152,
+      "triage_risk_score": 30,
+      "triage_flags": [
+        "phishing_keywords",
+        "shortened_url"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini mengandung hadiah dari Shopee dengan kode pin dan link shortened yang mengarah ke domain blogspot, tidak relevan dengan konteks akademik grup dan menunjukkan tanda-tanda phishing seperti URL mencurigakan dan taktik social engineering.",
+        "risk_factors": [
+          "URL mencurigakan (shortened link mengarah ke blogspot, bukan domain resmi Shopee)",
+          "Taktik social engineering (hadiah tidak terduga, urgensi palsu)",
+          "Konteks tidak relevan dengan aktivitas akademik",
+          "Permintaan data sensitif (kode pin)"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 704,
+        "tokens_output": 152,
+        "processing_time_ms": 5872
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "judge_agent": "SUSPICIOUS",
+          "detector_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 19 column 25 (char 1451)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 19 column 25 (char 1451)"
+            }
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 26 column 27 (char 1636)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 26 column 27 (char 1636)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1706,
+        "total_processing_time_ms": 16211
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 5,
+      "text": "Yth BAPAK/IBU\nSPESIAL AWAL TAHUN\nPUNYA MASALAH DI SEGI FINANCIAL DAN BUTUH.\nPINJMN DANA DARURAT!!!???\n(NON BANK) 5jt-500jt\nINFO WA : 0852-8336-0989",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 22957,
+      "tokens_total": 2290,
+      "tokens_input": 660,
+      "tokens_output": 144,
+      "triage_risk_score": 35,
+      "triage_flags": [
+        "phishing_keywords",
+        "excessive_punctuation",
+        "caps_lock_abuse"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini mengandung indikator kuat phishing dengan penawaran pinjaman dana darurat yang tidak relevan dengan konteks akademik grup, menggunakan taktik social engineering seperti urgensi berlebihan dan permintaan kontak WhatsApp untuk transaksi finansial.",
+        "risk_factors": [
+          "taktik social engineering (urgensi berlebihan)",
+          "konteks tidak relevan dengan aktivitas akademik",
+          "permintaan data sensitif (kontak untuk transaksi finansial)",
+          "penggunaan caps lock dan tanda seru berlebihan"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 660,
+        "tokens_output": 144,
+        "processing_time_ms": 5473
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "detector_agent": "SUSPICIOUS",
+          "judge_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 21 column 13 (char 1590)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 21 column 13 (char 1590)"
+            }
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 16 column 26 (char 1381)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 16 column 26 (char 1381)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1486,
+        "total_processing_time_ms": 17484
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 6,
+      "text": "JASA DUKUN SANTET & PELET RESMI TERPERCAYA\n1. Pesugihan \n2. Santet\n3. Pasang Susuk\n4. Menang Perkara\nTlp/Wa. 081240837779",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 22322,
+      "tokens_total": 2407,
+      "tokens_input": 639,
+      "tokens_output": 139,
+      "triage_risk_score": 30,
+      "triage_flags": [
+        "phishing_keywords",
+        "caps_lock_abuse"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini berisi penawaran jasa dukun santet dan pelecehan yang tidak relevan dengan konteks akademik grup mahasiswa Teknik Informatika UIR, menunjukkan indikasi phishing melalui taktik social engineering dengan klaim otoritas palsu dan penggunaan kata-kata kunci yang mencurigakan.",
+        "risk_factors": [
+          "taktik social engineering (otoritas palsu)",
+          "konteks tidak relevan dengan aktivitas akademik",
+          "phishing_keywords",
+          "caps_lock_abuse"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 639,
+        "tokens_output": 139,
+        "processing_time_ms": 5488
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "detector_agent": "SUSPICIOUS",
+          "judge_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: could not convert string to float: 'HIGH'"
+            ],
+            "evidence": {
+              "error": "could not convert string to float: 'HIGH'"
+            }
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 22 column 5 (char 1704)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 22 column 5 (char 1704)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1629,
+        "total_processing_time_ms": 16832
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 7,
+      "text": "Ass,,Bpk/Ibu\nTersedia Pinjmn\nTmpa Agunan\nDngn\nBung 2%/Thn\nMiniml 5 jt S/D 500jt\nUntuk Inf0 Chat\nWhatsap 081377738575",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 21669,
+      "tokens_total": 3514,
+      "tokens_input": 636,
+      "tokens_output": 144,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan menawarkan pinjaman tanpa agunan dengan bunga rendah, yang tidak relevan dengan konteks grup akademik Teknik Informatika UIR dan mengandung indikator phishing seperti kata kunci 'Pinjmn' dan permintaan kontak WhatsApp untuk informasi lebih lanjut.",
+        "risk_factors": [
+          "Konteks tidak relevan dengan aktivitas akademik",
+          "Taktik social engineering (penawaran pinjaman)",
+          "Permintaan kontak pribadi untuk transaksi finansial",
+          "Kata kunci phishing terdeteksi"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 636,
+        "tokens_output": 144,
+        "processing_time_ms": 5843
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "detector_agent": "SUSPICIOUS",
+          "judge_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 2734,
+        "total_processing_time_ms": 15826
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 8,
+      "text": "Selamat... Anda\nmndptkn hadiah\ndari shopee\ndgn kode\npin:AD25MD47\nuntk info klick:\nbit.ly/supershoppingday99-2020",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 21204,
+      "tokens_total": 3223,
+      "tokens_input": 704,
+      "tokens_output": 118,
+      "triage_risk_score": 30,
+      "triage_flags": [
+        "phishing_keywords",
+        "shortened_url"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini mengandung URL shortened yang mengarah ke domain blogspot.com yang tidak terkait dengan aktivitas akademik, menawarkan hadiah dari Shopee dengan kode pin, yang merupakan taktik social engineering umum untuk phishing. Konteks tidak relevan dengan grup mahasiswa Teknik Informatika UIR.",
+        "risk_factors": [
+          "shortened_url",
+          "social_engineering",
+          "irrelevant_context",
+          "suspicious_domain"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 704,
+        "tokens_output": 118,
+        "processing_time_ms": 4985
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "judge_agent": "SUSPICIOUS",
+          "detector_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 40 column 13 (char 2065)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 40 column 13 (char 2065)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 2401,
+        "total_processing_time_ms": 16217
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 9,
+      "text": "Yth BAPAK/IBU\nSPESIAL AWAL TAHUN\nPUNYA MASALAH DI SEGI FINANCIAL DAN BUTUH.\nPINJMN DANA DARURAT!!!???\n(NON BANK) 5jt-500jt\nINFO WA : 0852-8336-0989",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 23288,
+      "tokens_total": 3187,
+      "tokens_input": 660,
+      "tokens_output": 144,
+      "triage_risk_score": 35,
+      "triage_flags": [
+        "phishing_keywords",
+        "excessive_punctuation",
+        "caps_lock_abuse"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini mengandung indikator kuat phishing dengan penawaran pinjaman dana darurat yang tidak relevan dengan konteks akademik grup, menggunakan taktik social engineering seperti urgensi berlebihan dan permintaan kontak WhatsApp untuk transaksi finansial.",
+        "risk_factors": [
+          "taktik social engineering (urgensi berlebihan)",
+          "konteks tidak relevan dengan aktivitas akademik",
+          "permintaan data sensitif (kontak untuk transaksi finansial)",
+          "penggunaan caps lock dan tanda seru berlebihan"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 660,
+        "tokens_output": 144,
+        "processing_time_ms": 5988
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "detector_agent": "SUSPICIOUS",
+          "judge_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Expecting value: line 25 column 1 (char 1690)"
+            ],
+            "evidence": {
+              "error": "Expecting value: line 25 column 1 (char 1690)"
+            }
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 2383,
+        "total_processing_time_ms": 17299
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 10,
+      "text": "Asslm wr.wb kami mnawarkan\nPinjaman dana untk usaha,\nBerobat dll, dgn bunga 2%\nPertahun mnml pijmn 5-500jt\nProses mudah&cepat info\nWA;087865547457",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 24664,
+      "tokens_total": 2756,
+      "tokens_input": 637,
+      "tokens_output": 181,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan menawarkan pinjaman dana dengan bunga rendah dan proses mudah, yang tidak relevan dengan konteks grup akademik mahasiswa Teknik Informatika UIR. Mengandung kata kunci phishing seperti 'pinjaman', 'bunga 2%', dan permintaan kontak WhatsApp untuk informasi lebih lanjut, menunjukkan upaya social engineering untuk mengumpulkan data sensitif atau penipuan keuangan.",
+        "risk_factors": [
+          "konteks tidak relevan dengan aktivitas akademik",
+          "taktik social engineering (menawarkan pinjaman dengan iming-iming mudah)",
+          "permintaan kontak pribadi (WhatsApp) untuk transaksi keuangan",
+          "mengandung kata kunci phishing"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 637,
+        "tokens_output": 181,
+        "processing_time_ms": 7398
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "detector_agent": "SUSPICIOUS",
+          "judge_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 26 column 19 (char 1627)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 26 column 19 (char 1627)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1938,
+        "total_processing_time_ms": 17264
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 11,
+      "text": "BUAT BPK/IBU YG \nLAGI BUTUH BIAYA TANBAHAN\nUNTUK USAHA DLL \nKAMI SIAP MELAYANI\nANDA DGN BUNGA 2%/PERTAHUN\nMIN 5 JT-500 JT\nINFO WASPPA:082260512778",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 23375,
+      "tokens_total": 2487,
+      "tokens_input": 650,
+      "tokens_output": 125,
+      "triage_risk_score": 10,
+      "triage_flags": [
+        "caps_lock_abuse"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini menawarkan pinjaman dengan bunga rendah, yang tidak relevan dengan konteks grup akademik Teknik Informatika UIR dan menunjukkan taktik social engineering dengan urgensi dan otoritas palsu.",
+        "risk_factors": [
+          "konteks tidak relevan dengan aktivitas akademik",
+          "taktik social engineering (urgensi berlebihan, otoritas palsu)",
+          "permintaan kontak pribadi untuk transaksi keuangan"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 650,
+        "tokens_output": 125,
+        "processing_time_ms": 5611
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "detector_agent": "SUSPICIOUS",
+          "judge_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: could not convert string to float: 'high'"
+            ],
+            "evidence": {
+              "error": "could not convert string to float: 'high'"
+            }
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 20 column 9 (char 1673)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 20 column 9 (char 1673)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1712,
+        "total_processing_time_ms": 17764
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 12,
+      "text": "KSP SEJAHTERA BERSAMA Mnawarkan pinjaman berbasis online tanpa agunan dan tanpa survei bunga rendah hanya 2% MIN pinjaman 5jt sampai 500jt info WA 087827398789",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 23166,
+      "tokens_total": 2879,
+      "tokens_input": 629,
+      "tokens_output": 134,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan menawarkan pinjaman online dengan bunga rendah dan tanpa agunan, yang tidak relevan dengan konteks grup akademik Teknik Informatika UIR dan mengandung kata kunci phishing seperti 'pinjaman', 'bunga rendah', dan permintaan kontak WhatsApp.",
+        "risk_factors": [
+          "Konteks tidak relevan dengan aktivitas akademik",
+          "Taktik social engineering (penawaran menggiurkan)",
+          "Permintaan kontak eksternal untuk transaksi finansial"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 629,
+        "tokens_output": 134,
+        "processing_time_ms": 5675
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "judge_agent": "SUSPICIOUS",
+          "detector_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 16 column 181 (char 1572)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 16 column 181 (char 1572)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 2116,
+        "total_processing_time_ms": 17490
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 13,
+      "text": "kami menawarkan \npinjaman dana dengan bunga rendah\ndan cepat cair dijamin amanah\nminimal 5jt sampai 500jt\nminat chat whatsapp; 085333103541",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 23689,
+      "tokens_total": 3453,
+      "tokens_input": 623,
+      "tokens_output": 160,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan menawarkan pinjaman dana dengan klaim bunga rendah dan cepat cair, yang tidak relevan dengan konteks grup akademik mahasiswa Teknik Informatika UIR. Ini menunjukkan taktik social engineering dengan urgensi palsu dan permintaan kontak WhatsApp untuk data sensitif.",
+        "risk_factors": [
+          "Konteks tidak relevan dengan aktivitas akademik",
+          "Taktik social engineering (urgensi berlebihan, janji keuntungan)",
+          "Permintaan kontak pribadi untuk transaksi keuangan",
+          "Kata kunci phishing (pinjaman, dana, amanah)"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 623,
+        "tokens_output": 160,
+        "processing_time_ms": 6450
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "detector_agent": "SUSPICIOUS",
+          "judge_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 2670,
+        "total_processing_time_ms": 17238
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 14,
+      "text": "Alhamdulillah berkat bantuan AKI  JAGAT semua hutang  sy udah lunas,ingin sperti sy slahkan KLIK www.layanan-pesugihan.com",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 24820,
+      "tokens_total": 2253,
+      "tokens_input": 639,
+      "tokens_output": 165,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini mengandung konten yang tidak relevan dengan aktivitas akademik grup mahasiswa Teknik Informatika UIR, menggunakan taktik social engineering dengan janji keberhasilan finansial, dan mengarahkan ke URL yang mencurigakan terkait layanan pesugihan, yang merupakan indikator kuat phishing.",
+        "risk_factors": [
+          "URL mencurigakan (domain layanan-pesugihan.com tidak terkait akademik)",
+          "Taktik social engineering (janji keberhasilan finansial untuk memancing klik)",
+          "Konteks tidak relevan dengan aktivitas akademik",
+          "Permintaan klik ke situs yang tidak terpercaya"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 639,
+        "tokens_output": 165,
+        "processing_time_ms": 6644
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "detector_agent": "SUSPICIOUS",
+          "judge_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 31 column 13 (char 1814)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 31 column 13 (char 1814)"
+            }
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 20 column 9 (char 1710)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 20 column 9 (char 1710)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1449,
+        "total_processing_time_ms": 17155
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 15,
+      "text": "maaf mengganggu bpk/ibu saya bpk dermawan bisa membantu anda masalah keuangan hanya dgn bunga 2% info wa 087709373769",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 21194,
+      "tokens_total": 3244,
+      "tokens_input": 614,
+      "tokens_output": 143,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan menawarkan bantuan keuangan dengan bunga rendah melalui WhatsApp, yang tidak relevan dengan konteks akademik grup mahasiswa Teknik Informatika UIR dan mengandung kata kunci phishing seperti 'masalah keuangan' dan 'bunga 2%'.",
+        "risk_factors": [
+          "Konteks tidak relevan dengan aktivitas akademik",
+          "Taktik social engineering (otoritas palsu dengan 'bpk dermawan')",
+          "Permintaan kontak WhatsApp untuk transaksi keuangan",
+          "Kata kunci phishing yang umum"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 614,
+        "tokens_output": 143,
+        "processing_time_ms": 6028
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "judge_agent": "SUSPICIOUS",
+          "detector_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 2487,
+        "total_processing_time_ms": 15166
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 16,
+      "text": "Maaf Mengganggu Waktunya Pak/Ibu\nKami Dari KOPERASI\nMenawarkan PINJAMAN-ONLINE\n5jt Sampai 500jt\nPoses Cepat Bunga 2% Pertahun\nInfo Whatsapp :0823-1757-2717",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 21097,
+      "tokens_total": 3532,
+      "tokens_input": 642,
+      "tokens_output": 144,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan menawarkan pinjaman online dengan bunga rendah dan nomor WhatsApp, tidak relevan dengan konteks akademik grup mahasiswa Teknik Informatika UIR, menunjukkan taktik social engineering untuk mengumpulkan data sensitif.",
+        "risk_factors": [
+          "taktik social engineering (otoritas palsu dari 'KOPERASI')",
+          "konteks tidak relevan dengan aktivitas akademik",
+          "permintaan kontak pribadi (WhatsApp) untuk transaksi keuangan",
+          "keyword phishing (pinjaman online, bunga rendah)"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 642,
+        "tokens_output": 144,
+        "processing_time_ms": 5568
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "detector_agent": "SUSPICIOUS",
+          "judge_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 2746,
+        "total_processing_time_ms": 15528
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 17,
+      "text": "Hanya Kk & Ktp Sudah Bisa buat modal usaha dengan bunga% Min 5-500jt Melayani Seluruh Indonesia Minat WA:087844302111 tks...",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 21823,
+      "tokens_total": 3348,
+      "tokens_input": 619,
+      "tokens_output": 163,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini mengandung penawaran pinjaman modal usaha dengan persyaratan minimal dan kontak WhatsApp, yang tidak relevan dengan konteks akademik grup mahasiswa Teknik Informatika UIR dan menunjukkan taktik social engineering untuk menarik minat dengan janji keuntungan.",
+        "risk_factors": [
+          "Konteks tidak relevan dengan aktivitas akademik",
+          "Taktik social engineering (penawaran pinjaman)",
+          "Permintaan kontak pribadi (WhatsApp) untuk transaksi finansial",
+          "Mengandung kata kunci phishing seperti 'modal usaha', 'bunga%', 'Min 5-500jt'"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 619,
+        "tokens_output": 163,
+        "processing_time_ms": 6063
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "judge_agent": "SUSPICIOUS",
+          "detector_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 2566,
+        "total_processing_time_ms": 15758
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 18,
+      "text": "Info Pinjaman Tunai Cepat Cair Dan Terpercaya Tampa Agunan Tampa Riba Info Chat WA:085248724234",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 22822,
+      "tokens_total": 1978,
+      "tokens_input": 606,
+      "tokens_output": 125,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan berisi penawaran pinjaman tunai cepat tanpa agunan dan riba dengan tautan WhatsApp, yang tidak relevan dengan konteks grup akademik Teknik Informatika UIR dan menunjukkan indikasi phishing melalui taktik social engineering.",
+        "risk_factors": [
+          "taktik social engineering (penawaran pinjaman)",
+          "konteks tidak relevan dengan aktivitas akademik",
+          "permintaan kontak WhatsApp untuk layanan finansial"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 606,
+        "tokens_output": 125,
+        "processing_time_ms": 5266
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "detector_agent": "SUSPICIOUS",
+          "judge_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 20 column 18 (char 1421)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 20 column 18 (char 1421)"
+            }
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 15 column 30 (char 1650)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 15 column 30 (char 1650)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1247,
+        "total_processing_time_ms": 17556
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 19,
+      "text": "KSP SB\nButuh Dana Cepat? Buat\n-Modal\n-Biaya Pendidikan\n-Biaya Berobat\n-DLL Tampa Agunan\nMulai 5jt S/D 500jt Dgn Bunga 2% PerTahun\nINFO http://bit.ly/2L9J21t",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 25730,
+      "tokens_total": 1953,
+      "tokens_input": 755,
+      "tokens_output": 150,
+      "triage_risk_score": 30,
+      "triage_flags": [
+        "phishing_keywords",
+        "shortened_url"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan menawarkan pinjaman dana cepat dengan bunga rendah tanpa agunan, yang tidak relevan dengan konteks akademik grup mahasiswa Teknik Informatika UIR. Menggunakan URL shortener yang mengarah ke WhatsApp, menunjukkan taktik social engineering untuk mengumpulkan data sensitif.",
+        "risk_factors": [
+          "URL mencurigakan (shortened)",
+          "Taktik social engineering (urgensi berlebihan, otoritas palsu)",
+          "Permintaan data sensitif (potensial melalui WhatsApp)",
+          "Konteks tidak relevan dengan aktivitas akademik"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 755,
+        "tokens_output": 150,
+        "processing_time_ms": 6589
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "detector_agent": "SUSPICIOUS",
+          "judge_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 15 column 21 (char 1735)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 15 column 21 (char 1735)"
+            }
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 25 column 37 (char 1719)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 25 column 37 (char 1719)"
+            }
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Expecting value: line 19 column 8 (char 1747)"
+            ],
+            "evidence": {
+              "error": "Expecting value: line 19 column 8 (char 1747)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1048,
+        "total_processing_time_ms": 17015
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 20,
+      "text": "Ass, Bpk/Ibu, Kmi Menberikan Pinjaman Modal Dgn Bunga 2% Mdh Terjamin Dan Amanah, Chat di Wa: 087765378585",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 22332,
+      "tokens_total": 1690,
+      "tokens_input": 619,
+      "tokens_output": 145,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan menawarkan pinjaman modal dengan bunga rendah, yang tidak relevan dengan konteks akademik grup mahasiswa Teknik Informatika UIR dan mengandung kata kunci phishing seperti 'pinjaman', 'bunga 2%', dan permintaan untuk chat di WhatsApp.",
+        "risk_factors": [
+          "Konteks tidak relevan dengan aktivitas akademik",
+          "Taktik social engineering (menawarkan keuntungan finansial)",
+          "Permintaan interaksi eksternal (chat di WhatsApp)",
+          "Kata kunci phishing terdeteksi"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 619,
+        "tokens_output": 145,
+        "processing_time_ms": 5355
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "detector_agent": "SUSPICIOUS",
+          "judge_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 13 column 9 (char 1801)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 13 column 9 (char 1801)"
+            }
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 18 column 9 (char 1783)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 18 column 9 (char 1783)"
+            }
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Expecting ',' delimiter: line 31 column 1 (char 1844)"
+            ],
+            "evidence": {
+              "error": "Expecting ',' delimiter: line 31 column 1 (char 1844)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 926,
+        "total_processing_time_ms": 16977
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 21,
+      "text": "dana pinjaman \nberbaris online\nmulai 2Ojt s/d 1.milyar \nminat chat wa;085348099737",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 22843,
+      "tokens_total": 2939,
+      "tokens_input": 613,
+      "tokens_output": 149,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan menawarkan pinjaman dana dengan jumlah besar (2 juta hingga 1 miliar) dan meminta kontak WhatsApp, yang tidak relevan dengan konteks grup akademik Teknik Informatika UIR. Ini menunjukkan taktik social engineering dengan urgensi palsu dan permintaan data sensitif melalui chat pribadi.",
+        "risk_factors": [
+          "taktik social engineering (urgensi berlebihan)",
+          "konteks tidak relevan dengan aktivitas akademik",
+          "permintaan data sensitif melalui chat pribadi",
+          "keyword phishing terdeteksi"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 613,
+        "tokens_output": 149,
+        "processing_time_ms": 5533
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "detector_agent": "SUSPICIOUS",
+          "judge_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: could not convert string to float: 'HIGH'"
+            ],
+            "evidence": {
+              "error": "could not convert string to float: 'HIGH'"
+            }
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 2177,
+        "total_processing_time_ms": 17309
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 22,
+      "text": "KSP.SEJAHTERA BERSAMA\nMenawarkan Pinjaman Dana Online (bunga 0.6%)\nMinat Chat/WA 085341977016\nLimit Sampai 500 Juta\nTenor max 10 Tahun",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 21818,
+      "tokens_total": 2154,
+      "tokens_input": 632,
+      "tokens_output": 125,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan menawarkan pinjaman dana online dengan bunga rendah dan limit tinggi, yang tidak relevan dengan konteks grup akademik mahasiswa Teknik Informatika UIR. Ini menunjukkan taktik social engineering untuk menarik perhatian dengan janji finansial yang tidak realistis.",
+        "risk_factors": [
+          "konteks tidak relevan dengan aktivitas akademik",
+          "taktik social engineering (janji finansial)",
+          "phishing_keywords terdeteksi"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 632,
+        "tokens_output": 125,
+        "processing_time_ms": 5179
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "detector_agent": "SUSPICIOUS",
+          "judge_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 27 column 29 (char 1306)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 27 column 29 (char 1306)"
+            }
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 19 column 9 (char 1611)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 19 column 9 (char 1611)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1397,
+        "total_processing_time_ms": 16639
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 23,
+      "text": "KSP. Sejahtra Bersama Melayani pinjaman degan bunga 4%, Min 5jt s/d 500jt, jaminan kk&ktp. Minat? wa: 085244082486",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 22794,
+      "tokens_total": 2638,
+      "tokens_input": 628,
+      "tokens_output": 153,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini menawarkan pinjaman dengan bunga rendah dan jaminan dokumen pribadi (KK & KTP) di grup akademik, yang tidak relevan dengan konteks diskusi mahasiswa Teknik Informatika UIR. Ini menunjukkan taktik social engineering dengan urgensi palsu dan permintaan data sensitif.",
+        "risk_factors": [
+          "taktik social engineering (otoritas palsu)",
+          "permintaan data sensitif (KK, KTP)",
+          "konteks tidak relevan dengan aktivitas akademik",
+          "URL tidak ada tetapi konten mengandung kata kunci phishing"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 628,
+        "tokens_output": 153,
+        "processing_time_ms": 6434
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "detector_agent": "SUSPICIOUS",
+          "judge_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Expecting value: line 17 column 151 (char 1596)"
+            ],
+            "evidence": {
+              "error": "Expecting value: line 17 column 151 (char 1596)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1857,
+        "total_processing_time_ms": 16360
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 24,
+      "text": "MasterRupiah Bunga 0.6% Syarat Mudah Tanpa Deposit Awal & Biaya Admin, KTA Multiguna TakeOver NoBiChacking Wa:0816208901\nhttps://masterrupiah.com",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 26317,
+      "tokens_total": 1729,
+      "tokens_input": 633,
+      "tokens_output": 180,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini menawarkan pinjaman uang dengan bunga rendah dan syarat mudah, yang tidak relevan dengan konteks grup akademik Teknik Informatika UIR yang biasanya membahas diskusi akademik atau informasi kampus. URL 'masterrupiah.com' bukan domain terpercaya seperti kampus atau platform akademik, dan pesan menggunakan taktik social engineering dengan janji keuntungan finansial yang mencurigakan.",
+        "risk_factors": [
+          "Konteks tidak relevan dengan aktivitas akademik",
+          "URL dari domain yang tidak terpercaya",
+          "Taktik social engineering (janji keuntungan finansial)",
+          "Permintaan kontak WhatsApp untuk layanan pinjaman yang mencurigakan"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 633,
+        "tokens_output": 180,
+        "processing_time_ms": 7439
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "detector_agent": "SUSPICIOUS",
+          "judge_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 28 column 19 (char 1803)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 28 column 19 (char 1803)"
+            }
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 11 column 18 (char 1586)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 11 column 18 (char 1586)"
+            }
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 15 column 35 (char 1699)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 15 column 35 (char 1699)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 916,
+        "total_processing_time_ms": 17586
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 25,
+      "text": "Berbasis SYARIAH 100% Tanpa Riba\nSolusinya hanya di \nKSP BAITUSSALAM\nMENWARKAN Pinjaman online\nProses Cepat & Aman\nMinimal 5jt-250jt\nMinat WA : 0852 1413 4052",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 23158,
+      "tokens_total": 2381,
+      "tokens_input": 645,
+      "tokens_output": 161,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan menawarkan pinjaman online dengan klaim syariah dan tanpa riba, yang tidak relevan dengan konteks grup akademik Teknik Informatika UIR. Mengandung kata kunci phishing seperti 'Pinjaman online', 'Proses Cepat & Aman', dan meminta kontak WhatsApp untuk transaksi finansial, yang merupakan indikator kuat upaya phishing.",
+        "risk_factors": [
+          "Konteks tidak relevan dengan aktivitas akademik",
+          "Taktik social engineering (klaim syariah dan aman)",
+          "Permintaan kontak untuk transaksi finansial",
+          "Kata kunci phishing yang umum"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 645,
+        "tokens_output": 161,
+        "processing_time_ms": 6560
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "detector_agent": "SUSPICIOUS",
+          "judge_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 20 column 9 (char 1637)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 20 column 9 (char 1637)"
+            }
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 16 column 16 (char 1640)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 16 column 16 (char 1640)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1575,
+        "total_processing_time_ms": 16598
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 26,
+      "text": "KSP SEJAHTERA\nmelayani pinjaman\nmulai 5jt-500jt\ncepat & mudah\nBunga 4%\nU/info\nhub/chat \nvia WA:0853-4972-8464",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 20450,
+      "tokens_total": 3462,
+      "tokens_input": 631,
+      "tokens_output": 155,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini menawarkan pinjaman uang dengan bunga rendah, yang tidak relevan dengan konteks grup akademik mahasiswa Teknik Informatika UIR. Ini menunjukkan taktik social engineering dengan urgensi palsu dan permintaan data sensitif melalui WhatsApp.",
+        "risk_factors": [
+          "URL mencurigakan (tidak ada URL langsung, tetapi meminta kontak via WhatsApp)",
+          "Taktik social engineering (urgensi berlebihan, otoritas palsu)",
+          "Permintaan data sensitif (pinjaman uang)",
+          "Konteks tidak relevan dengan aktivitas akademik"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 631,
+        "tokens_output": 155,
+        "processing_time_ms": 6148
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "detector_agent": "SUSPICIOUS",
+          "judge_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 2676,
+        "total_processing_time_ms": 14302
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 27,
+      "text": "KSP SEJAHTERA BERSAMA\nButuh Dana Cepat? Buat\n-Modal\n-Biaya Pendidikan\n-Biaya Berobat\n-DLL\nMulai 5jt S/D 500jt Dgn Bunga 0,6%\nPerTahun\nINFO Chat WA 082352241375",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 23463,
+      "tokens_total": 2753,
+      "tokens_input": 648,
+      "tokens_output": 146,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini menawarkan pinjaman dana dengan bunga rendah dan mencakup kata kunci phishing seperti 'Butuh Dana Cepat' dan 'INFO Chat WA', yang tidak relevan dengan konteks akademik grup mahasiswa Teknik Informatika UIR. Ini menunjukkan upaya social engineering untuk meminta data sensitif atau transfer uang.",
+        "risk_factors": [
+          "taktik social engineering (urgensi berlebihan)",
+          "konteks tidak relevan dengan aktivitas akademik",
+          "permintaan data sensitif implisit melalui kontak WhatsApp"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 648,
+        "tokens_output": 146,
+        "processing_time_ms": 5811
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "detector_agent": "SUSPICIOUS",
+          "judge_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 13 column 9 (char 1841)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 13 column 9 (char 1841)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1959,
+        "total_processing_time_ms": 17651
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 28,
+      "text": "(KSP SEJAHTERA BERSAMA)\nMelayani pengajuan pinjaman berbasis \nONLINE Tanpa agunan min pinjaman 5 s/d 250jt \nBunga Cuma 2% minat Chat Via WA: 085360130404",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 23040,
+      "tokens_total": 2289,
+      "tokens_input": 638,
+      "tokens_output": 160,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini menawarkan pinjaman online dengan bunga rendah dan tanpa agunan, yang tidak relevan dengan konteks grup akademik mahasiswa Teknik Informatika UIR. Mengandung kata kunci phishing seperti 'pinjaman', 'tanpa agunan', dan 'bunga 2%', serta meminta kontak via WhatsApp untuk data sensitif, menunjukkan upaya social engineering.",
+        "risk_factors": [
+          "konteks tidak relevan dengan aktivitas akademik",
+          "taktik social engineering (penawaran pinjaman menarik)",
+          "permintaan kontak untuk data sensitif",
+          "kata kunci phishing"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 638,
+        "tokens_output": 160,
+        "processing_time_ms": 6553
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "detector_agent": "SUSPICIOUS",
+          "judge_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 14 column 18 (char 1594)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 14 column 18 (char 1594)"
+            }
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 18 column 19 (char 1354)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 18 column 19 (char 1354)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1491,
+        "total_processing_time_ms": 16486
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 29,
+      "text": "Butuh Pinjaman Dana Tunai\nmin 5jt-500jt\nSyarat KTP & KK\nBunga Ringan 1%/thn\nBUAT MODAL USAHA\nRENOFASI RUMAH DLL,\nWA:082264377986\nklik: http://bit.ly/2YbKAv7",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 24132,
+      "tokens_total": 2122,
+      "tokens_input": 728,
+      "tokens_output": 142,
+      "triage_risk_score": 30,
+      "triage_flags": [
+        "phishing_keywords",
+        "shortened_url"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan menawarkan pinjaman dana tunai dengan bunga rendah dan menggunakan URL shortener yang mengarah ke WhatsApp, yang tidak relevan dengan konteks akademik grup mahasiswa Teknik Informatika UIR dan menunjukkan taktik social engineering untuk menarik perhatian.",
+        "risk_factors": [
+          "URL mencurigakan (shortened)",
+          "Taktik social engineering (urgensi dan penawaran finansial)",
+          "Konteks tidak relevan dengan aktivitas akademik",
+          "Permintaan data sensitif (KTP & KK)"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 728,
+        "tokens_output": 142,
+        "processing_time_ms": 5734
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "judge_agent": "SUSPICIOUS",
+          "detector_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Expecting value: line 24 column 114 (char 1728)"
+            ],
+            "evidence": {
+              "error": "Expecting value: line 24 column 114 (char 1728)"
+            }
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 17 column 22 (char 1650)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 17 column 22 (char 1650)"
+            }
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 9 column 17 (char 1556)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 9 column 17 (char 1556)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1252,
+        "total_processing_time_ms": 16957
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 30,
+      "text": "KSP.SEJAHTERA BERSAMA\nMenawarkan Dana Pinjaman Proses Mudah & Cepat\nPLAFOND 5 s/d 500 Juta\nTENOR 1 s/d 7 Tahun\nBunga 0,6 %\nMinat Chat WA' 085246610231",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 21826,
+      "tokens_total": 2870,
+      "tokens_input": 645,
+      "tokens_output": 150,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan menawarkan pinjaman dana dengan bunga rendah dan proses cepat, yang tidak relevan dengan konteks akademik grup mahasiswa Teknik Informatika UIR. Mengandung taktik social engineering seperti janji kemudahan dan urgensi, serta meminta kontak WhatsApp untuk data sensitif.",
+        "risk_factors": [
+          "konteks tidak relevan dengan aktivitas akademik",
+          "taktik social engineering (janji kemudahan dan urgensi)",
+          "permintaan kontak untuk kemungkinan data sensitif",
+          "keyword terkait pinjaman dan keuangan"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 645,
+        "tokens_output": 150,
+        "processing_time_ms": 5659
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "detector_agent": "SUSPICIOUS",
+          "judge_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 25 column 23 (char 1513)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 25 column 23 (char 1513)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 2075,
+        "total_processing_time_ms": 16166
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 31,
+      "text": "Salam Bpk/Ibu\nKmi Ad pnwaran Modal Usaha DLL\nDngan Bnga 2%/thun Proses Cair Dlam 2 jam\nAMan, Amanah & Tnpa Anggunan\nMnat hub Whatsup 087788789777",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 21529,
+      "tokens_total": 2868,
+      "tokens_input": 641,
+      "tokens_output": 161,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan menawarkan pinjaman modal usaha dengan bunga rendah dan proses cepat, yang tidak relevan dengan konteks akademik grup mahasiswa Teknik Informatika UIR. Mengandung kata kunci phishing seperti 'Modal Usaha', 'Bnga 2%/thun', dan 'Proses Cair Dlam 2 jam', serta meminta kontak WhatsApp untuk transaksi finansial.",
+        "risk_factors": [
+          "Konteks tidak relevan dengan aktivitas akademik",
+          "Taktik social engineering (urgensi berlebihan)",
+          "Permintaan kontak untuk transaksi finansial",
+          "Kata kunci phishing yang umum"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 641,
+        "tokens_output": 161,
+        "processing_time_ms": 6077
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "detector_agent": "SUSPICIOUS",
+          "judge_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 19 column 9 (char 1648)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 19 column 9 (char 1648)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 2066,
+        "total_processing_time_ms": 15452
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 32,
+      "text": "Asslm wr.wb kami \nDari koperasi mnawarkan\nPinjaman dana untk usaha,\nBerobat dll, dgn bunga 2%\nPerthun mnml pijmn 5-500jt\nProses mudah&cepat info\nWA;082217122699",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 22761,
+      "tokens_total": 2989,
+      "tokens_input": 643,
+      "tokens_output": 162,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan menawarkan pinjaman dana dengan bunga rendah dan proses mudah, yang tidak relevan dengan konteks grup akademik mahasiswa Teknik Informatika UIR. Mengandung taktik social engineering seperti urgensi dan otoritas palsu (dari koperasi), serta meminta kontak WhatsApp untuk informasi lebih lanjut, yang berisiko mengarah pada permintaan data sensitif.",
+        "risk_factors": [
+          "konteks tidak relevan dengan aktivitas akademik",
+          "taktik social engineering (urgensi dan otoritas palsu)",
+          "permintaan kontak untuk informasi lebih lanjut berpotensi phishing"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 643,
+        "tokens_output": 162,
+        "processing_time_ms": 6366
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "detector_agent": "SUSPICIOUS",
+          "judge_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 19 column 9 (char 1724)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 19 column 9 (char 1724)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 2184,
+        "total_processing_time_ms": 16394
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 33,
+      "text": "BIG PR0M0 CUCI GUDANG..!!!\nIPHONE:750ribu\nSAMSUNG:750ribu\nOPPO:750ribu\nVIVO:750ribu\ndan laptOp 1jt minat \nSilahkan cat/wa 0852-4027-1562",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 23513,
+      "tokens_total": 2598,
+      "tokens_input": 647,
+      "tokens_output": 180,
+      "triage_risk_score": 5,
+      "triage_flags": [
+        "excessive_punctuation"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini menawarkan promosi penjualan produk elektronik dengan harga sangat murah (misalnya iPhone 750 ribu), yang tidak relevan dengan konteks grup akademik mahasiswa Teknik Informatika UIR. Ini menunjukkan taktik social engineering dengan urgensi berlebihan (BIG PR0M0 CUCI GUDANG) dan permintaan untuk menghubungi nomor WhatsApp, yang dapat digunakan untuk upaya phishing atau penipuan.",
+        "risk_factors": [
+          "konteks tidak relevan dengan aktivitas akademik",
+          "taktik social engineering (urgensi berlebihan)",
+          "harga tidak realistis untuk produk elektronik",
+          "permintaan kontak pribadi di luar platform grup"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 647,
+        "tokens_output": 180,
+        "processing_time_ms": 6788
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "detector_agent": "SUSPICIOUS",
+          "judge_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: could not convert string to float: 'HIGH'"
+            ],
+            "evidence": {
+              "error": "could not convert string to float: 'HIGH'"
+            }
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 14 column 21 (char 1682)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 14 column 21 (char 1682)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1771,
+        "total_processing_time_ms": 16725
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 34,
+      "text": "Yuk berbagi kata cinta di SMS Hitz super ASYIK! Gabung GRATIS/1hr, balas SMS ini, ketik: OKE",
+      "expected": "PHISHING",
+      "predicted": "SAFE",
+      "confidence": 1.0,
+      "decided_by": "triage",
+      "action": "none",
+      "processing_time_ms": 0,
+      "tokens_total": 0,
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": null,
+      "mad_result": null,
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 35,
+      "text": "Dptkan vocer 500rb, aktfkn RBT BEBAS AKSES 7hr prtma: Inul Daratista-Masa Lalu trf slnjtnya 7rb/30hr, 2rb/7hr, 1rb/3hr (sesuai pulsa) Balas sms ketik: UNTUNG2",
+      "expected": "PHISHING",
+      "predicted": "SAFE",
+      "confidence": 1.0,
+      "decided_by": "triage",
+      "action": "none",
+      "processing_time_ms": 0,
+      "tokens_total": 0,
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": null,
+      "mad_result": null,
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 36,
+      "text": "SHOPEE\nSlmt.\nNo.+6287784xxxxxx\nAnda resmi\nMen-dptkan hadiah\nKe-2 cek tunai\nRp.175jt KODE\nID PEMENANG:(AD25MD47)\nU/info hadiah\nKlik.\nwww.grandprize55.online",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 23897,
+      "tokens_total": 2422,
+      "tokens_input": 665,
+      "tokens_output": 161,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini mengandung indikator phishing yang jelas, termasuk URL mencurigakan dengan domain tidak dikenal (grandprize55.online), taktik social engineering dengan janji hadiah uang tunai besar (Rp.175 juta) dan urgensi palsu, serta konteks tidak relevan dengan aktivitas akademik grup mahasiswa Teknik Informatika UIR.",
+        "risk_factors": [
+          "URL mencurigakan dengan domain tidak terpercaya",
+          "Taktik social engineering (janji hadiah uang, urgensi)",
+          "Konteks tidak relevan dengan akademik",
+          "Permintaan klik link untuk informasi hadiah"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 665,
+        "tokens_output": 161,
+        "processing_time_ms": 6261
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "judge_agent": "SUSPICIOUS",
+          "detector_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 31 column 17 (char 1714)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 31 column 17 (char 1714)"
+            }
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 7 column 29 (char 1469)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 7 column 29 (char 1469)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1596,
+        "total_processing_time_ms": 16208
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 37,
+      "text": "SHOPEE INDONESIA\nSelamat No Anda\nresmi terpilih meraih\nHadiah ke-2\nRp.175jta\ndari SHOPEE\nID pemenang\n(J7K2B59)\nU/info hadiah klik;\nbit.ly/shopee3347",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 26454,
+      "tokens_total": 3407,
+      "tokens_input": 708,
+      "tokens_output": 193,
+      "triage_risk_score": 30,
+      "triage_flags": [
+        "phishing_keywords",
+        "shortened_url"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini mengandung indikator phishing yang kuat: URL shortened (bit.ly) mengarah ke domain blogspot yang tidak resmi (shopee3347.blogspot.com), bukan domain Shopee yang sah (shopee.co.id). Pesan menggunakan taktik social engineering dengan klaim hadiah uang besar (Rp.175 juta) dan urgensi palsu untuk memancing klik. Konteks tidak relevan dengan aktivitas akademik grup mahasiswa Teknik Informatika UIR, yang biasanya membahas topik akademik, bukan promosi hadiah dari e-commerce.",
+        "risk_factors": [
+          "shortened_url",
+          "suspicious_domain (blogspot bukan shopee.co.id)",
+          "social_engineering (klaim hadiah uang besar)",
+          "urgency_tactics",
+          "irrelevant_context"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 708,
+        "tokens_output": 193,
+        "processing_time_ms": 7436
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "judge_agent": "SUSPICIOUS",
+          "detector_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 32 column 13 (char 1722)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 32 column 13 (char 1722)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 2506,
+        "total_processing_time_ms": 15059
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 38,
+      "text": "PESAN RESMI !!!\nSELAMAT ANDA\nTERPILIH SEBAGAI\nPEMENANG HADIAH\nKE-2 dr SHOPEE 2019 \nCode ID;25f4777 \nU/info klik;\nwww.big-shopee37.blogspot.com",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 24232,
+      "tokens_total": 3299,
+      "tokens_input": 673,
+      "tokens_output": 183,
+      "triage_risk_score": 35,
+      "triage_flags": [
+        "phishing_keywords",
+        "excessive_punctuation",
+        "caps_lock_abuse"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini mengandung indikator phishing yang jelas: mengklaim hadiah dari Shopee 2019 dengan tautan ke blogspot yang tidak resmi, menggunakan urgensi dan otoritas palsu (PESAN RESMI), serta tidak relevan dengan konteks akademik grup mahasiswa Teknik Informatika UIR.",
+        "risk_factors": [
+          "URL mencurigakan (blogspot domain untuk klaim hadiah resmi)",
+          "taktik social engineering (urgensi berlebihan, otoritas palsu)",
+          "konteks tidak relevan dengan aktivitas akademik",
+          "perilaku tidak konsisten (mahasiswa tidak mungkin mengirim pesan promosi hadiah Shopee di grup akademik)"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 673,
+        "tokens_output": 183,
+        "processing_time_ms": 6723
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "judge_agent": "SUSPICIOUS",
+          "detector_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 22 column 5 (char 1767)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 22 column 5 (char 1767)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 2443,
+        "total_processing_time_ms": 16285
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 39,
+      "text": "LAZADA ID\nMarkatplace No 1\nUcapkan SELAMAT\nAnda Trdaftar Pemenang\nLAZADA 11.11 Hadiah\nJUTAWAN Rp.125Jta\nID:MP47AD7\nInfo\nbit.ly/lazada-win11",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 26384,
+      "tokens_total": 2027,
+      "tokens_input": 709,
+      "tokens_output": 212,
+      "triage_risk_score": 30,
+      "triage_flags": [
+        "phishing_keywords",
+        "shortened_url"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini mengandung indikator phishing yang kuat: URL shortened mengarah ke domain blogspot yang tidak resmi (lazada-day11.blogspot.com), bukan domain Lazada yang sah (lazada.co.id). Pesan menggunakan taktik social engineering dengan klaim kemenangan undian dan hadiah uang besar (Rp.125 juta) yang tidak relevan dengan konteks akademik grup mahasiswa Teknik Informatika UIR. Tidak ada hubungan dengan aktivitas kampus atau diskusi akademik.",
+        "risk_factors": [
+          "URL shortened mengarah ke domain mencurigakan (blogspot)",
+          "Taktik social engineering (klaim kemenangan undian)",
+          "Hadiah uang besar tidak relevan dengan konteks akademik",
+          "Domain tidak sesuai dengan brand resmi (Lazada)",
+          "Konteks tidak sesuai dengan aktivitas grup"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 709,
+        "tokens_output": 212,
+        "processing_time_ms": 7509
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "detector_agent": "SUSPICIOUS",
+          "judge_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 24 column 23 (char 1615)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 24 column 23 (char 1615)"
+            }
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 12 column 5 (char 1723)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 12 column 5 (char 1723)"
+            }
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 19 column 9 (char 1692)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 19 column 9 (char 1692)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1106,
+        "total_processing_time_ms": 15927
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 40,
+      "text": "SELAMAT..\nAnda resmi\nmen-dpatkan\nHADIAH KE-2\nRp.175 juta.\nDri LAZADA2019\nID;02498123\nU/info hadiah klick;\nbit.ly/call-centerlazada29",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 23422,
+      "tokens_total": 2668,
+      "tokens_input": 710,
+      "tokens_output": 131,
+      "triage_risk_score": 30,
+      "triage_flags": [
+        "phishing_keywords",
+        "shortened_url"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini mengandung indikator phishing yang jelas: URL shortened (bit.ly) mengarah ke domain blogspot yang tidak terpercaya, konteks hadiah uang tidak relevan dengan aktivitas akademik grup, dan menggunakan taktik social engineering dengan urgensi palsu.",
+        "risk_factors": [
+          "URL shortened mencurigakan",
+          "domain tidak terpercaya (blogspot)",
+          "taktik social engineering (hadiah uang)",
+          "konteks tidak relevan dengan akademik"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 710,
+        "tokens_output": 131,
+        "processing_time_ms": 5219
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "detector_agent": "SUSPICIOUS",
+          "judge_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 30 column 29 (char 1582)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 30 column 29 (char 1582)"
+            }
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 25 column 22 (char 1700)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 25 column 22 (char 1700)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1827,
+        "total_processing_time_ms": 15967
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 41,
+      "text": "PT.SHOPEE\nMENGUCAPKAN\nSLAMAT!!!\nNO anda resmi\nm-dptkn hadiah\nKe-2 cek tunai\nRp.175jt\ndri pt.shopee\nPIN:B8337H9\nU/info klik:\nwww.shopeetbk29.blogspot.com",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 23592,
+      "tokens_total": 2798,
+      "tokens_input": 670,
+      "tokens_output": 179,
+      "triage_risk_score": 25,
+      "triage_flags": [
+        "phishing_keywords",
+        "excessive_punctuation"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini menunjukkan tanda-tanda phishing yang jelas dengan URL mencurigakan (blogspot.com yang tidak terkait dengan Shopee resmi), taktik social engineering (klaim hadiah uang tunai besar dan urgensi), dan konteks tidak relevan dengan aktivitas akademik grup.",
+        "risk_factors": [
+          "URL mencurigakan (domain blogspot.com bukan domain resmi Shopee)",
+          "Taktik social engineering (klaim hadiah uang tunai besar dan urgensi)",
+          "Permintaan data sensitif (PIN yang mungkin digunakan untuk penipuan)",
+          "Konteks tidak relevan dengan aktivitas akademik",
+          "Penggunaan kata kunci phishing (hadiah, cek tunai)"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 670,
+        "tokens_output": 179,
+        "processing_time_ms": 6328
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "judge_agent": "SUSPICIOUS",
+          "detector_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 30 column 18 (char 1779)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 30 column 18 (char 1779)"
+            }
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 19 column 25 (char 1635)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 19 column 25 (char 1635)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1949,
+        "total_processing_time_ms": 16001
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 42,
+      "text": "Anda mendapat 700.000 TUNAI, silakan klik tautan untuk mendapatkannya: http://isat.ekontan.com/01/14bskn0y WA CS:085777640327",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 21333,
+      "tokens_total": 3133,
+      "tokens_input": 640,
+      "tokens_output": 139,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan menawarkan uang tunai dengan tautan mencurigakan dan nomor WhatsApp, tidak relevan dengan konteks akademik grup mahasiswa Teknik Informatika UIR, menunjukkan upaya phishing.",
+        "risk_factors": [
+          "URL mencurigakan (domain ekontan.com tidak terkait akademik)",
+          "Taktik social engineering (tawaran uang tunai)",
+          "Permintaan data sensitif (implisit melalui klik tautan)",
+          "Konteks tidak relevan dengan aktivitas akademik"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 640,
+        "tokens_output": 139,
+        "processing_time_ms": 4992
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "detector_agent": "SUSPICIOUS",
+          "judge_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 22 column 9 (char 1779)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 22 column 9 (char 1779)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 2354,
+        "total_processing_time_ms": 15288
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 43,
+      "text": "SIM C4RD ANDA\nM-dptkan\n1unit mobil T0Y0TA INN0VA\ndr myPERT4MIN4\nPin Pemenang Anda: 789fr77\nKlik link: bit.ly/undianmypertamina",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 23504,
+      "tokens_total": 3206,
+      "tokens_input": 703,
+      "tokens_output": 117,
+      "triage_risk_score": 30,
+      "triage_flags": [
+        "phishing_keywords",
+        "shortened_url"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini mengandung indikator phishing yang jelas: URL shortened mengarah ke domain blogspot yang tidak terpercaya, konteks tidak relevan dengan aktivitas akademik (promo undian mobil dari Pertamina), dan menggunakan taktik social engineering (klaim hadiah mencurigakan).",
+        "risk_factors": [
+          "shortened_url",
+          "suspicious_domain",
+          "irrelevant_context",
+          "social_engineering"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 703,
+        "tokens_output": 117,
+        "processing_time_ms": 5163
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "detector_agent": "SUSPICIOUS",
+          "judge_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 19 column 26 (char 1559)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 19 column 26 (char 1559)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 2386,
+        "total_processing_time_ms": 15624
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 44,
+      "text": "sLMt!No whatsapp\nAnda Men-dptkn\nRp.175.000.000\nPIN:D33C879\ncek di:\nbit.ly/info-resmi314",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 24402,
+      "tokens_total": 2452,
+      "tokens_input": 682,
+      "tokens_output": 139,
+      "triage_risk_score": 30,
+      "triage_flags": [
+        "phishing_keywords",
+        "shortened_url"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan mengandung URL shortened yang mengarah ke domain blogspot.com yang tidak terkait dengan aktivitas akademik, dengan klaim hadiah uang besar dan PIN yang mencurigakan, serta menggunakan taktik social engineering untuk memancing klik.",
+        "risk_factors": [
+          "URL shortened mencurigakan (bit.ly)",
+          "Domain tidak terpercaya (blogspot.com)",
+          "Taktik social engineering (klaim hadiah uang)",
+          "Permintaan data sensitif (PIN)",
+          "Konteks tidak relevan dengan akademik"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 682,
+        "tokens_output": 139,
+        "processing_time_ms": 5202
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "judge_agent": "SUSPICIOUS",
+          "detector_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 34 column 13 (char 1860)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 34 column 13 (char 1860)"
+            }
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 12 column 5 (char 1702)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 12 column 5 (char 1702)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1631,
+        "total_processing_time_ms": 16617
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 45,
+      "text": "sLMt!No whatsapp\nAnda Men-dptkn\nRp.175.000.000\nPIN:D33C879\ncek di:\nbit.ly/info-resmi314",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 20840,
+      "tokens_total": 3786,
+      "tokens_input": 682,
+      "tokens_output": 197,
+      "triage_risk_score": 30,
+      "triage_flags": [
+        "phishing_keywords",
+        "shortened_url"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan mengandung klaim hadiah uang besar (Rp.175.000.000) dengan PIN, yang merupakan taktik social engineering umum dalam phishing untuk memancing klik. URL shortened (bit.ly) mengarah ke domain blogspot (info-resmi314.blogspot.com), yang tidak terkait dengan aktivitas akademik atau institusi terpercaya seperti kampus, dan domain ini mencurigakan karena sering digunakan untuk situs phishing. Konteks pesan tidak sesuai dengan diskusi akademik di grup mahasiswa Teknik Informatika UIR.",
+        "risk_factors": [
+          "URL mencurigakan (shortened dan domain blogspot)",
+          "Taktik social engineering (klaim hadiah uang)",
+          "Konteks tidak relevan dengan aktivitas akademik",
+          "Permintaan data sensitif (PIN)"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 682,
+        "tokens_output": 197,
+        "processing_time_ms": 7067
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "judge_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS",
+          "detector_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 2907,
+        "total_processing_time_ms": 13770
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 46,
+      "text": "Anda M-dptkan\n125,000.000.00\nID Anda (AAQ2099)\ncek ID Anda\nbit.ly/promoshopee567",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 26833,
+      "tokens_total": 2156,
+      "tokens_input": 680,
+      "tokens_output": 164,
+      "triage_risk_score": 10,
+      "triage_flags": [
+        "shortened_url"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini mengandung URL shortened yang mengarah ke domain blogspot yang tidak terkait dengan aktivitas akademik, menawarkan uang dalam jumlah besar dengan format tidak wajar, dan menggunakan taktik urgensi palsu untuk memeriksa ID, yang sangat tidak konsisten dengan konteks grup mahasiswa Teknik Informatika UIR.",
+        "risk_factors": [
+          "URL shortened mencurigakan (bit.ly)",
+          "Domain tidak terpercaya (blogspot.com)",
+          "Taktik social engineering (penawaran uang besar, urgensi)",
+          "Konteks tidak relevan dengan akademik",
+          "Format pesan tidak konsisten dengan baseline grup"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 680,
+        "tokens_output": 164,
+        "processing_time_ms": 6258
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "detector_agent": "SUSPICIOUS",
+          "judge_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: could not convert string to float: 'high'"
+            ],
+            "evidence": {
+              "error": "could not convert string to float: 'high'"
+            }
+          },
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: could not convert string to float: 'HIGH'"
+            ],
+            "evidence": {
+              "error": "could not convert string to float: 'HIGH'"
+            }
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Expecting property name enclosed in double quotes: line 32 column 4 (char 1730)"
+            ],
+            "evidence": {
+              "error": "Expecting property name enclosed in double quotes: line 32 column 4 (char 1730)"
+            }
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1312,
+        "total_processing_time_ms": 15731
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 47,
+      "text": "PESAN RESMI !!!\nanda pemenan\nRp150.000.000\nDari SHOPEE SALE\nPIN ID:IJ4T547\nCocokan PIN anda di\nbit.ly/mensaleshopee22coid",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 23412,
+      "tokens_total": 2602,
+      "tokens_input": 712,
+      "tokens_output": 117,
+      "triage_risk_score": 35,
+      "triage_flags": [
+        "phishing_keywords",
+        "excessive_punctuation",
+        "shortened_url"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini menunjukkan indikator phishing yang kuat: URL shortened mengarah ke domain blogspot yang tidak terkait dengan aktivitas akademik, klaim hadiah uang besar dari Shopee yang tidak relevan dengan konteks grup mahasiswa, dan penggunaan PIN ID yang mencurigakan.",
+        "risk_factors": [
+          "shortened_url",
+          "social_engineering_urgency",
+          "irrelevant_context",
+          "suspicious_domain"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 712,
+        "tokens_output": 117,
+        "processing_time_ms": 4441
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "judge_agent": "SUSPICIOUS",
+          "detector_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.75,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 27 column 9 (char 1637)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 27 column 9 (char 1637)"
+            }
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 16 column 21 (char 1647)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 16 column 21 (char 1647)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1773,
+        "total_processing_time_ms": 15988
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 48,
+      "text": "Anda Pemenang KE-2\nRp.150.000.000,00\nSHOPEE REJEKI\nawal tahun 2020\nTOKEN ID (B8337H9\nSilahkan buka link di bawah:\ns.id/rejekianksholeh\nCek HADIAH anda",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 23029,
+      "tokens_total": 2800,
+      "tokens_input": 709,
+      "tokens_output": 142,
+      "triage_risk_score": 40,
+      "triage_flags": [
+        "phishing_keywords",
+        "shortened_url"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan mengklaim kemenangan hadiah uang besar dari Shopee dengan urgensi palsu, menggunakan URL shortener s.id yang tidak terpercaya dalam konteks akademik, dan meminta klik link untuk cek hadiah, yang merupakan taktik phishing umum.",
+        "risk_factors": [
+          "URL shortener mencurigakan (s.id)",
+          "Taktik social engineering (urgensi dan hadiah uang)",
+          "Konteks tidak relevan dengan aktivitas akademik",
+          "Permintaan klik link untuk klaim hadiah"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 709,
+        "tokens_output": 142,
+        "processing_time_ms": 5315
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "judge_agent": "SUSPICIOUS",
+          "detector_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: could not convert string to float: 'HIGH'"
+            ],
+            "evidence": {
+              "error": "could not convert string to float: 'HIGH'"
+            }
+          },
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 27 column 26 (char 1595)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 27 column 26 (char 1595)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1949,
+        "total_processing_time_ms": 15369
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 49,
+      "text": "Anda Pemenang\nSHOPEE NEW YEAR\nRp. 150.000.000,-\nPIN (iJ4T547)\nInfo Klik Link :\ns.id/pt-shopeeawalthn",
+      "expected": "PHISHING",
+      "predicted": "PHISHING",
+      "confidence": 0.8360655737704918,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 29968,
+      "tokens_total": 5963,
+      "tokens_input": 689,
+      "tokens_output": 159,
+      "triage_risk_score": 40,
+      "triage_flags": [
+        "phishing_keywords",
+        "shortened_url"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini mengandung indikator phishing yang jelas: URL shortened (s.id) yang tidak terpercaya dalam konteks akademik, klaim hadiah uang besar (Rp. 150.000.000) dengan urgensi palsu, dan permintaan untuk mengklik link yang tidak relevan dengan aktivitas mahasiswa Teknik Informatika UIR.",
+        "risk_factors": [
+          "URL shortened mencurigakan (s.id)",
+          "taktik social engineering (klaim hadiah uang besar)",
+          "konteks tidak relevan dengan akademik",
+          "permintaan klik link tanpa konteks yang valid"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 689,
+        "tokens_output": 159,
+        "processing_time_ms": 5665
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "PHISHING",
+        "confidence": 0.8360655737704918,
+        "rounds_executed": 2,
+        "consensus_reached": true,
+        "consensus_type": "strong_majority",
+        "agent_votes": {
+          "defender_agent": "LEGITIMATE",
+          "critic_agent": "PHISHING",
+          "detector_agent": "PHISHING",
+          "fact_checker_agent": "PHISHING",
+          "judge_agent": "PHISHING"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: could not convert string to float: 'HIGH'"
+            ],
+            "evidence": {
+              "error": "could not convert string to float: 'HIGH'"
+            }
+          },
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "PHISHING",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          }
+        ],
+        "round_2_summary": [
+          {
+            "agent_type": "defender_agent",
+            "stance": "LEGITIMATE",
+            "confidence": 1.0,
+            "key_arguments": [
+              "Pesan menggunakan domain s.id yang merupakan layanan pemendek URL resmi yang dapat digunakan untuk tujuan sah, termasuk kampanye pemasaran.",
+              "Struktur pesan sederhana dengan informasi hadiah dan PIN, mirip dengan format notifikasi kemenangan yang umum dalam promosi online.",
+              "Tidak ada indikator teknis phishing yang jelas seperti domain palsu atau permintaan data sensitif dalam pesan ini."
+            ],
+            "evidence": {
+              "url_checker_result": "s.id adalah layanan pemendek URL yang valid dan dapat mengarah ke berbagai tujuan, termasuk halaman web resmi."
+            }
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "PHISHING",
+            "confidence": 1.0,
+            "key_arguments": [
+              "URL shortener 's.id' obscures destination, increasing risk; message uses urgency ('NEW YEAR') and prize bait (Rp. 150.000.000) typical of phishing; lack of official Shopee branding or verification details; other agents' unanimous suspicious stance (though with low confidence) aligns with phishing indicators; URL checker data (if available) would likely show unverified or malicious links, but absence of such data here still supports suspicion due to message structure."
+            ],
+            "evidence": {
+              "message_analysis": "Prize claim with PIN and shortened link",
+              "agent_consensus": "All agents suspicious or phishing",
+              "url_obfuscation": "s.id shortener used"
+            }
+          },
+          {
+            "agent_type": "detector_agent",
+            "stance": "PHISHING",
+            "confidence": 1.0,
+            "key_arguments": [
+              "URL shortener 's.id' obscures destination, increasing phishing risk",
+              "Message claims unrealistic prize amount (Rp. 150.000.000) with urgency",
+              "Contains PIN code (iJ4T547) typical of phishing lures",
+              "All other agents agree on suspicious/phishing classification",
+              "URL checker likely confirms malicious or suspicious destination"
+            ],
+            "evidence": {
+              "url_shortener": "s.id",
+              "prize_amount": "Rp. 150.000.000",
+              "pin_code": "iJ4T547",
+              "agent_consensus": "All agents: SUSPICIOUS or PHISHING",
+              "url_check_result": "Likely malicious/suspicious (based on available data)"
+            }
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "PHISHING",
+            "confidence": 0.85,
+            "key_arguments": [
+              "URL 's.id/pt-shopeeawalthn' uses URL shortening service 's.id' which obscures the actual destination, a common phishing tactic",
+              "Message claims unrealistic prize amount (Rp. 150.000.000) with urgency to click link, typical of phishing lures",
+              "No official Shopee branding or verification in the message structure",
+              "URL checker analysis shows shortened link redirects to unverified domain not affiliated with Shopee"
+            ],
+            "evidence": {
+              "url_analysis": "Shortened URL 's.id/pt-shopeeawalthn' detected",
+              "url_redirect": "Redirects to suspicious domain not matching shopee.co.id",
+              "message_pattern": "Prize announcement with PIN code and urgent call-to-action",
+              "brand_mismatch": "No official Shopee verification elements present"
+            }
+          },
+          {
+            "agent_type": "judge_agent",
+            "stance": "PHISHING",
+            "confidence": 0.8,
+            "key_arguments": [
+              "URL shortener 's.id' obscures destination, making verification difficult",
+              "Message promises unusually high prize (Rp. 150.000.000) with minimal personalization, typical of phishing lures",
+              "Contains PIN code 'iJ4T547' which serves no legitimate purpose in prize notifications",
+              "All agents agree on suspicious nature, with defender_agent specifically classifying as phishing",
+              "Round 1 analysis error was technical, not substantive - actual content analysis supports phishing conclusion"
+            ],
+            "evidence": {
+              "url_shortener": "s.id",
+              "prize_amount": "Rp. 150.000.000",
+              "pin_code": "iJ4T547",
+              "agent_consensus": "All agents suspicious (detector_agent: 100%, others: 50%) with defender_agent specifically phishing",
+              "message_characteristics": "Generic prize announcement with urgent call-to-action"
+            }
+          }
+        ],
+        "total_tokens": 5115,
+        "total_processing_time_ms": 22743
+      },
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 50,
+      "text": "Slmt No. Anda Mendapatkan\nHadiah Rp.100jt Dari\nPT. WHATSAPP\nID: UF77957\nINFO Klik Link URL di bawah ini:\nbit.ly/wa-2019",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 28042,
+      "tokens_total": 3986,
+      "tokens_input": 696,
+      "tokens_output": 179,
+      "triage_risk_score": 30,
+      "triage_flags": [
+        "phishing_keywords",
+        "shortened_url"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini menunjukkan indikator phishing yang kuat: mengklaim hadiah uang tunai besar dari PT. WhatsApp (otoritas palsu), menggunakan URL shortener yang mengarah ke domain blogspot yang tidak terkait dengan aktivitas akademik, dan meminta klik link untuk informasi lebih lanjut tanpa konteks akademik yang relevan.",
+        "risk_factors": [
+          "URL mencurigakan (shortened URL mengarah ke domain blogspot)",
+          "Taktik social engineering (klaim hadiah uang tunai besar, otoritas palsu PT. WhatsApp)",
+          "Konteks tidak relevan dengan aktivitas akademik",
+          "Permintaan klik link tanpa penjelasan akademik yang valid"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 696,
+        "tokens_output": 179,
+        "processing_time_ms": 6762
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "judge_agent": "SUSPICIOUS",
+          "detector_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 3111,
+        "total_processing_time_ms": 15825
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 51,
+      "text": "SIMcard Anda Mendapatkan Penghargaan Ke.5 Dari ERA JAYA Kode pin (479kl278) U/info klik:\nhttps://bit.ly/info-erajaya29",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 25858,
+      "tokens_total": 3007,
+      "tokens_input": 691,
+      "tokens_output": 121,
+      "triage_risk_score": 30,
+      "triage_flags": [
+        "phishing_keywords",
+        "shortened_url"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini mengandung indikator phishing yang kuat: URL shortened mengarah ke domain blogspot yang tidak terkait dengan aktivitas akademik, menggunakan taktik social engineering dengan klaim penghargaan palsu dan kode pin, serta konteks tidak relevan dengan grup mahasiswa Teknik Informatika UIR.",
+        "risk_factors": [
+          "shortened_url",
+          "social_engineering_urgency",
+          "irrelevant_context",
+          "suspicious_domain"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 691,
+        "tokens_output": 121,
+        "processing_time_ms": 5051
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "judge_agent": "SUSPICIOUS",
+          "detector_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 30 column 22 (char 1660)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 30 column 22 (char 1660)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 2195,
+        "total_processing_time_ms": 16624
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 52,
+      "text": "SHOPEE 9.9\nSlmt\nNo.Anda Resmi\nMendaptkan Hadiah\nKe-2 Cek Tunai\nRp.185jt Code ID\nPemenang;(AD25MD47)\nU/Info Hadiah\nKlik.\nbit.ly/info-shoppingday99",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 24043,
+      "tokens_total": 2639,
+      "tokens_input": 714,
+      "tokens_output": 149,
+      "triage_risk_score": 30,
+      "triage_flags": [
+        "phishing_keywords",
+        "shortened_url"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini mengandung URL shortened (bit.ly) yang mengarah ke domain blogspot yang tidak terkait dengan aktivitas akademik, dengan klaim hadiah uang tunai besar (Rp 185 juta) yang tidak relevan dengan konteks grup mahasiswa Teknik Informatika UIR. Ini menunjukkan taktik social engineering dengan urgensi palsu dan permintaan klik yang mencurigakan.",
+        "risk_factors": [
+          "shortened_url",
+          "social_engineering_urgency",
+          "irrelevant_context",
+          "suspicious_domain",
+          "phishing_keywords"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 714,
+        "tokens_output": 149,
+        "processing_time_ms": 5900
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "detector_agent": "SUSPICIOUS",
+          "judge_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 30 column 13 (char 1666)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 30 column 13 (char 1666)"
+            }
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 12 column 9 (char 1634)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 12 column 9 (char 1634)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1776,
+        "total_processing_time_ms": 15927
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 53,
+      "text": "Selamat anda.\nTerdaftar di\nBPJS INDONESIA\nSebagai Penerima \ndana Bantuan.\nRp.175juta\nU/info klik:\nbit.ly/dana-bpjs21-indonesia\n\nMasukkan PIN di Locked:\n57DL77",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 24876,
+      "tokens_total": 3373,
+      "tokens_input": 722,
+      "tokens_output": 125,
+      "triage_risk_score": 30,
+      "triage_flags": [
+        "phishing_keywords",
+        "shortened_url"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini mengandung indikator phishing yang kuat: URL shortened mengarah ke domain blogspot yang tidak terkait dengan BPJS Indonesia, menawarkan dana bantuan besar dengan urgensi palsu, dan meminta PIN yang sensitif, yang tidak relevan dengan konteks akademik grup.",
+        "risk_factors": [
+          "shortened_url",
+          "social_engineering_urgency",
+          "request_for_sensitive_data",
+          "mismatched_domain",
+          "irrelevant_context"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 722,
+        "tokens_output": 125,
+        "processing_time_ms": 5055
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "judge_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "detector_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.65,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 19 column 26 (char 1533)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 19 column 26 (char 1533)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 2526,
+        "total_processing_time_ms": 15927
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 54,
+      "text": "selamatAnda M-dpatkan\nC3K Rp.189.000.000\ndari.PERTAMINA\nCODE ID;(717747)\ninfo lanjut;\nWA;0822-5016-9377\nAtau klik;\nbit.ly/pertamina377",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 29019,
+      "tokens_total": 2954,
+      "tokens_input": 693,
+      "tokens_output": 195,
+      "triage_risk_score": 10,
+      "triage_flags": [
+        "shortened_url"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan menawarkan hadiah uang tunai besar dari Pertamina dengan klaim tidak masuk akal dan tidak relevan dengan konteks akademik grup mahasiswa Teknik Informatika UIR. URL shortened mengarah ke domain blogspot yang mencurigakan, bukan situs resmi Pertamina, dan meminta kontak WhatsApp untuk informasi lebih lanjut, yang merupakan taktik umum phishing untuk mengumpulkan data pribadi atau melakukan penipuan.",
+        "risk_factors": [
+          "URL mencurigakan (shortened URL mengarah ke domain blogspot bukan situs resmi)",
+          "Taktik social engineering (urgensi dan hadiah uang besar)",
+          "Konteks tidak relevan dengan aktivitas akademik",
+          "Permintaan kontak WhatsApp untuk informasi sensitif"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 693,
+        "tokens_output": 195,
+        "processing_time_ms": 7614
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "judge_agent": "SUSPICIOUS",
+          "detector_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: could not convert string to float: 'HIGH'"
+            ],
+            "evidence": {
+              "error": "could not convert string to float: 'HIGH'"
+            }
+          },
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 34 column 30 (char 1867)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 34 column 30 (char 1867)"
+            }
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 2066,
+        "total_processing_time_ms": 16477
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 55,
+      "text": "PT.WhatsApp\nSlmt.\nMen-dptkan hadiah\nKe-2 cek tunai\nRp.175jt KODE\nID PEMENANG:[WHA012]\nU/info hadiah\nKlik.\nbit.ly/infohadiah-wa747",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 25728,
+      "tokens_total": 3220,
+      "tokens_input": 713,
+      "tokens_output": 167,
+      "triage_risk_score": 30,
+      "triage_flags": [
+        "phishing_keywords",
+        "shortened_url"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini mengandung URL shortened yang mengarah ke domain blogspot yang tidak terkait dengan aktivitas akademik, menawarkan hadiah uang tunai besar dengan urgensi, dan menggunakan taktik social engineering seperti kode pemenang palsu, yang sangat tidak sesuai dengan konteks grup mahasiswa Teknik Informatika UIR.",
+        "risk_factors": [
+          "URL shortened mencurigakan (bit.ly)",
+          "Domain tujuan tidak terpercaya (blogspot.com)",
+          "Taktik social engineering (hadiah uang tunai besar, urgensi)",
+          "Konteks tidak relevan dengan aktivitas akademik",
+          "Permintaan klik link untuk informasi hadiah"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 713,
+        "tokens_output": 167,
+        "processing_time_ms": 6714
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "detector_agent": "SUSPICIOUS",
+          "judge_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Expecting property name enclosed in double quotes: line 24 column 4 (char 1708)"
+            ],
+            "evidence": {
+              "error": "Expecting property name enclosed in double quotes: line 24 column 4 (char 1708)"
+            }
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 2340,
+        "total_processing_time_ms": 16110
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 56,
+      "text": "HADIAH KHUSUS UNTUK PENGGUNA TELEGRAM AKTIF 1)VOUCHER GRATIS UNTUK DI SEMUA OPERATOR 2) BEBAS KOUTA UNTUK AKSES DI SEMUA FITUR TELEGRAM SELAMA 3 BULAN HADIAH DI RESMI KAN DARI TELEGRAM DALAM RANGKA MENINGKATKAN PENGGUNA TELEGRAM CARA AMBIL HADIAH NYA SILAKAN LANGSUNG ISI LINK DI BAWAH👇 https://is.gd/gratispulsa500ktelegrampromo",
+      "expected": "PHISHING",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 24779,
+      "tokens_total": 3788,
+      "tokens_input": 806,
+      "tokens_output": 167,
+      "triage_risk_score": 65,
+      "triage_flags": [
+        "urgency_keywords",
+        "phishing_keywords",
+        "caps_lock_abuse",
+        "shortened_url"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini menunjukkan indikasi kuat phishing dengan penawaran hadiah palsu berupa voucher gratis dan kuota internet, menggunakan URL shortener (is.gd) yang tidak terpercaya dalam konteks akademik, serta mengandung taktik social engineering seperti urgensi dan otoritas palsu dari Telegram.",
+        "risk_factors": [
+          "URL shortener mencurigakan (is.gd)",
+          "Taktik social engineering (urgensi, otoritas palsu)",
+          "Konteks tidak relevan dengan aktivitas akademik",
+          "Penawaran hadiah yang tidak masuk akal untuk grup mahasiswa",
+          "Penggunaan caps lock berlebihan"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 806,
+        "tokens_output": 167,
+        "processing_time_ms": 6426
+      },
+      "mad_result": {
+        "variant": "mad5",
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "detector_agent": "SUSPICIOUS",
+          "judge_agent": "SUSPICIOUS",
+          "fact_checker_agent": "SUSPICIOUS",
+          "defender_agent": "SUSPICIOUS",
+          "critic_agent": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "detector_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "judge_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 1.0,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "fact_checker_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "defender_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [],
+            "evidence": {}
+          },
+          {
+            "agent_type": "critic_agent",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.5,
+            "key_arguments": [
+              "Analysis failed: Unterminated string starting at: line 19 column 9 (char 1775)"
+            ],
+            "evidence": {
+              "error": "Unterminated string starting at: line 19 column 9 (char 1775)"
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 2815,
+        "total_processing_time_ms": 16968
+      },
+      "correct": false,
+      "error": null
+    }
+  ],
+  "metrics": {
+    "accuracy": 0.0179,
+    "precision": 1.0,
+    "recall": 0.0179,
+    "f1_score": 0.0351,
+    "detection_rate": 0.9643,
+    "confusion_matrix": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 55,
+      "tn": 0,
+      "tp_detected": 54,
+      "fn_missed": 2
+    },
+    "total": 56,
+    "correct": 1,
+    "wrong": 55,
+    "errors": 0,
+    "expected_distribution": {
+      "PHISHING": 56
+    },
+    "predicted_distribution": {
+      "SUSPICIOUS": 53,
+      "SAFE": 2,
+      "PHISHING": 1
+    },
+    "stage_distribution": {
+      "mad": 54,
+      "triage": 2
+    },
+    "stage_percentage": {
+      "mad": 96.4,
+      "triage": 3.6
+    },
+    "stage_accuracy": {
+      "mad": 0.0185,
+      "triage": 0.0
+    },
+    "avg_time_ms": 22964.9,
+    "min_time_ms": 0,
+    "max_time_ms": 29968,
+    "total_time_seconds": 1286.08,
+    "total_tokens": 155327,
+    "total_tokens_input": 36188,
+    "total_tokens_output": 8384,
+    "avg_tokens_per_msg": 2773.7,
+    "total_cost_usd": 0.013654,
+    "avg_cost_per_msg": 0.000244,
+    "avg_confidence_correct": 0.8361,
+    "avg_confidence_wrong": 0.5182
+  },
+  "dataset_size": 56,
+  "mad_mode": "mad5",
+  "total_time_seconds": 1286.08
+}

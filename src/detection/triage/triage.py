@@ -6,6 +6,7 @@ Combines all rule-based checks into a unified triage system
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
+from urllib.parse import urlparse
 
 from .whitelist import WhitelistChecker
 from .blacklist import BlacklistChecker, RedFlag
@@ -54,12 +55,12 @@ class TriageResult:
 
 class RuleBasedTriage:
     """
-    Rule-Based Triage System
+    Sistem Triage Berbasis Rule
     
-    Stage 1 of the phishing detection pipeline.
-    Performs fast rule-based filtering before LLM analysis.
+    Stage 1 dari pipeline deteksi phishing.
+    Melakukan penyaringan cepat berbasis rule sebelum analisis LLM.
     
-    Risk Score Calculation:
+    Perhitungan Risk Score:
     - Blacklisted domain: +50
     - Shortened URL (destination unknown/suspicious): +10
     - Shortened URL (destination whitelisted): 0 (risk dihapus)
@@ -72,15 +73,15 @@ class RuleBasedTriage:
     - CAPS LOCK abuse: +10
     - Authority impersonation: +20
     
-    URL Shortener Policy:
+    Kebijakan URL Shortener:
     - Shortener BUKAN indikator kuat phishing (dosen sering pakai).
-    - Sistem akan expand (follow redirect) untuk dapat domain tujuan.
+    - Sistem akan expand (follow redirect) untuk mendapatkan domain tujuan.
     - Jika tujuan whitelisted → risk dikurangi (shortener aman).
-    - Jika tujuan unknown → mild suspicious saja.
+    - Jika tujuan unknown → hanya sedikit mencurigakan.
     - Jika tujuan blacklisted → risk tetap tinggi via blacklisted_domain.
     
-    Classification:
-    - SAFE: risk_score == 0 AND only whitelisted URLs
+    Klasifikasi:
+    - SAFE: risk_score == 0 DAN hanya URL whitelisted
     - LOW_RISK: risk_score < 30
     - HIGH_RISK: risk_score >= 30
     """
@@ -164,6 +165,7 @@ class RuleBasedTriage:
         behavioral_anomalies: list[AnomalyResult] = []
         triggered_flags: list[str] = []
         expanded_urls: dict = {}  # Track expansion results
+        expanded_destinations: dict[str, str | None] = {}  # url → final_domain
         
         # Pre-process url_checks to find trusted URLs (from URLSecurityChecker)
         # These URLs were already expanded and determined to be safe
@@ -177,6 +179,28 @@ class RuleBasedTriage:
                 
                 if source == 'whitelist' or (not is_malicious and risk == 0.0):
                     trusted_urls_from_checker.add(url)
+                
+                # Preserve expansion evidence from external checker for downstream LLM prompts
+                expanded_url = check_result.get("expanded_url")
+                if expanded_url:
+                    parsed = urlparse(expanded_url)
+                    final_domain = (parsed.netloc or "").lower()
+                    if final_domain.startswith("www."):
+                        final_domain = final_domain[4:]
+                    final_domain = final_domain.split(":")[0]
+                    
+                    expanded_urls[url] = {
+                        "original_url": url,
+                        "is_shortened": self.url_expander.is_shortened(url),
+                        "expanded_url": expanded_url,
+                        "final_domain": final_domain or None,
+                        "expansion_success": True,
+                        "from_cache": False,
+                        "error": None,
+                        "source": check_result.get("source", "url_checker")
+                    }
+                    if final_domain:
+                        expanded_destinations[url] = final_domain
         
         # Step 1: Extract and analyze URLs
         urls = self.url_analyzer.extract_urls(message_text)
@@ -184,8 +208,11 @@ class RuleBasedTriage:
         
         # Step 2: Expand shortened URLs → get destination domain
         # BUT: skip expansion if URL was already checked by URLSecurityChecker
-        expanded_destinations: dict[str, str | None] = {}  # url → final_domain
         for url in urls:
+            # Already have expansion evidence from URLSecurityChecker
+            if url in expanded_urls:
+                continue
+            
             # If URL was already verified as trusted by async checker, skip local expansion
             if url in trusted_urls_from_checker:
                 continue

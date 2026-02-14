@@ -6,7 +6,7 @@ Menghitung metrik:
 - Accuracy, Precision, Recall, F1-Score
 - Confusion Matrix
 - Stage distribution (Triage / Single-Shot / MAD)
-- Token usage & cost per message
+- Token usage per message
 - Processing time statistics
 - Per-message detail (untuk analisis error)
 
@@ -14,6 +14,7 @@ Usage:
     python evaluate.py --dataset data/dataset_phishing.csv
     python evaluate.py --dataset data/dataset_phishing.csv --output results/
     python evaluate.py --dataset data/dataset_phishing.csv --limit 10   # test dulu 10 pesan
+    python evaluate.py --dataset data/dataset_phishing.csv --eval-mode mad_only --mad-mode mad5
 """
 
 import sys
@@ -29,7 +30,14 @@ from collections import Counter
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent))
 
-from src.detection import PhishingDetectionPipeline
+from src.detection import (
+    PhishingDetectionPipeline,
+    close_url_checker_sync,
+    get_url_checker,
+)
+from src.detection.triage import RuleBasedTriage
+from src.detection.mad import MultiAgentDebate as MAD3Debate
+from src.detection.mad5 import MultiAgentDebate as MAD5Debate
 
 # ============================================================
 # Configuration
@@ -63,9 +71,11 @@ LABEL_MAP = {
     "Suspicious": "SUSPICIOUS",
 }
 
-# DeepSeek pricing
+# Resource profiling constants
 COST_INPUT = 0.28 / 1_000_000   # $0.28 per 1M tokens
 COST_OUTPUT = 0.42 / 1_000_000  # $0.42 per 1M tokens
+
+logger = logging.getLogger(__name__)
 
 
 def load_dataset(csv_path: str, text_col: str = "chat", label_col: str = "tipe",
@@ -207,6 +217,181 @@ def evaluate_dataset(pipeline, dataset: list[dict], verbose: bool = True) -> dic
         "results": results,
         "metrics": metrics,
         "dataset_size": len(dataset),
+        "eval_mode": "pipeline",
+        "mad_mode": getattr(pipeline, "mad_mode", "mad3"),
+        "total_time_seconds": round(total_time, 2),
+    }
+
+
+def _create_mad_debate(mad_mode: str):
+    """Create MAD debate instance based on selected mode."""
+    if mad_mode == "mad3":
+        return MAD3Debate(skip_round_2_on_consensus=True)
+    if mad_mode == "mad5":
+        return MAD5Debate(skip_round_2_on_consensus=True)
+    raise ValueError(f"Unsupported mad_mode='{mad_mode}'. Use 'mad3' or 'mad5'.")
+
+
+def _normalize_mad_classification(decision: str) -> str:
+    normalized = (decision or "").upper()
+    if normalized == "LEGITIMATE":
+        return "SAFE"
+    return normalized or "SUSPICIOUS"
+
+
+def _determine_action(classification: str, confidence: float) -> str:
+    """Mirror pipeline action mapping for report consistency."""
+    if classification == "SAFE":
+        return "none"
+    if classification == "PHISHING":
+        return "flag_review"
+    if classification == "SUSPICIOUS":
+        return "warn" if confidence >= 0.60 else "flag_review"
+    return "flag_review"
+
+
+def _collect_url_checks(urls_found: list[str]) -> dict | None:
+    """Collect URL checks similarly to the full pipeline's MAD preparation."""
+    if not urls_found:
+        return None
+
+    try:
+        checker = get_url_checker()
+        try:
+            return checker.check_urls_sync(urls_found)
+        except Exception as e:
+            logger.warning(f"Sync URL check failed, fallback to heuristic: {e}")
+            try:
+                url_checks = {}
+                for url in urls_found:
+                    result = checker._heuristic_check(url)
+                    url_checks[url] = result.to_dict()
+                return url_checks
+            except Exception as fallback_error:
+                logger.warning(f"Heuristic URL check failed: {fallback_error}")
+                return None
+    except Exception as checker_error:
+        logger.warning(f"URL checker initialization failed: {checker_error}")
+        return None
+
+
+def evaluate_dataset_mad_only(
+    mad,
+    triage: RuleBasedTriage,
+    dataset: list[dict],
+    mad_mode: str,
+    verbose: bool = True
+) -> dict:
+    """
+    Evaluate dataset using MAD only for final decision.
+
+    Triage is kept for context only (risk flags, URLs), but never finalizes output.
+    """
+    results = []
+    total_start = time.time()
+
+    for i, data in enumerate(dataset, 1):
+        if verbose:
+            print(f"\r  Processing {i}/{len(dataset)}... ", end="", flush=True)
+
+        msg_start = time.time()
+        message_timestamp = datetime.now()
+
+        try:
+            triage_result = triage.analyze(
+                message_text=data["text"],
+                message_timestamp=message_timestamp,
+                user_baseline=None,
+                url_checks=None
+            )
+            url_checks = _collect_url_checks(triage_result.urls_found or [])
+
+            mad_result = mad.run_debate(
+                message_text=data["text"],
+                message_timestamp=message_timestamp,
+                sender_info=None,
+                baseline_metrics=None,
+                triage_result=triage_result.to_dict(),
+                single_shot_result=None,
+                url_checks=url_checks,
+                parallel=True
+            )
+
+            classification = _normalize_mad_classification(mad_result.decision)
+            confidence = mad_result.confidence
+
+            tokens_in = sum(
+                r.get("tokens_input", 0) for r in (mad_result.round_1_summary or [])
+            ) + sum(
+                r.get("tokens_input", 0) for r in (mad_result.round_2_summary or [])
+            )
+            tokens_out = sum(
+                r.get("tokens_output", 0) for r in (mad_result.round_1_summary or [])
+            ) + sum(
+                r.get("tokens_output", 0) for r in (mad_result.round_2_summary or [])
+            )
+
+            # Fallback for legacy summaries that may not carry token in/out fields.
+            if tokens_in == 0 and tokens_out == 0 and mad_result.total_tokens > 0:
+                tokens_in = int(mad_result.total_tokens * 0.6)
+                tokens_out = mad_result.total_tokens - tokens_in
+
+            mad_payload = mad_result.to_dict()
+            mad_payload.setdefault("variant", mad_mode)
+
+            results.append({
+                "index": i,
+                "text": data["text"],
+                "expected": data["expected_label"],
+                "predicted": classification,
+                "confidence": confidence,
+                "decided_by": "mad",
+                "action": _determine_action(classification, confidence),
+                "processing_time_ms": int((time.time() - msg_start) * 1000),
+                "tokens_total": mad_result.total_tokens,
+                "tokens_input": tokens_in,
+                "tokens_output": tokens_out,
+                "triage_risk_score": triage_result.risk_score,
+                "triage_flags": triage_result.triggered_flags,
+                "single_shot_result": None,
+                "mad_result": mad_payload,
+                "correct": _is_correct(data["expected_label"], classification),
+                "error": None,
+            })
+
+        except Exception as e:
+            results.append({
+                "index": i,
+                "text": data["text"],
+                "expected": data["expected_label"],
+                "predicted": "ERROR",
+                "confidence": 0,
+                "decided_by": "error",
+                "action": "none",
+                "processing_time_ms": int((time.time() - msg_start) * 1000),
+                "tokens_total": 0,
+                "tokens_input": 0,
+                "tokens_output": 0,
+                "triage_risk_score": 0,
+                "triage_flags": [],
+                "single_shot_result": None,
+                "mad_result": None,
+                "correct": False,
+                "error": str(e),
+            })
+
+    if verbose:
+        print(f"\r  Processing {len(dataset)}/{len(dataset)} ✅")
+
+    total_time = time.time() - total_start
+    metrics = calculate_metrics(results, total_time)
+
+    return {
+        "results": results,
+        "metrics": metrics,
+        "dataset_size": len(dataset),
+        "eval_mode": "mad_only",
+        "mad_mode": mad_mode,
         "total_time_seconds": round(total_time, 2),
     }
 
@@ -360,6 +545,8 @@ def print_report(eval_result: dict):
     print(f"\n{'═'*70}")
     print(f"  TELEPHISDEBATE — EVALUATION REPORT")
     print(f"  {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"  Eval Mode: {eval_result.get('eval_mode', 'pipeline')}")
+    print(f"  MAD Mode: {eval_result.get('mad_mode', 'mad3')}")
     print(f"{'═'*70}")
     
     # ── Dataset Overview ──
@@ -414,12 +601,10 @@ def print_report(eval_result: dict):
     print(f"   Avg per msg:   {metrics['avg_time_ms']:.0f}ms")
     print(f"   Min / Max:     {metrics['min_time_ms']}ms / {metrics['max_time_ms']}ms")
     
-    # ── Token & Cost ──
-    print(f"\n💰 TOKEN & COST (DeepSeek: $0.28/1M in, $0.42/1M out)")
+    # ── Token profile ──
+    print(f"\n🧠 TOKEN PROFILE")
     print(f"   Total tokens:  {metrics['total_tokens']:,} (in: {metrics['total_tokens_input']:,}, out: {metrics['total_tokens_output']:,})")
     print(f"   Avg per msg:   {metrics['avg_tokens_per_msg']:,.0f} tokens")
-    print(f"   Total cost:    ${metrics['total_cost_usd']:.4f}")
-    print(f"   Avg cost/msg:  ${metrics['avg_cost_per_msg']:.6f}")
     
     # ── Confidence Analysis ──
     print(f"\n🎯 CONFIDENCE")
@@ -447,7 +632,7 @@ def print_report(eval_result: dict):
     emoji = "🎉" if metrics['f1_score'] >= 0.9 else "✅" if metrics['f1_score'] >= 0.7 else "⚠️"
     print(f"  {emoji} F1-Score: {metrics['f1_score']:.1%} | "
           f"Detection Rate: {metrics['detection_rate']:.1%} | "
-          f"Cost: ${metrics['total_cost_usd']:.4f}")
+          f"Avg Time: {metrics['avg_time_ms']:.0f}ms")
     print(f"{'═'*70}\n")
 
 
@@ -542,6 +727,18 @@ def main():
         action="store_true",
         help="Minimal output (hanya metrik akhir)"
     )
+    parser.add_argument(
+        "--mad-mode",
+        choices=["mad3", "mad5"],
+        default="mad3",
+        help="Pilih varian MAD untuk Stage 3 (default: mad3)",
+    )
+    parser.add_argument(
+        "--eval-mode",
+        choices=["pipeline", "mad_only"],
+        default="pipeline",
+        help="Mode evaluasi: pipeline lengkap atau MAD-only (default: pipeline)",
+    )
     
     args = parser.parse_args()
     
@@ -572,23 +769,45 @@ def main():
     if args.limit:
         print(f"   ⚠️  Limited to first {args.limit} messages")
     
-    # Initialize pipeline
-    print(f"\n🔧 Initializing detection pipeline...")
-    pipeline = PhishingDetectionPipeline()
-    print(f"   Pipeline ready (Triage → Single-Shot → MAD)")
+    pipeline = None
+    triage = None
+    mad = None
+
+    if args.eval_mode == "pipeline":
+        print(f"\n🔧 Initializing detection pipeline...")
+        pipeline = PhishingDetectionPipeline(mad_mode=args.mad_mode)
+        print(f"   Pipeline ready (Triage → Single-Shot → {args.mad_mode.upper()})")
+    else:
+        print(f"\n🔧 Initializing MAD-only evaluator...")
+        triage = RuleBasedTriage()
+        mad = _create_mad_debate(args.mad_mode)
+        print(f"   MAD-only ready (Triage context → {args.mad_mode.upper()} decision)")
     
-    # Run evaluation
-    print(f"\n🔄 Running evaluation on {len(dataset)} messages...")
-    eval_result = evaluate_dataset(pipeline, dataset, verbose=not args.quiet)
-    
-    # Print report
-    print_report(eval_result)
-    
-    # Save results
-    if args.output:
-        print(f"💾 Saving results...")
-        save_results(eval_result, args.output)
-        print()
+    try:
+        # Run evaluation
+        print(f"\n🔄 Running evaluation on {len(dataset)} messages...")
+        if args.eval_mode == "pipeline":
+            eval_result = evaluate_dataset(pipeline, dataset, verbose=not args.quiet)
+        else:
+            eval_result = evaluate_dataset_mad_only(
+                mad=mad,
+                triage=triage,
+                dataset=dataset,
+                mad_mode=args.mad_mode,
+                verbose=not args.quiet
+            )
+        
+        # Print report
+        print_report(eval_result)
+        
+        # Save results
+        if args.output:
+            print(f"💾 Saving results...")
+            save_results(eval_result, args.output)
+            print()
+    finally:
+        # Prevent aiohttp unclosed session warnings from URL checker singleton
+        close_url_checker_sync()
 
 
 if __name__ == "__main__":

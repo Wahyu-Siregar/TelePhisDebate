@@ -204,7 +204,7 @@ Hubungi admin grup jika pesan anda salah dihapus.
         
         # Fetch DB stats if logging is enabled
         db_section = ""
-        cost_section = ""
+        usage_section = ""
         if self.enable_logging:
             try:
                 db = get_supabase_client()
@@ -233,21 +233,21 @@ Hubungi admin grup jika pesan anda salah dihapus.
 • Suspicious: {suspicious_db.count or 0}
 • Phishing: {phishing_db.count or 0}"""
                 
-                # API cost from api_usage table
+                # API usage from api_usage table
                 usage = db.table("api_usage").select(
-                    "total_tokens_input, total_tokens_output, estimated_cost_usd"
+                    "total_tokens_input, total_tokens_output, total_requests"
                 ).execute()
                 
                 if usage.data:
                     total_in = sum(r.get("total_tokens_input", 0) or 0 for r in usage.data)
                     total_out = sum(r.get("total_tokens_output", 0) or 0 for r in usage.data)
-                    total_cost = sum(float(r.get("estimated_cost_usd", 0) or 0) for r in usage.data)
+                    total_reqs = sum(r.get("total_requests", 0) or 0 for r in usage.data)
                     
-                    cost_section = f"""
-💰 **API Usage (All-Time):**
+                    usage_section = f"""
+🧠 **Inference Activity (All-Time):**
+• Total requests: {total_reqs:,}
 • Input tokens: {total_in:,}
-• Output tokens: {total_out:,}
-• Estimated cost: ${total_cost:.4f}"""
+• Output tokens: {total_out:,}"""
                 
             except Exception as e:
                 logger.warning(f"Could not fetch DB stats: {e}")
@@ -265,7 +265,7 @@ Hubungi admin grup jika pesan anda salah dihapus.
 • Phishing: {session_stats['phishing_count']}
 • Dihapus: {session_stats['deleted_count']}
 {db_section}
-{cost_section}
+{usage_section}
 
 🔧 **Config:**
 • Logging: {'Enabled' if self.enable_logging else 'Disabled'}
@@ -320,14 +320,13 @@ Hubungi admin grup jika pesan anda salah dihapus.
                     "id", count="exact"
                 ).eq("stage", "mad").execute()
                 
-                # API cost
+                # API usage
                 usage = db.table("api_usage").select(
-                    "total_tokens_input, total_tokens_output, estimated_cost_usd, total_requests"
+                    "total_tokens_input, total_tokens_output, total_requests"
                 ).execute()
                 
                 total_in = sum(r.get("total_tokens_input", 0) or 0 for r in (usage.data or []))
                 total_out = sum(r.get("total_tokens_output", 0) or 0 for r in (usage.data or []))
-                total_cost = sum(float(r.get("estimated_cost_usd", 0) or 0) for r in (usage.data or []))
                 total_reqs = sum(r.get("total_requests", 0) or 0 for r in (usage.data or []))
                 total_tokens = total_in + total_out
                 avg_tokens = total_tokens / total if total > 0 else 0
@@ -349,14 +348,11 @@ PHISHING:   {phishing:>4} ({phishing_pct:>5.1f}%)
 • Single-Shot LLM: {ss_count.count or 0}
 • Multi-Agent Debate: {mad_count.count or 0}
 
-**API Usage:**
+**Inference Activity:**
 • Total requests: {total_reqs:,}
 • Input tokens: {total_in:,}
 • Output tokens: {total_out:,}
 • Avg tokens/msg: {avg_tokens:,.0f}
-• Estimated cost: ${total_cost:.4f}
-
-💵 Pricing: $0.28/1M input, $0.42/1M output
 """
             except Exception as e:
                 logger.warning(f"Could not fetch DB stats: {e}")

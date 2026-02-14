@@ -81,25 +81,140 @@ class VirusTotalChecker:
     """VirusTotal API v3 integration for URL/domain checking"""
     
     BASE_URL = "https://www.virustotal.com/api/v3"
+    KEY_ROTATION_STATUS = {401, 403, 429}
+    KEY_ROTATION_ERROR_CODES = {
+        "QuotaExceededError",
+        "TooManyRequestsError",
+        "AuthenticationRequiredError",
+        "ForbiddenError",
+    }
     
     def __init__(self, api_key: str | None = None):
-        self.api_key = api_key or Config.VIRUSTOTAL_API_KEY
+        raw_api_keys = api_key if api_key is not None else Config.VIRUSTOTAL_API_KEY
+        self.api_keys = self._parse_api_keys(raw_api_keys)
+        self._active_key_index = 0
         self._session: aiohttp.ClientSession | None = None
+        if self.api_keys:
+            logger.info(
+                "VirusTotal checker initialized with %d API key(s).",
+                len(self.api_keys),
+            )
     
     @property
     def is_configured(self) -> bool:
-        return bool(self.api_key)
+        return len(self.api_keys) > 0
     
     async def _get_session(self) -> aiohttp.ClientSession:
         if self._session is None or self._session.closed:
-            self._session = aiohttp.ClientSession(
-                headers={"x-apikey": self.api_key}
-            )
+            self._session = aiohttp.ClientSession()
         return self._session
     
     async def close(self):
         if self._session and not self._session.closed:
             await self._session.close()
+
+    def _parse_api_keys(self, raw_api_keys: str | None) -> list[str]:
+        """Parse comma-separated API keys from environment/config."""
+        if not raw_api_keys:
+            return []
+        return [key.strip() for key in raw_api_keys.split(",") if key.strip()]
+
+    def _mask_key(self, key: str) -> str:
+        """Mask API key for safe logging."""
+        if len(key) <= 8:
+            return "***"
+        return f"{key[:4]}...{key[-4:]}"
+
+    def _extract_error_code(self, data: dict | None) -> str:
+        """Extract VirusTotal error code if present."""
+        if not isinstance(data, dict):
+            return ""
+        error = data.get("error", {})
+        if isinstance(error, dict):
+            return str(error.get("code", ""))
+        return ""
+
+    def _should_rotate_key(self, status: int | None, data: dict | None) -> bool:
+        """Decide if we should rotate to the next API key."""
+        if status in self.KEY_ROTATION_STATUS:
+            return True
+        code = self._extract_error_code(data)
+        return code in self.KEY_ROTATION_ERROR_CODES
+
+    def _iter_key_candidates(self):
+        """Iterate keys starting from current active key."""
+        total = len(self.api_keys)
+        for offset in range(total):
+            index = (self._active_key_index + offset) % total
+            yield index, self.api_keys[index]
+
+    async def _vt_get(self, endpoint: str) -> tuple[int | None, dict, int | None]:
+        """
+        Perform a VirusTotal GET request with automatic key rotation.
+
+        Returns:
+            (status_code, payload_dict, key_index_used)
+        """
+        if not self.is_configured:
+            return None, {"error": {"code": "NoAPIKey", "message": "API key not configured"}}, None
+
+        session = await self._get_session()
+        last_status: int | None = None
+        last_payload: dict = {}
+
+        for index, key in self._iter_key_candidates():
+            try:
+                async with session.get(
+                    f"{self.BASE_URL}/{endpoint}",
+                    headers={"x-apikey": key}
+                ) as resp:
+                    last_status = resp.status
+                    try:
+                        payload = await resp.json()
+                    except Exception:
+                        payload = {"raw_text": await resp.text()}
+                    last_payload = payload if isinstance(payload, dict) else {"raw": payload}
+
+                    if resp.status == 200:
+                        self._active_key_index = index
+                        return resp.status, last_payload, index
+
+                    should_rotate = self._should_rotate_key(resp.status, last_payload)
+                    if should_rotate and len(self.api_keys) > 1:
+                        logger.warning(
+                            "VirusTotal key %s exhausted/blocked (%s:%s), rotating...",
+                            self._mask_key(key),
+                            resp.status,
+                            self._extract_error_code(last_payload) or "unknown",
+                        )
+                        continue
+
+                    self._active_key_index = index
+                    return resp.status, last_payload, index
+
+            except asyncio.TimeoutError:
+                last_status = None
+                last_payload = {"error": {"code": "TimeoutError", "message": "Request timeout"}}
+                logger.warning(
+                    "VirusTotal timeout with key %s, trying next key if available.",
+                    self._mask_key(key),
+                )
+                if len(self.api_keys) > 1:
+                    continue
+                return last_status, last_payload, index
+            except Exception as e:
+                last_status = None
+                last_payload = {"error": {"code": "RequestError", "message": str(e)}}
+                logger.warning(
+                    "VirusTotal request error with key %s: %s",
+                    self._mask_key(key),
+                    e,
+                )
+                if len(self.api_keys) > 1:
+                    continue
+                return last_status, last_payload, index
+
+        return last_status, last_payload, None
     
     def _get_url_id(self, url: str) -> str:
         """Get VirusTotal URL identifier (base64 of URL)"""
@@ -121,20 +236,22 @@ class VirusTotalChecker:
             return self._fallback_result(url, "API key not configured")
         
         try:
-            session = await self._get_session()
-            
             # Try to get existing URL analysis
             url_id = self._get_url_id(url)
-            async with session.get(f"{self.BASE_URL}/urls/{url_id}") as resp:
-                if resp.status == 200:
-                    data = await resp.json()
-                    return self._parse_url_response(url, data)
-                elif resp.status == 404:
-                    # URL not in database, check domain instead
-                    return await self.check_domain(self._extract_domain(url))
-                else:
-                    logger.warning(f"VirusTotal URL check failed: {resp.status}")
-                    return await self.check_domain(self._extract_domain(url))
+            status, data, _ = await self._vt_get(f"urls/{url_id}")
+
+            if status == 200:
+                return self._parse_url_response(url, data)
+            if status == 404:
+                # URL not in database, check domain instead
+                return await self.check_domain(self._extract_domain(url))
+
+            logger.warning(
+                "VirusTotal URL check failed: status=%s code=%s",
+                status,
+                self._extract_error_code(data) or "unknown",
+            )
+            return await self.check_domain(self._extract_domain(url))
                     
         except asyncio.TimeoutError:
             logger.error("VirusTotal request timeout")
@@ -149,15 +266,32 @@ class VirusTotalChecker:
             return self._fallback_result(domain, "API key not configured")
         
         try:
-            session = await self._get_session()
-            
-            async with session.get(f"{self.BASE_URL}/domains/{domain}") as resp:
-                if resp.status == 200:
-                    data = await resp.json()
-                    return self._parse_domain_response(domain, data)
-                else:
-                    logger.warning(f"VirusTotal domain check failed: {resp.status}")
-                    return self._fallback_result(domain, f"API error: {resp.status}")
+            status, data, _ = await self._vt_get(f"domains/{domain}")
+
+            if status == 200:
+                return self._parse_domain_response(domain, data)
+            if status == 404:
+                # Domain is not present in VirusTotal DB yet.
+                # Treat as unknown (neutral) and let heuristic score drive final risk.
+                logger.info("VirusTotal domain not found: %s", domain)
+                return URLCheckResult(
+                    url=f"https://{domain}",
+                    is_malicious=False,
+                    risk_score=0.0,
+                    source="virustotal",
+                    details={
+                        "domain": domain,
+                        "not_found": True,
+                        "note": "Domain not found in VirusTotal database"
+                    }
+                )
+
+            logger.warning(
+                "VirusTotal domain check failed: status=%s code=%s",
+                status,
+                self._extract_error_code(data) or "unknown",
+            )
+            return self._fallback_result(domain, f"API error: {status}")
                     
         except Exception as e:
             logger.error(f"VirusTotal domain check error: {e}")
@@ -685,6 +819,31 @@ def get_url_checker() -> URLSecurityChecker:
     if _checker is None:
         _checker = URLSecurityChecker()
     return _checker
+
+
+def close_url_checker_sync() -> None:
+    """Close checker sessions synchronously to prevent unclosed session warnings."""
+    global _checker
+
+    if _checker is None:
+        return
+
+    checker = _checker
+    _checker = None
+
+    try:
+        loop = asyncio.get_running_loop()
+        if loop.is_running():
+            import nest_asyncio
+
+            nest_asyncio.apply()
+            loop.run_until_complete(checker.close())
+        else:
+            loop.run_until_complete(checker.close())
+    except RuntimeError:
+        asyncio.run(checker.close())
+    except Exception as e:
+        logger.warning(f"Failed to close URL checker cleanly: {e}")
 
 
 def check_urls_external(urls: list[str]) -> dict[str, dict]:

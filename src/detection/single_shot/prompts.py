@@ -12,7 +12,7 @@ Tugasmu: Menganalisis apakah pesan dari akun mahasiswa terverifikasi menunjukkan
 
 Konteks:
 - Grup: Mahasiswa Teknik Informatika, Universitas Islam Riau (UIR)
-- Konten tipikal: diskusi akademik, tugas kuliah, pengumuman event kampus
+- Konten tipikal: diskusi akademik, Informasi akademik, pengumuman event kampus
 - Model ancaman: Akun mahasiswa yang dikompromikan mengirimkan link phishing
 
 Kriteria Phishing:
@@ -27,6 +27,7 @@ Kriteria Legitimate:
 2. Konteks sesuai aktivitas akademik
 3. Gaya pesan konsisten dengan pengguna
 4. Tidak ada indikator social engineering
+5. URL shortener tidak otomatis berbahaya jika expanded URL mengarah ke domain terpercaya
 
 Output dalam format JSON strict:
 {
@@ -39,6 +40,7 @@ Output dalam format JSON strict:
 PENTING:
 - Berikan confidence tinggi (>0.85) hanya jika sangat yakin
 - Gunakan "SUSPICIOUS" jika ragu antara SAFE dan PHISHING
+- Jangan memberi label PHISHING hanya karena URL shortener jika evidence expand/trusted mendukung LEGITIMATE
 - Pertimbangkan konteks grup akademik Indonesia"""
 
 
@@ -50,17 +52,17 @@ def construct_analysis_prompt(
     triage_result: dict | None = None
 ) -> str:
     """
-    Construct the analysis prompt for Single-Shot LLM.
+    Susun prompt analisis untuk LLM Single-Shot.
     
     Args:
-        message_text: The message content to analyze
-        message_timestamp: When the message was sent
-        sender_info: Information about the sender (username, join date, etc.)
-        baseline_metrics: User's baseline behavior metrics
-        triage_result: Result from rule-based triage stage
+        message_text: Konten pesan yang akan dianalisis
+        message_timestamp: Waktu ketika pesan dikirim
+        sender_info: Informasi tentang pengirim (nama pengguna, tanggal bergabung, dll.)
+        baseline_metrics: Metrik perilaku dasar pengguna
+        triage_result: Hasil dari tahap triase berbasis aturan
         
     Returns:
-        Formatted prompt string
+        String prompt yang telah diformat
     """
     prompt_parts = ["=== Permintaan Analisis Pesan ===\n"]
     
@@ -123,6 +125,26 @@ def construct_analysis_prompt(
         whitelisted = triage_result.get("whitelisted_urls", [])
         if whitelisted:
             prompt_parts.append(f"- URLs whitelisted: {whitelisted}")
+        
+        expanded_urls = triage_result.get("expanded_urls", {})
+        if expanded_urls:
+            prompt_parts.append("- Evidence ekspansi URL:")
+            for original_url, expansion in expanded_urls.items():
+                if not isinstance(expansion, dict):
+                    continue
+                expanded_url = expansion.get("expanded_url")
+                final_domain = expansion.get("final_domain")
+                source = expansion.get("source", "triage_expander")
+                if expanded_url:
+                    prompt_parts.append(
+                        f"  - {original_url} -> {expanded_url} "
+                        f"(domain: {final_domain or 'unknown'}, source: {source})"
+                    )
+                else:
+                    prompt_parts.append(
+                        f"  - {original_url} -> gagal expand "
+                        f"(source: {source})"
+                    )
     
     prompt_parts.append("")
     prompt_parts.append("Analisis pesan ini dan berikan klasifikasi dalam format JSON.")

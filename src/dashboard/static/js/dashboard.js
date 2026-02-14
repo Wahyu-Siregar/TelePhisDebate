@@ -257,14 +257,6 @@ async function updateApiUsage() {
     document.getElementById('tokensInput').textContent = (usage.tokens_input || 0).toLocaleString();
     document.getElementById('tokensOutput').textContent = (usage.tokens_output || 0).toLocaleString();
     document.getElementById('totalRequests').textContent = (usage.total_requests || 0).toLocaleString();
-    document.getElementById('totalCost').textContent = `$${(usage.total_cost || 0).toFixed(4)}`;
-    
-    // Update pricing info if available
-    if (usage.pricing) {
-        const p = usage.pricing;
-        document.getElementById('pricingInfo').textContent = 
-            `Model: ${p.model} | Input: $${p.input_per_1m}/1M tokens | Output: $${p.output_per_1m}/1M tokens`;
-    }
 }
 
 // ============================================================

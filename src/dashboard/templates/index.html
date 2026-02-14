@@ -19,6 +19,14 @@
                 <i class="iconoir-clipboard-check"></i>
                 <span>Evaluation</span>
             </a>
+            <a href="/evaluation/compare" class="nav-link" title="MAD Comparison">
+                <i class="iconoir-stats-report"></i>
+                <span>MAD Compare</span>
+            </a>
+            <a href="/evaluation/modes" class="nav-link" title="Evaluation Modes">
+                <i class="iconoir-git-pull-request"></i>
+                <span>Mode Compare</span>
+            </a>
             <div class="nav-status">
                 <span class="status-dot"></span>
                 <span id="lastUpdate">Loading...</span>
@@ -208,9 +216,9 @@
             </div>
         </section>
 
-        <!-- API Usage -->
+        <!-- Inference Activity -->
         <section class="api-usage">
-            <h2><i class="iconoir-dollar-circle"></i> API USAGE & COST</h2>
+            <h2><i class="iconoir-cpu"></i> INFERENCE ACTIVITY</h2>
             <div class="usage-grid">
                 <div class="usage-card">
                     <span class="usage-value" id="tokensInput">0</span>
@@ -224,13 +232,6 @@
                     <span class="usage-value" id="totalRequests">0</span>
                     <span class="usage-label">API Requests</span>
                 </div>
-                <div class="usage-card">
-                    <span class="usage-value" id="totalCost">$0.00</span>
-                    <span class="usage-label">Estimated Cost</span>
-                </div>
-            </div>
-            <div class="usage-pricing-info">
-                <span id="pricingInfo">Model: deepseek-chat | Input: $0.28/1M tokens | Output: $0.42/1M tokens</span>
             </div>
         </section>
     </main>

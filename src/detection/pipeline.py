@@ -12,8 +12,8 @@ from typing import Any
 from .triage import RuleBasedTriage, TriageResult
 from .single_shot import SingleShotClassifier
 from .single_shot.classifier import ClassificationResult
-from .mad import MultiAgentDebate
-from .mad.orchestrator import DebateResult
+from .mad import MultiAgentDebate as MultiAgentDebateV3
+from .mad5 import MultiAgentDebate as MultiAgentDebateV5
 from .url_checker import get_url_checker
 
 logger = logging.getLogger(__name__)
@@ -68,34 +68,35 @@ class DetectionResult:
 
 class PhishingDetectionPipeline:
     """
-    Complete Phishing Detection Pipeline
+    Pipeline Deteksi Phishing Lengkap
     
-    Flow:
-    1. Triage (Rule-Based): Fast filtering
-       - SAFE with whitelisted URLs only → Done
-       - Shortened URLs expanded & re-evaluated before scoring
-       - Otherwise → Stage 2
+    Alur:
+    1. Triage (Berbasis Rule): Filtering cepat
+       - SAFE dengan hanya URLs terdaftar → Selesai
+       - Shortened URLs diperluas & dievaluasi ulang sebelum scoring
+       - Selainnya → Stage 2
        
-    2. Single-Shot LLM: Quick classification (ROUTER, not final judge)
-       - High confidence SAFE (≥90%) → Done
-       - PHISHING (any confidence) → Always escalate to Stage 3
-       - SUSPICIOUS or low confidence → Stage 3
+    2. Single-Shot LLM: Klasifikasi cepat (ROUTER, bukan judge final)
+       - SAFE dengan confidence tinggi (≥90%) → Selesai
+       - PHISHING (confidence apapun) → Selalu eskalasi ke Stage 3
+       - SUSPICIOUS atau confidence rendah → Stage 3
        
-       NOTE: Single-shot NEVER finalizes PHISHING. This prevents
-       "yakin tapi salah" — high confidence but wrong PHISHING labels
-       that would cause false alerts and spam admin notifications.
+       CATATAN: Single-shot TIDAK PERNAH menyelesaikan PHISHING. Ini mencegah
+       "yakin tapi salah" — label PHISHING dengan confidence tinggi tapi hasil
+       yang salah yang akan menyebabkan false alerts dan spam notifikasi admin.
        
-    3. Multi-Agent Debate: Final verification for PHISHING
-       - 3 agents debate and vote
-       - Weighted aggregation for final decision
-       - Only stage that can finalize PHISHING classification
+    3. Multi-Agent Debate: Verifikasi final untuk PHISHING
+       - Mode `mad3`: 3 agents berdebat dan memberikan vote
+       - Mode `mad5`: 5 agents (detector/critic/defender/fact-checker/judge)
+       - Weighted aggregation untuk keputusan final
+       - Hanya stage yang dapat menyelesaikan klasifikasi PHISHING
        
-    Action Mapping:
-    - SAFE: no action
-    - SUSPICIOUS (low conf): flag for review
-    - SUSPICIOUS (high conf): warn users
-    - PHISHING (conf < 80%): warn + flag
-    - PHISHING (conf ≥ 80%): delete message
+    Pemetaan Action:
+    - SAFE: tidak ada action
+    - SUSPICIOUS (confidence rendah): tandai untuk review
+    - SUSPICIOUS (confidence tinggi): peringatkan users
+    - PHISHING (confidence < 80%): peringatkan + tandai
+    - PHISHING (confidence ≥ 80%): hapus pesan
     """
     
     # Action thresholds
@@ -105,7 +106,8 @@ class PhishingDetectionPipeline:
     def __init__(
         self,
         custom_whitelist: set[str] | None = None,
-        custom_blacklist: set[str] | None = None
+        custom_blacklist: set[str] | None = None,
+        mad_mode: str = "mad3",
     ):
         """
         Initialize the detection pipeline.
@@ -113,11 +115,21 @@ class PhishingDetectionPipeline:
         Args:
             custom_whitelist: Additional domains to whitelist
             custom_blacklist: Additional domains to blacklist
+            mad_mode: MAD variant to use ("mad3" default or "mad5")
         """
         # Initialize stages
         self.triage = RuleBasedTriage(custom_whitelist, custom_blacklist)
         self.single_shot = SingleShotClassifier(triage=self.triage)
-        self.mad = MultiAgentDebate(skip_round_2_on_consensus=True)
+        self.mad_mode = (mad_mode or "mad3").strip().lower()
+
+        if self.mad_mode == "mad3":
+            self.mad = MultiAgentDebateV3(skip_round_2_on_consensus=True)
+        elif self.mad_mode == "mad5":
+            self.mad = MultiAgentDebateV5(skip_round_2_on_consensus=True)
+        else:
+            raise ValueError(
+                f"Unsupported mad_mode='{mad_mode}'. Use 'mad3' or 'mad5'."
+            )
     
     def process_message(
         self,
@@ -211,19 +223,27 @@ class PhishingDetectionPipeline:
         # ============================================================
         
         # URL checks should be passed from handler (async context)
-        # If not provided, use heuristic fallback
+        # If not provided, run synchronous URL checker (expand + VT/heuristic)
         if url_checks is None:
             urls_found = triage_result.urls_found if triage_result else []
             if urls_found:
                 try:
                     checker = get_url_checker()
-                    url_checks = {}
-                    for url in urls_found:
-                        result = checker._heuristic_check(url)
-                        url_checks[url] = result.to_dict()
-                    logger.debug(f"Heuristic URL check for {len(urls_found)} URLs")
-                except Exception as e:
-                    logger.warning(f"Heuristic URL check failed: {e}")
+                    try:
+                        url_checks = checker.check_urls_sync(urls_found)
+                        logger.debug(f"Sync URL check for {len(urls_found)} URLs")
+                    except Exception as e:
+                        logger.warning(f"Sync URL check failed, fallback to heuristic: {e}")
+                        try:
+                            url_checks = {}
+                            for url in urls_found:
+                                result = checker._heuristic_check(url)
+                                url_checks[url] = result.to_dict()
+                        except Exception as fallback_error:
+                            logger.warning(f"Heuristic URL check failed: {fallback_error}")
+                            url_checks = None
+                except Exception as checker_error:
+                    logger.warning(f"URL checker initialization failed: {checker_error}")
                     url_checks = None
         
         mad_result = self.mad.run_debate(
@@ -247,13 +267,16 @@ class PhishingDetectionPipeline:
             total_tokens_in += r.get("tokens_input", 0)
             total_tokens_out += r.get("tokens_output", 0)
         
+        mad_payload = mad_result.to_dict()
+        mad_payload.setdefault("variant", self.mad_mode)
+
         return self._finalize(
             classification=self._normalize_classification(mad_result.decision),
             confidence=mad_result.confidence,
             decided_by="mad",
             triage_result=triage_result.to_dict(),
             single_shot_result=single_shot_result.to_dict(),
-            mad_result=mad_result.to_dict(),
+            mad_result=mad_payload,
             start_time=start_time,
             total_tokens=total_tokens,
             tokens_in=total_tokens_in,

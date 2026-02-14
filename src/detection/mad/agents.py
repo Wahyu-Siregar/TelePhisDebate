@@ -30,7 +30,10 @@ class AgentResponse:
             "stance": self.stance,
             "confidence": self.confidence,
             "key_arguments": self.key_arguments,
-            "evidence": self.evidence
+            "evidence": self.evidence,
+            "tokens_input": self.tokens_input,
+            "tokens_output": self.tokens_output,
+            "processing_time_ms": self.processing_time_ms,
         }
 
 
@@ -226,27 +229,27 @@ class ContentAnalyzer(BaseAgent):
     def system_prompt(self) -> str:
         return """Kamu adalah Content Analyzer agent dalam sistem deteksi phishing.
 
-Peran: Menganalisis konten pesan, pola linguistik, dan deviasi perilaku.
+                    Peran: Menganalisis konten pesan, pola linguistik, dan deviasi perilaku.
 
-Fokus analisis:
-1. Konsistensi gaya bahasa dengan baseline pengguna
-2. Taktik social engineering (urgensi, otoritas palsu, ketakutan)
-3. Relevansi konteks dengan aktivitas akademik grup
-4. Anomali struktur dan format pesan
-5. Penggunaan bahasa Indonesia yang tidak wajar
+                    Fokus analisis:
+                    1. Konsistensi gaya bahasa dengan baseline pengguna
+                    2. Taktik social engineering (urgensi, otoritas palsu, ketakutan)
+                    3. Relevansi konteks dengan aktivitas akademik grup
+                    4. Anomali struktur dan format pesan
+                    5. Penggunaan bahasa Indonesia yang tidak wajar
 
-Output JSON:
-{
-  "stance": "PHISHING" | "SUSPICIOUS" | "LEGITIMATE",
-  "confidence": 0.0-1.0,
-  "key_arguments": ["argumen1", "argumen2", ...],
-  "evidence": {
-    "style_deviation": 0.0-1.0,
-    "urgency_score": 0.0-1.0,
-    "social_engineering_detected": true/false,
-    "linguistic_anomalies": ["anomali1", ...]
-  }
-}"""
+                    Output JSON:
+                    {
+                    "stance": "PHISHING" | "SUSPICIOUS" | "LEGITIMATE",
+                    "confidence": 0.0-1.0,
+                    "key_arguments": ["argumen1", "argumen2", ...],
+                    "evidence": {
+                        "style_deviation": 0.0-1.0,
+                        "urgency_score": 0.0-1.0,
+                        "social_engineering_detected": true/false,
+                        "linguistic_anomalies": ["anomali1", ...]
+                    }
+                    }"""
     
     def _construct_prompt(
         self,
@@ -309,28 +312,29 @@ class SecurityValidator(BaseAgent):
     def system_prompt(self) -> str:
         return """Kamu adalah Security Validator agent dalam sistem deteksi phishing.
 
-Peran: Memverifikasi URL, reputasi domain, dan bukti keamanan eksternal.
+                Peran: Memverifikasi URL, reputasi domain, dan bukti keamanan eksternal.
 
-Fokus analisis:
-1. Struktur URL (obfuscation, patterns mencurigakan)
-2. Reputasi domain berdasarkan data yang tersedia
-3. Verifikasi tujuan link
-4. Kecocokan dengan database phishing historis
-5. HTTPS vs HTTP, TLD analysis
+                Fokus analisis:
+                1. Struktur URL (obfuscation, patterns mencurigakan)
+                2. Reputasi domain berdasarkan data yang tersedia
+                3. Verifikasi tujuan link
+                4. Kecocokan dengan database phishing historis
+                5. HTTPS vs HTTP, TLD analysis
+                6. URL shortener bukan bukti phishing jika expanded URL menunjuk domain tepercaya
 
-Output JSON:
-{
-  "stance": "PHISHING" | "SUSPICIOUS" | "LEGITIMATE",
-  "confidence": 0.0-1.0,
-  "key_arguments": ["argumen1", "argumen2", ...],
-  "evidence": {
-    "url_risk_score": 0.0-1.0,
-    "domain_trusted": true/false,
-    "is_shortened": true/false,
-    "tld_suspicious": true/false,
-    "security_checks": {"check1": "result", ...}
-  }
-}"""
+                Output JSON:
+                {
+                "stance": "PHISHING" | "SUSPICIOUS" | "LEGITIMATE",
+                "confidence": 0.0-1.0,
+                "key_arguments": ["argumen1", "argumen2", ...],
+                "evidence": {
+                    "url_risk_score": 0.0-1.0,
+                    "domain_trusted": true/false,
+                    "is_shortened": true/false,
+                    "tld_suspicious": true/false,
+                    "security_checks": {"check1": "result", ...}
+                }
+                }"""
     
     def _construct_prompt(
         self,
@@ -359,6 +363,20 @@ Output JSON:
             parts.append("\nAnalisis URL (Triage):")
             parts.append(f"- Whitelisted URLs: {triage.get('whitelisted_urls', [])}")
             parts.append(f"- Risk score: {triage.get('risk_score', 0)}")
+            expanded_urls = triage.get('expanded_urls', {})
+            if expanded_urls:
+                parts.append("- Expanded URLs (Triage):")
+                for original_url, expansion in expanded_urls.items():
+                    if not isinstance(expansion, dict):
+                        continue
+                    expanded_url = expansion.get("expanded_url")
+                    final_domain = expansion.get("final_domain")
+                    source = expansion.get("source", "triage_expander")
+                    if expanded_url:
+                        parts.append(
+                            f"  - {original_url} -> {expanded_url} "
+                            f"(domain: {final_domain or 'unknown'}, source: {source})"
+                        )
             
             triggered = triage.get('triggered_flags', [])
             url_flags = [f for f in triggered if 'url' in f or 'tld' in f or 'domain' in f]
@@ -368,21 +386,30 @@ Output JSON:
         # External checks if available (VirusTotal, etc.)
         url_checks = context.get('url_checks', {}) if context else {}
         if url_checks:
-            parts.append("\n=== Hasil VirusTotal ===")
+            parts.append("\n=== Hasil URL Checker Eksternal ===")
             for url, result in url_checks.items():
                 parts.append(f"\nURL: {url}")
                 if isinstance(result, dict):
                     is_malicious = result.get('is_malicious', False)
                     risk_score = result.get('risk_score', 0)
                     source = result.get('source', 'unknown')
+                    expanded_url = result.get('expanded_url')
                     details = result.get('details', {})
                     
                     status = "⚠️ BERBAHAYA" if is_malicious else "✅ AMAN"
                     parts.append(f"  Status: {status}")
                     parts.append(f"  Risk Score: {risk_score:.2f}")
                     parts.append(f"  Source: {source}")
+                    if expanded_url:
+                        parts.append(f"  Expanded URL: {expanded_url}")
                     
                     if details:
+                        if details.get('trusted_domain') is True:
+                            parts.append("  Trusted domain: ya")
+                        if 'redirect_chain' in details:
+                            redirect_chain = details.get('redirect_chain') or []
+                            if redirect_chain:
+                                parts.append(f"  Redirect chain: {' -> '.join(redirect_chain)}")
                         if 'malicious' in details:
                             parts.append(f"  Engines deteksi malicious: {details.get('malicious', 0)}/{details.get('total_engines', 0)}")
                         if 'suspicious' in details:
@@ -419,27 +446,27 @@ class SocialContextEvaluator(BaseAgent):
     def system_prompt(self) -> str:
         return """Kamu adalah Social Context Evaluator agent dalam sistem deteksi phishing.
 
-Peran: Mengevaluasi konteks sosial dan perilaku khusus untuk grup akademik.
+                Peran: Mengevaluasi konteks sosial dan perilaku khusus untuk grup akademik.
 
-Fokus analisis:
-1. Pola perilaku historis pengirim
-2. Kesesuaian waktu posting
-3. Relevansi dengan aktivitas akademik yang sedang berlangsung
-4. Dinamika sosial dalam grup mahasiswa
-5. Apakah konten masuk akal untuk konteks akademik
+                Fokus analisis:
+                1. Pola perilaku historis pengirim
+                2. Kesesuaian waktu posting
+                3. Relevansi dengan aktivitas akademik yang sedang berlangsung
+                4. Dinamika sosial dalam grup mahasiswa
+                5. Apakah konten masuk akal untuk konteks akademik
 
-Output JSON:
-{
-  "stance": "PHISHING" | "SUSPICIOUS" | "LEGITIMATE",
-  "confidence": 0.0-1.0,
-  "key_arguments": ["argumen1", "argumen2", ...],
-  "evidence": {
-    "behavior_anomaly_score": 0.0-1.0,
-    "context_relevance": 0.0-1.0,
-    "timing_appropriate": true/false,
-    "academic_context_match": true/false
-  }
-}"""
+                Output JSON:
+                {
+                "stance": "PHISHING" | "SUSPICIOUS" | "LEGITIMATE",
+                "confidence": 0.0-1.0,
+                "key_arguments": ["argumen1", "argumen2", ...],
+                "evidence": {
+                    "behavior_anomaly_score": 0.0-1.0,
+                    "context_relevance": 0.0-1.0,
+                    "timing_appropriate": true/false,
+                    "academic_context_match": true/false
+                }
+                }"""
     
     def _construct_prompt(
         self,

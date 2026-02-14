@@ -1,0 +1,56 @@
+{
+  "accuracy": 0.6818,
+  "precision": 0.68,
+  "recall": 0.7727,
+  "f1_score": 0.7234,
+  "detection_rate": 0.7727,
+  "confusion_matrix": {
+    "tp": 17,
+    "fp": 8,
+    "fn": 5,
+    "tn": 36,
+    "tp_detected": 17,
+    "fn_missed": 5
+  },
+  "total": 66,
+  "correct": 45,
+  "wrong": 21,
+  "errors": 0,
+  "expected_distribution": {
+    "SAFE": 22,
+    "SUSPICIOUS": 22,
+    "PHISHING": 22
+  },
+  "predicted_distribution": {
+    "SAFE": 35,
+    "SUSPICIOUS": 6,
+    "PHISHING": 25
+  },
+  "stage_distribution": {
+    "single_shot": 2,
+    "triage": 33,
+    "mad": 31
+  },
+  "stage_percentage": {
+    "single_shot": 3.0,
+    "triage": 50.0,
+    "mad": 47.0
+  },
+  "stage_accuracy": {
+    "single_shot": 1.0,
+    "triage": 0.6061,
+    "mad": 0.7419
+  },
+  "avg_time_ms": 8521.5,
+  "min_time_ms": 0,
+  "max_time_ms": 28401,
+  "total_time_seconds": 562.47,
+  "total_tokens": 102409,
+  "total_tokens_input": 20153,
+  "total_tokens_output": 4482,
+  "avg_tokens_per_msg": 1551.7,
+  "total_cost_usd": 0.007525,
+  "avg_cost_per_msg": 0.000114,
+  "avg_confidence_correct": 0.9311,
+  "avg_confidence_wrong": 1.0
+}

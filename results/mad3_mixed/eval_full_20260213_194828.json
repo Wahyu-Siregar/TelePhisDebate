@@ -1,0 +1,4743 @@
+{
+  "results": [
+    {
+      "index": 1,
+      "text": "Teman-teman besok kuliah Pemrograman Web jam 08.00 pindah ke ruang FTI-203 ya",
+      "expected": "SAFE",
+      "predicted": "SAFE",
+      "confidence": 0.95,
+      "decided_by": "single_shot",
+      "action": "none",
+      "processing_time_ms": 6489,
+      "tokens_total": 734,
+      "tokens_input": 607,
+      "tokens_output": 127,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "SAFE",
+        "confidence": 0.95,
+        "reasoning": "Pesan berisi informasi akademik yang relevan untuk grup mahasiswa Teknik Informatika UIR, yaitu perubahan jadwal kuliah Pemrograman Web. Tidak ada URL, permintaan data sensitif, atau taktik social engineering yang mencurigakan. Kata-kata phishing mungkin terdeteksi secara rule-based, tetapi konteksnya normal dan konsisten dengan aktivitas akademik.",
+        "risk_factors": [
+          "phishing_keywords (dari triage rule-based)"
+        ],
+        "should_escalate_to_mad": false,
+        "escalation_reason": "",
+        "tokens_input": 607,
+        "tokens_output": 127,
+        "processing_time_ms": 6488
+      },
+      "mad_result": null,
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 2,
+      "text": "Reminder deadline proposal TA Jumat jam 23.59 upload di Google Classroom",
+      "expected": "SAFE",
+      "predicted": "SAFE",
+      "confidence": 1.0,
+      "decided_by": "triage",
+      "action": "none",
+      "processing_time_ms": 0,
+      "tokens_total": 0,
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": null,
+      "mad_result": null,
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 3,
+      "text": "Link materi Algoritma minggu ini ada di https://drive.google.com/drive/folders/1abcXYZ",
+      "expected": "SAFE",
+      "predicted": "SAFE",
+      "confidence": 1.0,
+      "decided_by": "triage",
+      "action": "none",
+      "processing_time_ms": 1,
+      "tokens_total": 0,
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": null,
+      "mad_result": null,
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 4,
+      "text": "Siang semua, rapat panitia seminar jam 13.30 di ruang himpunan",
+      "expected": "SAFE",
+      "predicted": "SAFE",
+      "confidence": 1.0,
+      "decided_by": "triage",
+      "action": "none",
+      "processing_time_ms": 0,
+      "tokens_total": 0,
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": null,
+      "mad_result": null,
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 5,
+      "text": "Untuk absensi hari ini silakan isi form resmi kampus di https://sikad.uir.ac.id",
+      "expected": "SAFE",
+      "predicted": "SAFE",
+      "confidence": 1.0,
+      "decided_by": "triage",
+      "action": "none",
+      "processing_time_ms": 0,
+      "tokens_total": 0,
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": null,
+      "mad_result": null,
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 6,
+      "text": "Ada yang bisa pinjam charger laptop 65W sampai jam 3 sore",
+      "expected": "SAFE",
+      "predicted": "SAFE",
+      "confidence": 0.95,
+      "decided_by": "single_shot",
+      "action": "none",
+      "processing_time_ms": 4744,
+      "tokens_total": 704,
+      "tokens_input": 594,
+      "tokens_output": 110,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "SAFE",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini adalah permintaan pinjam charger laptop dalam konteks akademik yang umum di grup mahasiswa, tanpa URL, tautan, atau indikator phishing seperti urgensi berlebihan atau permintaan data sensitif.",
+        "risk_factors": [
+          "phishing_keywords terdeteksi dalam triage, tetapi tidak relevan karena pesan tidak mengandung tautan atau upaya phishing aktual"
+        ],
+        "should_escalate_to_mad": false,
+        "escalation_reason": "",
+        "tokens_input": 594,
+        "tokens_output": 110,
+        "processing_time_ms": 4744
+      },
+      "mad_result": null,
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 7,
+      "text": "Jadwal asistensi basis data saya geser ke Kamis malam setelah Magrib",
+      "expected": "SAFE",
+      "predicted": "SAFE",
+      "confidence": 1.0,
+      "decided_by": "triage",
+      "action": "none",
+      "processing_time_ms": 0,
+      "tokens_total": 0,
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": null,
+      "mad_result": null,
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 8,
+      "text": "Silakan cek nilai kuis di portal akademik, kalau ada salah input kabari saya",
+      "expected": "SAFE",
+      "predicted": "SAFE",
+      "confidence": 1.0,
+      "decided_by": "triage",
+      "action": "none",
+      "processing_time_ms": 0,
+      "tokens_total": 0,
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": null,
+      "mad_result": null,
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 9,
+      "text": "Info perpustakaan, pengembalian buku terakhir tanggal 20 Februari",
+      "expected": "SAFE",
+      "predicted": "SAFE",
+      "confidence": 1.0,
+      "decided_by": "triage",
+      "action": "none",
+      "processing_time_ms": 0,
+      "tokens_total": 0,
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": null,
+      "mad_result": null,
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 10,
+      "text": "Besok praktikum jaringan bawa kabel LAN masing-masing ya",
+      "expected": "SAFE",
+      "predicted": "SAFE",
+      "confidence": 1.0,
+      "decided_by": "triage",
+      "action": "none",
+      "processing_time_ms": 0,
+      "tokens_total": 0,
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": null,
+      "mad_result": null,
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 11,
+      "text": "Notulen rapat BEM sudah saya upload ke folder tim malam ini",
+      "expected": "SAFE",
+      "predicted": "SAFE",
+      "confidence": 1.0,
+      "decided_by": "triage",
+      "action": "none",
+      "processing_time_ms": 0,
+      "tokens_total": 0,
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": null,
+      "mad_result": null,
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 12,
+      "text": "Link Zoom kuliah tamu: https://zoom.us/j/1234567890 passcode sudah dikirim di grup kelas",
+      "expected": "SAFE",
+      "predicted": "SAFE",
+      "confidence": 1.0,
+      "decided_by": "triage",
+      "action": "none",
+      "processing_time_ms": 0,
+      "tokens_total": 0,
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": null,
+      "mad_result": null,
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 13,
+      "text": "Selamat pagi, siapa yang belum isi presensi bisa DM saya sebelum jam 10",
+      "expected": "SAFE",
+      "predicted": "SAFE",
+      "confidence": 1.0,
+      "decided_by": "triage",
+      "action": "none",
+      "processing_time_ms": 0,
+      "tokens_total": 0,
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": null,
+      "mad_result": null,
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 14,
+      "text": "Dokumen surat izin kegiatan sudah ditandatangani pembina",
+      "expected": "SAFE",
+      "predicted": "SAFE",
+      "confidence": 1.0,
+      "decided_by": "triage",
+      "action": "none",
+      "processing_time_ms": 0,
+      "tokens_total": 0,
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": null,
+      "mad_result": null,
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 15,
+      "text": "Tolong review slide presentasi saya di folder bersama sebelum sore",
+      "expected": "SAFE",
+      "predicted": "SAFE",
+      "confidence": 1.0,
+      "decided_by": "triage",
+      "action": "none",
+      "processing_time_ms": 0,
+      "tokens_total": 0,
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": null,
+      "mad_result": null,
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 16,
+      "text": "Pengumuman dosen: UTS Sistem Operasi tetap offline di gedung F pada Senin",
+      "expected": "SAFE",
+      "predicted": "SAFE",
+      "confidence": 1.0,
+      "decided_by": "triage",
+      "action": "none",
+      "processing_time_ms": 1,
+      "tokens_total": 0,
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": null,
+      "mad_result": null,
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 17,
+      "text": "Kegiatan bakti sosial himpunan jadi hari Sabtu, titik kumpul di kampus",
+      "expected": "SAFE",
+      "predicted": "SAFE",
+      "confidence": 1.0,
+      "decided_by": "triage",
+      "action": "none",
+      "processing_time_ms": 0,
+      "tokens_total": 0,
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": null,
+      "mad_result": null,
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 18,
+      "text": "Untuk kelompok 3 dan 4, jadwal bimbingan ditukar jadi pukul 14.00",
+      "expected": "SAFE",
+      "predicted": "SAFE",
+      "confidence": 1.0,
+      "decided_by": "triage",
+      "action": "none",
+      "processing_time_ms": 0,
+      "tokens_total": 0,
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": null,
+      "mad_result": null,
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 19,
+      "text": "Terima kasih yang sudah hadir diskusi proposal tadi malam",
+      "expected": "SAFE",
+      "predicted": "SAFE",
+      "confidence": 1.0,
+      "decided_by": "triage",
+      "action": "none",
+      "processing_time_ms": 0,
+      "tokens_total": 0,
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": null,
+      "mad_result": null,
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 20,
+      "text": "Saya sudah kirim template laporan KP versi terbaru di email kelas",
+      "expected": "SAFE",
+      "predicted": "SAFE",
+      "confidence": 1.0,
+      "decided_by": "triage",
+      "action": "none",
+      "processing_time_ms": 0,
+      "tokens_total": 0,
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": null,
+      "mad_result": null,
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 21,
+      "text": "Teman-teman, surat aktif kuliah bisa diunduh dari portal mahasiswa",
+      "expected": "SAFE",
+      "predicted": "SAFE",
+      "confidence": 1.0,
+      "decided_by": "triage",
+      "action": "none",
+      "processing_time_ms": 0,
+      "tokens_total": 0,
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": null,
+      "mad_result": null,
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 22,
+      "text": "Siapa yang mau gabung latihan debat internal minggu depan, daftar di chat ini",
+      "expected": "SAFE",
+      "predicted": "SAFE",
+      "confidence": 1.0,
+      "decided_by": "triage",
+      "action": "none",
+      "processing_time_ms": 0,
+      "tokens_total": 0,
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": null,
+      "mad_result": null,
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 23,
+      "text": "Ada lowongan magang startup, detailnya di https://bit.ly/magang-dev-2026 coba cek dulu validitasnya",
+      "expected": "SUSPICIOUS",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 17593,
+      "tokens_total": 2752,
+      "tokens_input": 671,
+      "tokens_output": 128,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "shortened_url"
+      ],
+      "single_shot_result": {
+        "classification": "SUSPICIOUS",
+        "confidence": 0.65,
+        "reasoning": "Pesan menawarkan lowongan magang startup dengan URL shortener bit.ly yang tidak diekspansi ke domain terpercaya dalam evidence, menimbulkan kekhawatiran phishing karena konteks akademik tidak langsung relevan dan URL tidak diverifikasi.",
+        "risk_factors": [
+          "shortened_url",
+          "konteks_tidak_langsung_relevan_dengan_akademik",
+          "domain_tidak_diekspansi_ke_terpercaya"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "SUSPICIOUS classification requires multi-agent verification",
+        "tokens_input": 671,
+        "tokens_output": 128,
+        "processing_time_ms": 5004
+      },
+      "mad_result": {
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "content_analyzer": "SUSPICIOUS",
+          "social_context": "SUSPICIOUS",
+          "security_validator": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "content_analyzer",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.65,
+            "key_arguments": [
+              "shortened_url_detected",
+              "context_not_directly_relevant_to_academic_activities",
+              "lack_of_trusted_domain_verification"
+            ],
+            "evidence": {
+              "style_deviation": 0.4,
+              "urgency_score": 0.2,
+              "social_engineering_detected": false,
+              "linguistic_anomalies": [
+                "use_of_shortened_url_bit.ly",
+                "informal_tone_with_coba_cek_dulu"
+              ]
+            }
+          },
+          {
+            "agent_type": "social_context",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.7,
+            "key_arguments": [
+              "Pengirim tidak dikenal (@unknown) tanpa riwayat perilaku yang dapat diverifikasi, meningkatkan risiko anomali sosial",
+              "Waktu posting (19:39) di luar jam akademik umum, tetapi masih masuk akal untuk aktivitas mahasiswa, namun kurang mendukung konteks formal",
+              "Konten lowongan magang startup relevan dengan mahasiswa Teknik Informatika, tetapi tautan pendek (bit.ly) mencurigakan tanpa konteks tambahan",
+              "Kurangnya detail spesifik atau validasi dalam pesan membuatnya tidak sesuai dengan dinamika sosial grup akademik yang biasanya lebih terstruktur"
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.8,
+              "context_relevance": 0.6,
+              "timing_appropriate": true,
+              "academic_context_match": false
+            }
+          },
+          {
+            "agent_type": "security_validator",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.65,
+            "key_arguments": [
+              "URL menggunakan shortener bit.ly yang menyembunyikan tujuan asli",
+              "Risk score 20 dari analisis triage menunjukkan potensi risiko",
+              "Reputasi domain bit.ly dengan score 42 tidak terlalu tinggi",
+              "1 dari 93 engine deteksi malicious di VirusTotal mengindikasikan kemungkinan ancaman"
+            ],
+            "evidence": {
+              "url_risk_score": 0.2,
+              "domain_trusted": false,
+              "is_shortened": true,
+              "tld_suspicious": false,
+              "security_checks": {
+                "triage_risk_score": 20,
+                "virustotal_malicious_engines": 1,
+                "virustotal_suspicious_engines": 0,
+                "reputation_score": 42,
+                "expanded_url_analysis": "URL tetap mengarah ke bit.ly tanpa pengembangan ke tujuan akhir"
+              }
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1953,
+        "total_processing_time_ms": 8463,
+        "variant": "mad3"
+      },
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 24,
+      "text": "Info beasiswa luar negeri dibuka mendadak, pendaftaran via https://scholar-hub.xyz/form",
+      "expected": "SUSPICIOUS",
+      "predicted": "PHISHING",
+      "confidence": 1.0,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 21545,
+      "tokens_total": 5060,
+      "tokens_input": 619,
+      "tokens_output": 114,
+      "triage_risk_score": 15,
+      "triage_flags": [
+        "suspicious_tld"
+      ],
+      "single_shot_result": {
+        "classification": "SUSPICIOUS",
+        "confidence": 0.7,
+        "reasoning": "Pesan mengumumkan beasiswa luar negeri dengan URL domain .xyz yang mencurigakan dan tidak terkait dengan institusi akademik terpercaya, meskipun konteks beasiswa relevan untuk grup mahasiswa.",
+        "risk_factors": [
+          "suspicious_tld (.xyz)",
+          "domain tidak dikenal (scholar-hub.xyz)",
+          "konteks mendadak/urgensi"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "SUSPICIOUS classification requires multi-agent verification",
+        "tokens_input": 619,
+        "tokens_output": 114,
+        "processing_time_ms": 4722
+      },
+      "mad_result": {
+        "decision": "PHISHING",
+        "confidence": 1.0,
+        "rounds_executed": 2,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "content_analyzer": "PHISHING",
+          "security_validator": "PHISHING",
+          "social_context": "PHISHING"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "social_context",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.65,
+            "key_arguments": [
+              "Pengirim tidak dikenal tanpa baseline perilaku",
+              "Pesan beasiswa mendadak tanpa konteks akademik spesifik",
+              "Link eksternal dengan domain tidak resmi",
+              "Kurangnya detail akademik yang relevan untuk grup Teknik Informatika"
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.8,
+              "context_relevance": 0.3,
+              "timing_appropriate": false,
+              "academic_context_match": false
+            }
+          },
+          {
+            "agent_type": "security_validator",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.65,
+            "key_arguments": [
+              "TLD .xyz umumnya digunakan untuk domain baru atau kurang tepercaya",
+              "Domain scholar-hub.xyz tidak dikenal dalam whitelist",
+              "Risk score internal 15 menunjukkan kecurigaan moderat",
+              "Meskipun checker eksternal melaporkan aman, reputasi domain tidak tersedia"
+            ],
+            "evidence": {
+              "url_risk_score": 0.55,
+              "domain_trusted": false,
+              "is_shortened": false,
+              "tld_suspicious": true,
+              "security_checks": {
+                "internal_risk_score": 15,
+                "external_risk_score": 0.4,
+                "malicious_engines": "0/93",
+                "reputation_score": 0
+              }
+            }
+          },
+          {
+            "agent_type": "content_analyzer",
+            "stance": "PHISHING",
+            "confidence": 0.8,
+            "key_arguments": [
+              "URL dengan TLD .xyz yang mencurigakan",
+              "Domain tidak dikenal (scholar-hub.xyz) dalam konteks beasiswa",
+              "Penggunaan kata 'mendadak' menciptakan urgensi palsu",
+              "Kurangnya detail spesifik atau konteks akademik yang relevan"
+            ],
+            "evidence": {
+              "style_deviation": 0.7,
+              "urgency_score": 0.8,
+              "social_engineering_detected": true,
+              "linguistic_anomalies": [
+                "Pesan singkat dan tidak formal",
+                "Penggunaan 'mendadak' untuk memanipulasi respons cepat",
+                "URL tidak sesuai dengan sumber beasiswa resmi yang umum"
+              ]
+            }
+          }
+        ],
+        "round_2_summary": [
+          {
+            "agent_type": "content_analyzer",
+            "stance": "PHISHING",
+            "confidence": 0.75,
+            "key_arguments": [
+              "URL dengan TLD .xyz yang mencurigakan dan domain tidak dikenal (scholar-hub.xyz)",
+              "Penggunaan kata 'mendadak' menciptakan urgensi palsu yang tinggi",
+              "Kurangnya detail spesifik atau konteks akademik yang relevan untuk grup Teknik Informatika",
+              "Analisis agent lain mengonfirmasi kecurigaan dengan domain tidak resmi dan ketiadaan baseline perilaku pengirim"
+            ],
+            "evidence": {
+              "style_deviation": 0.8,
+              "urgency_score": 0.9,
+              "social_engineering_detected": true,
+              "linguistic_anomalies": [
+                "Pesan singkat tanpa detail akademik yang mendalam",
+                "Penggunaan kata 'mendadak' yang tidak wajar dalam konteks beasiswa formal"
+              ]
+            }
+          },
+          {
+            "agent_type": "security_validator",
+            "stance": "PHISHING",
+            "confidence": 0.75,
+            "key_arguments": [
+              "TLD .xyz umumnya digunakan untuk domain baru atau kurang tepercaya, meningkatkan risiko phishing",
+              "Domain scholar-hub.xyz tidak dikenal dalam whitelist atau database tepercaya",
+              "Penggunaan kata 'mendadak' menciptakan urgensi palsu, teknik umum dalam phishing",
+              "Kurangnya detail akademik spesifik atau konteks resmi untuk beasiswa",
+              "Analisis content_analyzer mendukung phishing dengan argumen kuat tentang TLD dan urgensi"
+            ],
+            "evidence": {
+              "url_risk_score": 0.7,
+              "domain_trusted": false,
+              "is_shortened": false,
+              "tld_suspicious": true,
+              "security_checks": {
+                "https_present": true,
+                "external_reputation_check": "not available",
+                "historical_phishing_match": "no data"
+              }
+            }
+          },
+          {
+            "agent_type": "social_context",
+            "stance": "PHISHING",
+            "confidence": 0.75,
+            "key_arguments": [
+              "Pengirim tidak dikenal tanpa baseline perilaku, meningkatkan risiko perilaku anomali",
+              "Pesan beasiswa mendadak tanpa konteks akademik spesifik, tidak sesuai dengan pola aktivitas akademik yang umum",
+              "Link eksternal dengan domain .xyz yang tidak resmi dan tidak dikenal, mencurigakan dalam konteks sosial grup",
+              "Kurangnya detail akademik yang relevan untuk grup Teknik Informatika, mengurangi kesesuaian konteks",
+              "Kata 'mendadak' menciptakan urgensi palsu, tipikal dalam serangan phishing untuk memanipulasi perilaku sosial"
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.8,
+              "context_relevance": 0.3,
+              "timing_appropriate": false,
+              "academic_context_match": false
+            }
+          }
+        ],
+        "total_tokens": 4327,
+        "total_processing_time_ms": 15500,
+        "variant": "mad3"
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 25,
+      "text": "Dapat broadcast seminar nasional gratis dengan sertifikat, registrasi di tinyurl.com/semnas-now",
+      "expected": "SUSPICIOUS",
+      "predicted": "PHISHING",
+      "confidence": 1.0,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 26824,
+      "tokens_total": 5456,
+      "tokens_input": 662,
+      "tokens_output": 128,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "shortened_url"
+      ],
+      "single_shot_result": {
+        "classification": "SUSPICIOUS",
+        "confidence": 0.65,
+        "reasoning": "Pesan menawarkan seminar nasional gratis dengan sertifikat menggunakan URL shortener (tinyurl.com) tanpa konteks spesifik akademik UIR. URL tidak dapat diekspansi ke domain terpercaya, meningkatkan risiko phishing meskipun tidak ada permintaan data sensitif.",
+        "risk_factors": [
+          "shortened_url",
+          "konteks tidak relevan dengan aktivitas akademik UIR",
+          "taktik social engineering (penawaran gratis)"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "SUSPICIOUS classification requires multi-agent verification",
+        "tokens_input": 662,
+        "tokens_output": 128,
+        "processing_time_ms": 5236
+      },
+      "mad_result": {
+        "decision": "PHISHING",
+        "confidence": 1.0,
+        "rounds_executed": 2,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "content_analyzer": "PHISHING",
+          "social_context": "PHISHING",
+          "security_validator": "PHISHING"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "content_analyzer",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.65,
+            "key_arguments": [
+              "shortened_url_detected",
+              "irrelevant_to_academic_context",
+              "social_engineering_free_offer"
+            ],
+            "evidence": {
+              "style_deviation": 0.4,
+              "urgency_score": 0.3,
+              "social_engineering_detected": true,
+              "linguistic_anomalies": [
+                "use_of_shortened_url_tinyurl",
+                "generic_promotional_language"
+              ]
+            }
+          },
+          {
+            "agent_type": "security_validator",
+            "stance": "PHISHING",
+            "confidence": 0.85,
+            "key_arguments": [
+              "URL shortener (tinyurl.com) digunakan tanpa expanded URL yang aman",
+              "Risk score eksternal sangat tinggi (1.00 dari VirusTotal)",
+              "Reputasi domain buruk (score -132)",
+              "2/93 mesin deteksi mengklasifikasikan sebagai malicious",
+              "Pesan promosi 'gratis' dengan tautan pendek mencurigakan"
+            ],
+            "evidence": {
+              "url_risk_score": 1.0,
+              "domain_trusted": false,
+              "is_shortened": true,
+              "tld_suspicious": false,
+              "security_checks": {
+                "external_risk_assessment": "High risk (VirusTotal score 1.00)",
+                "reputation_score": "-132 (very poor)",
+                "malicious_detections": "2/93 engines",
+                "url_expansion": "No safe expanded URL provided",
+                "message_context": "Promotional free offer with shortened link"
+              }
+            }
+          },
+          {
+            "agent_type": "social_context",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.7,
+            "key_arguments": [
+              "Pengirim tidak dikenal (@unknown) tanpa riwayat perilaku yang dapat diverifikasi, meningkatkan risiko anomali sosial",
+              "Pesan menggunakan URL pendek (tinyurl.com/semnas-now) yang dapat menyembunyikan tujuan asli, umum dalam phishing",
+              "Konteks akademik (seminar nasional gratis dengan sertifikat) relevan untuk mahasiswa Teknik Informatika, tetapi kurang detail spesifik atau sumber terpercaya",
+              "Waktu posting (19:39) di luar jam kerja akademik biasa, mungkin mengurangi kredibilitas untuk komunikasi resmi",
+              "Kurangnya baseline perilaku pengirim membuat evaluasi konteks sosial sulit, mendorong kehati-hatian"
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.8,
+              "context_relevance": 0.6,
+              "timing_appropriate": false,
+              "academic_context_match": true
+            }
+          }
+        ],
+        "round_2_summary": [
+          {
+            "agent_type": "content_analyzer",
+            "stance": "PHISHING",
+            "confidence": 0.75,
+            "key_arguments": [
+              "shortened_url_detected",
+              "social_engineering_free_offer",
+              "high_external_risk_score",
+              "poor_domain_reputation",
+              "irrelevant_to_academic_context",
+              "unknown_sender_without_verifiable_history"
+            ],
+            "evidence": {
+              "style_deviation": 0.7,
+              "urgency_score": 0.6,
+              "social_engineering_detected": true,
+              "linguistic_anomalies": [
+                "use_of_shortened_url_without_expansion",
+                "vague_promotional_language_without_specific_details",
+                "unusual_timing_for_academic_communication"
+              ]
+            }
+          },
+          {
+            "agent_type": "social_context",
+            "stance": "PHISHING",
+            "confidence": 0.8,
+            "key_arguments": [
+              "Pengirim tidak dikenal tanpa riwayat perilaku yang diverifikasi, meningkatkan risiko anomali sosial",
+              "URL pendek (tinyurl.com/semnas-now) digunakan tanpa expanded URL yang aman, umum dalam phishing",
+              "Risk score eksternal sangat tinggi (1.00 dari VirusTotal) dan reputasi domain buruk (score -132)",
+              "Konteks akademik relevan tetapi kurang detail spesifik atau sumber terpercaya, mendukung social engineering",
+              "Waktu posting (19:39) di luar jam kerja akademik biasa, mengurangi kredibilitas untuk komunikasi resmi"
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.9,
+              "context_relevance": 0.7,
+              "timing_appropriate": false,
+              "academic_context_match": true
+            }
+          },
+          {
+            "agent_type": "security_validator",
+            "stance": "PHISHING",
+            "confidence": 0.85,
+            "key_arguments": [
+              "URL shortener (tinyurl.com) digunakan tanpa expanded URL yang aman",
+              "Risk score eksternal sangat tinggi (1.00 dari VirusTotal)",
+              "Reputasi domain buruk (score -132)",
+              "2/93 mesin deteksi mengklasifikasikan sebagai malicious",
+              "Pesan promosi 'gratis' dengan tautan pendek mencurigakan",
+              "Pengirim tidak dikenal (@unknown) tanpa riwayat perilaku yang dapat diverifikasi",
+              "Konteks akademik kurang detail spesifik atau sumber terpercaya",
+              "Waktu posting (19:39) di luar jam kerja akademik biasa"
+            ],
+            "evidence": {
+              "url_risk_score": 1.0,
+              "domain_trusted": false,
+              "is_shortened": true,
+              "tld_suspicious": false,
+              "security_checks": {
+                "VirusTotal_score": "1.00",
+                "domain_reputation_score": "-132",
+                "malicious_detections": "2/93",
+                "expanded_url_verification": "not_provided"
+              }
+            }
+          }
+        ],
+        "total_tokens": 4666,
+        "total_processing_time_ms": 19254,
+        "variant": "mad3"
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 26,
+      "text": "Katanya ada subsidi UKT tambahan, diminta isi data lewat link ini https://forms.gle/abCDefGh",
+      "expected": "SUSPICIOUS",
+      "predicted": "PHISHING",
+      "confidence": 1.0,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 28401,
+      "tokens_total": 5720,
+      "tokens_input": 616,
+      "tokens_output": 137,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": {
+        "classification": "SUSPICIOUS",
+        "confidence": 0.7,
+        "reasoning": "Pesan mengklaim subsidi UKT tambahan dengan link Google Forms, tetapi tidak ada konteks pengirim atau otorisasi resmi dari kampus. Google Forms umumnya aman, namun isi data sensitif untuk subsidi memerlukan verifikasi lebih lanjut.",
+        "risk_factors": [
+          "Taktik social engineering (otoritas palsu terkait subsidi)",
+          "Permintaan data sensitif melalui link eksternal",
+          "Kurangnya konteks pengirim terverifikasi"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "SUSPICIOUS classification requires multi-agent verification",
+        "tokens_input": 616,
+        "tokens_output": 137,
+        "processing_time_ms": 5282
+      },
+      "mad_result": {
+        "decision": "PHISHING",
+        "confidence": 1.0,
+        "rounds_executed": 2,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "social_context": "PHISHING",
+          "content_analyzer": "PHISHING",
+          "security_validator": "PHISHING"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "content_analyzer",
+            "stance": "PHISHING",
+            "confidence": 0.85,
+            "key_arguments": [
+              "Menggunakan otoritas palsu terkait subsidi UKT untuk memancing respons",
+              "Meminta pengisian data melalui link eksternal tanpa konteks verifikasi",
+              "Pesan singkat dan ambigu tanpa detail atau sumber resmi",
+              "Mengandung elemen urgensi implisit dengan kata 'diminta'"
+            ],
+            "evidence": {
+              "style_deviation": 0.7,
+              "urgency_score": 0.6,
+              "social_engineering_detected": true,
+              "linguistic_anomalies": [
+                "Penggunaan kata 'Katanya' yang tidak formal dan tidak jelas sumbernya",
+                "Struktur pesan sangat singkat dan tidak sesuai dengan komunikasi akademik resmi"
+              ]
+            }
+          },
+          {
+            "agent_type": "security_validator",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.7,
+            "key_arguments": [
+              "URL shortener (forms.gle) digunakan untuk link yang mengarah ke formulir data sensitif",
+              "Reputasi domain rendah dengan skor -4",
+              "2 dari 93 mesin deteksi mengklasifikasikan sebagai malicious",
+              "Konteks pesan tentang subsidi UKT tambahan dapat memicu phishing untuk data pribadi"
+            ],
+            "evidence": {
+              "url_risk_score": 0.02,
+              "domain_trusted": false,
+              "is_shortened": true,
+              "tld_suspicious": false,
+              "security_checks": {
+                "external_scan": "2/93 engines flagged as malicious, reputation score -4",
+                "https_used": true,
+                "url_pattern": "Shortened Google Forms link (forms.gle) for sensitive data collection"
+              }
+            }
+          },
+          {
+            "agent_type": "social_context",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.65,
+            "key_arguments": [
+              "Pengirim tidak dikenal (@unknown) tanpa riwayat perilaku yang jelas, meningkatkan risiko anomali sosial",
+              "Pesan mengklaim subsidi UKT tambahan, yang mungkin tidak sesuai dengan jadwal atau kebijakan akademik umum tanpa konfirmasi resmi",
+              "Waktu posting (19:40) di luar jam kerja administratif kampus, mengurangi kemungkinan validitas untuk urusan resmi",
+              "Link eksternal (forms.gle) meminta data pribadi, berpotensi untuk phishing meskipun dalam konteks akademik",
+              "Konteks grup mahasiswa Teknik Informatika UIR relevan, tetapi pesan tidak spesifik ke aktivitas akademik yang sedang berlangsung"
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.8,
+              "context_relevance": 0.4,
+              "timing_appropriate": false,
+              "academic_context_match": false
+            }
+          }
+        ],
+        "round_2_summary": [
+          {
+            "agent_type": "social_context",
+            "stance": "PHISHING",
+            "confidence": 0.75,
+            "key_arguments": [
+              "Pengirim tidak dikenal tanpa riwayat perilaku, meningkatkan anomali sosial dan risiko phishing",
+              "Klaim subsidi UKT tambahan tidak sesuai dengan kebijakan akademik umum tanpa konfirmasi resmi, menunjukkan otoritas palsu",
+              "Waktu posting di luar jam kerja administratif mengurangi validitas untuk urusan resmi",
+              "Link eksternal (forms.gle) meminta data pribadi dengan reputasi domain rendah dan deteksi malicious, mendukung phishing",
+              "Pesan singkat dan ambigu tanpa detail atau sumber, menciptakan urgensi implisit untuk manipulasi"
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.8,
+              "context_relevance": 0.3,
+              "timing_appropriate": false,
+              "academic_context_match": false
+            }
+          },
+          {
+            "agent_type": "content_analyzer",
+            "stance": "PHISHING",
+            "confidence": 0.9,
+            "key_arguments": [
+              "Menggunakan otoritas palsu terkait subsidi UKT tanpa verifikasi resmi",
+              "Meminta pengisian data sensitif melalui link eksternal (forms.gle) yang berisiko phishing",
+              "Pesan singkat dan ambigu tanpa detail atau sumber yang dapat dipercaya",
+              "Mengandung urgensi implisit dengan kata 'diminta' untuk memancing respons cepat",
+              "Analisis agent lain mengonfirmasi risiko tinggi: URL shortener dengan reputasi rendah dan konteks sosial yang mencurigakan"
+            ],
+            "evidence": {
+              "style_deviation": 0.8,
+              "urgency_score": 0.7,
+              "social_engineering_detected": true,
+              "linguistic_anomalies": [
+                "Pesan terlalu singkat dan tidak formal untuk komunikasi resmi kampus",
+                "Penggunaan kata 'Katanya' menunjukkan sumber tidak jelas dan tidak dapat diandalkan",
+                "Struktur pesan langsung ke link tanpa penjelasan atau konteks yang memadai"
+              ]
+            }
+          },
+          {
+            "agent_type": "security_validator",
+            "stance": "PHISHING",
+            "confidence": 0.8,
+            "key_arguments": [
+              "URL shortener (forms.gle) digunakan untuk link yang mengarah ke formulir data sensitif tanpa konteks verifikasi resmi",
+              "Reputasi domain rendah dengan skor -4 dan 2 dari 93 mesin deteksi mengklasifikasikan sebagai malicious",
+              "Konteks pesan tentang subsidi UKT tambahan memicu phishing untuk data pribadi dengan otoritas palsu dan urgensi implisit",
+              "Pengirim tidak dikenal (@unknown) dan waktu posting (19:40) di luar jam kerja administratif, mengurangi validitas",
+              "Analisis agent lain mendukung phishing dengan argumen kuat seperti pesan ambigu dan permintaan data tanpa sumber resmi"
+            ],
+            "evidence": {
+              "url_risk_score": 0.75,
+              "domain_trusted": false,
+              "is_shortened": true,
+              "tld_suspicious": false,
+              "security_checks": {
+                "url_obfuscation": "URL shortener forms.gle digunakan, mengaburkan tujuan akhir",
+                "domain_reputation": "Skor reputasi -4, 2/93 mesin deteksi menandai malicious",
+                "https_usage": "URL menggunakan HTTPS, tetapi ini tidak menjamin legitimasi dalam konteks phishing",
+                "context_verification": "Tidak ada konfirmasi resmi untuk klaim subsidi UKT tambahan",
+                "social_risk": "Pengirim tidak dikenal dan waktu posting tidak lazim untuk urusan resmi"
+              }
+            }
+          }
+        ],
+        "total_tokens": 4967,
+        "total_processing_time_ms": 21959,
+        "variant": "mad3"
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 27,
+      "text": "Ada akun baru share promo laptop murah, link tokonya pakai short url bit.ly/laptophebat",
+      "expected": "SUSPICIOUS",
+      "predicted": "PHISHING",
+      "confidence": 1.0,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 26872,
+      "tokens_total": 5542,
+      "tokens_input": 656,
+      "tokens_output": 119,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "shortened_url"
+      ],
+      "single_shot_result": {
+        "classification": "SUSPICIOUS",
+        "confidence": 0.7,
+        "reasoning": "Pesan berisi link shortener bit.ly yang mengarah ke promo laptop murah, tidak relevan dengan konteks akademik grup mahasiswa Teknik Informatika UIR dan berpotensi phishing karena mempromosikan penawaran komersial.",
+        "risk_factors": [
+          "shortened_url",
+          "konteks_tidak_relevan_akademik",
+          "promo_komersial_mencurigakan"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "SUSPICIOUS classification requires multi-agent verification",
+        "tokens_input": 656,
+        "tokens_output": 119,
+        "processing_time_ms": 4575
+      },
+      "mad_result": {
+        "decision": "PHISHING",
+        "confidence": 1.0,
+        "rounds_executed": 2,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "social_context": "PHISHING",
+          "content_analyzer": "PHISHING",
+          "security_validator": "PHISHING"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "content_analyzer",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.7,
+            "key_arguments": [
+              "Menggunakan URL pendek (bit.ly) yang dapat menyembunyikan tujuan asli",
+              "Konteks tidak relevan dengan aktivitas akademik grup",
+              "Promo komersial mencurigakan yang tidak biasa dalam grup akademik",
+              "Pesan singkat dan langsung tanpa konteks pribadi atau akademik"
+            ],
+            "evidence": {
+              "style_deviation": 0.6,
+              "urgency_score": 0.3,
+              "social_engineering_detected": true,
+              "linguistic_anomalies": [
+                "Pendekatan langsung dengan promo komersial",
+                "Penggunaan URL pendek tanpa penjelasan",
+                "Tidak ada konteks akademik atau pribadi yang relevan"
+              ]
+            }
+          },
+          {
+            "agent_type": "social_context",
+            "stance": "PHISHING",
+            "confidence": 0.85,
+            "key_arguments": [
+              "Pengirim tidak dikenal (@unknown) tanpa riwayat perilaku, meningkatkan risiko aktivitas mencurigakan",
+              "Pesan berisi promosi laptop murah dengan short URL (bit.ly/laptophebat), tidak relevan dengan konteks akademik grup mahasiswa Teknik Informatika",
+              "Waktu posting (19:40) tidak spesifik untuk aktivitas akademik, tetapi konten tidak sesuai dengan diskusi umum grup",
+              "Kurangnya baseline perilaku membuat evaluasi bergantung pada ketidaksesuaian konten dengan tujuan grup"
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.9,
+              "context_relevance": 0.1,
+              "timing_appropriate": false,
+              "academic_context_match": false
+            }
+          },
+          {
+            "agent_type": "security_validator",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.65,
+            "key_arguments": [
+              "URL shortener bit.ly digunakan tanpa expanded URL yang jelas",
+              "Reputasi domain bit.ly tepercaya, tetapi tujuan link tidak diverifikasi",
+              "Risk score eksternal rendah (0.20), tetapi ada 1/93 engine mendeteksi malicious",
+              "Konteks promosi laptop murah dari akun baru meningkatkan risiko phishing"
+            ],
+            "evidence": {
+              "url_risk_score": 0.4,
+              "domain_trusted": true,
+              "is_shortened": true,
+              "tld_suspicious": false,
+              "security_checks": {
+                "url_structure": "shortened URL tanpa expanded destination yang diketahui",
+                "domain_reputation": "bit.ly adalah URL shortener tepercaya",
+                "external_scan": "VirusTotal menunjukkan 1/93 engine mendeteksi malicious, risk score 0.20",
+                "https_usage": "HTTPS digunakan",
+                "context_risk": "promosi laptop murah dari akun baru mencurigakan"
+              }
+            }
+          }
+        ],
+        "round_2_summary": [
+          {
+            "agent_type": "social_context",
+            "stance": "PHISHING",
+            "confidence": 0.8,
+            "key_arguments": [
+              "Pengirim tidak dikenal tanpa riwayat perilaku, meningkatkan risiko aktivitas mencurigakan",
+              "Promo laptop murah dengan short URL tidak relevan dengan konteks akademik grup mahasiswa Teknik Informatika",
+              "Konteks komersial mencurigakan yang tidak biasa dalam diskusi akademik",
+              "Analisis agent lain mendukung ketidaksesuaian konten dan risiko URL shortener"
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.9,
+              "context_relevance": 0.1,
+              "timing_appropriate": false,
+              "academic_context_match": false
+            }
+          },
+          {
+            "agent_type": "content_analyzer",
+            "stance": "PHISHING",
+            "confidence": 0.75,
+            "key_arguments": [
+              "Menggunakan URL pendek (bit.ly) yang dapat menyembunyikan tujuan asli",
+              "Konteks tidak relevan dengan aktivitas akademik grup mahasiswa Teknik Informatika",
+              "Promo komersial mencurigakan dari akun baru tanpa riwayat perilaku",
+              "Pesan singkat dan langsung tanpa konteks pribadi atau akademik",
+              "Waktu posting (19:40) tidak mendukung aktivitas akademik, dan konten tidak sesuai dengan diskusi grup"
+            ],
+            "evidence": {
+              "style_deviation": 0.8,
+              "urgency_score": 0.3,
+              "social_engineering_detected": true,
+              "linguistic_anomalies": [
+                "Pesan terlalu singkat dan impersonal untuk konteks grup akademik",
+                "Fokus pada promosi komersial yang tidak wajar dalam lingkungan akademik"
+              ]
+            }
+          },
+          {
+            "agent_type": "security_validator",
+            "stance": "PHISHING",
+            "confidence": 0.75,
+            "key_arguments": [
+              "URL shortener bit.ly digunakan tanpa expanded URL yang jelas, menyembunyikan tujuan asli",
+              "Reputasi domain bit.ly tepercaya, tetapi tujuan link tidak diverifikasi dan konteks mencurigakan",
+              "Konteks promosi laptop murah dari akun baru (@unknown) tanpa riwayat perilaku meningkatkan risiko phishing",
+              "Pesan tidak relevan dengan aktivitas akademik grup mahasiswa Teknik Informatika, menunjukkan ketidaksesuaian konten",
+              "Risk score eksternal rendah (0.20), tetapi ada 1/93 engine mendeteksi malicious, menambah kecurigaan"
+            ],
+            "evidence": {
+              "url_risk_score": 0.65,
+              "domain_trusted": true,
+              "is_shortened": true,
+              "tld_suspicious": false,
+              "security_checks": {
+                "url_obfuscation_check": "high risk due to shortener without clear expansion",
+                "domain_reputation_check": "bit.ly is trusted, but destination unknown",
+                "context_analysis": "commercial promotion in academic group is suspicious",
+                "sender_analysis": "unknown sender with no behavioral history increases risk",
+                "external_scan": "low risk score but 1 malicious detection out of 93 engines"
+              }
+            }
+          }
+        ],
+        "total_tokens": 4767,
+        "total_processing_time_ms": 20032,
+        "variant": "mad3"
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 28,
+      "text": "Teman saya kirim peluang kerja remote, tapi domainnya baru dan belum pernah saya lihat",
+      "expected": "SUSPICIOUS",
+      "predicted": "SAFE",
+      "confidence": 1.0,
+      "decided_by": "triage",
+      "action": "none",
+      "processing_time_ms": 0,
+      "tokens_total": 0,
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": null,
+      "mad_result": null,
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 29,
+      "text": "Panitia event minta transfer pendaftaran hari ini juga, kontaknya bukan nomor panitia lama",
+      "expected": "SUSPICIOUS",
+      "predicted": "PHISHING",
+      "confidence": 1.0,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 21457,
+      "tokens_total": 5037,
+      "tokens_input": 600,
+      "tokens_output": 138,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "SUSPICIOUS",
+        "confidence": 0.7,
+        "reasoning": "Pesan meminta transfer uang untuk pendaftaran event dengan urgensi tinggi ('hari ini juga') dan menyebut kontak bukan nomor panitia lama, yang dapat mengindikasikan upaya social engineering untuk mencuri uang atau data sensitif. Namun, tanpa informasi pengirim atau URL, tidak dapat dikonfirmasi sebagai phishing.",
+        "risk_factors": [
+          "taktik social engineering (urgensi)",
+          "permintaan transfer uang",
+          "konteks tidak jelas tanpa detail event atau panitia"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "SUSPICIOUS classification requires multi-agent verification",
+        "tokens_input": 600,
+        "tokens_output": 138,
+        "processing_time_ms": 5417
+      },
+      "mad_result": {
+        "decision": "PHISHING",
+        "confidence": 1.0,
+        "rounds_executed": 2,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "security_validator": "PHISHING",
+          "social_context": "PHISHING",
+          "content_analyzer": "PHISHING"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "content_analyzer",
+            "stance": "PHISHING",
+            "confidence": 0.85,
+            "key_arguments": [
+              "Permintaan transfer uang tanpa konteks jelas",
+              "Taktik urgensi tinggi dengan 'hari ini juga'",
+              "Deviasi dari kontak panitia resmi",
+              "Kurangnya detail spesifik tentang event atau panitia"
+            ],
+            "evidence": {
+              "style_deviation": 0.7,
+              "urgency_score": 0.9,
+              "social_engineering_detected": true,
+              "linguistic_anomalies": [
+                "Penggunaan 'hari ini juga' menciptakan urgensi berlebihan",
+                "Penyebutan 'kontaknya bukan nomor panitia lama' mencurigakan dan tidak lazim dalam komunikasi resmi"
+              ]
+            }
+          },
+          {
+            "agent_type": "security_validator",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.7,
+            "key_arguments": [
+              "Tidak ada URL untuk dianalisis secara langsung",
+              "Pesan menunjukkan permintaan transfer mendesak dengan kontak yang tidak dikenal",
+              "Risk score awal 20% menunjukkan potensi risiko moderat"
+            ],
+            "evidence": {
+              "url_risk_score": 0.2,
+              "domain_trusted": false,
+              "is_shortened": false,
+              "tld_suspicious": false,
+              "security_checks": {
+                "url_presence": "Tidak ada URL tersedia untuk analisis",
+                "message_context": "Permintaan transfer mendesak dengan perubahan kontak mencurigakan"
+              }
+            }
+          },
+          {
+            "agent_type": "social_context",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.7,
+            "key_arguments": [
+              "Pengirim tidak dikenal (@unknown) tanpa riwayat perilaku yang jelas, meningkatkan risiko anomali sosial",
+              "Pesan meminta transfer segera (hari ini juga), menciptakan tekanan waktu yang tidak biasa untuk konteks akademik",
+              "Kontak yang disebutkan bukan nomor panitia lama, menunjukkan potensi perubahan tidak resmi atau penipuan",
+              "Konteks grup mahasiswa Teknik Informatika UIR biasanya melibatkan komunikasi formal atau terstruktur untuk event, bukan permintaan mendadak via pesan grup"
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.8,
+              "context_relevance": 0.4,
+              "timing_appropriate": false,
+              "academic_context_match": false
+            }
+          }
+        ],
+        "round_2_summary": [
+          {
+            "agent_type": "security_validator",
+            "stance": "PHISHING",
+            "confidence": 0.8,
+            "key_arguments": [
+              "Permintaan transfer mendesak tanpa URL untuk verifikasi langsung",
+              "Deviasi dari kontak resmi panitia meningkatkan risiko penipuan",
+              "Konteks grup akademik biasanya formal, bukan permintaan mendadak via pesan grup",
+              "Taktik urgensi tinggi ('hari ini juga') umum dalam phishing sosial"
+            ],
+            "evidence": {
+              "url_risk_score": 0.2,
+              "domain_trusted": false,
+              "is_shortened": false,
+              "tld_suspicious": false,
+              "security_checks": {
+                "no_url_provided": "Tidak ada URL untuk analisis teknis",
+                "social_engineering_risk": "Tinggi berdasarkan permintaan transfer dan kontak tidak dikenal"
+              }
+            }
+          },
+          {
+            "agent_type": "social_context",
+            "stance": "PHISHING",
+            "confidence": 0.8,
+            "key_arguments": [
+              "Pengirim tidak dikenal tanpa riwayat perilaku, meningkatkan anomali sosial",
+              "Permintaan transfer mendesak ('hari ini juga') menciptakan tekanan waktu yang tidak wajar untuk konteks akademik",
+              "Deviasi dari kontak panitia resmi menunjukkan potensi penipuan atau perubahan tidak sah",
+              "Konteks grup mahasiswa Teknik Informatika UIR biasanya melibatkan komunikasi formal, bukan permintaan mendadak via pesan grup",
+              "Kurangnya detail spesifik tentang event atau panitia memperkuat kecurigaan phishing"
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.9,
+              "context_relevance": 0.2,
+              "timing_appropriate": false,
+              "academic_context_match": false
+            }
+          },
+          {
+            "agent_type": "content_analyzer",
+            "stance": "PHISHING",
+            "confidence": 0.8,
+            "key_arguments": [
+              "Permintaan transfer uang tanpa konteks jelas tentang event atau panitia",
+              "Taktik urgensi tinggi dengan 'hari ini juga' menciptakan tekanan waktu yang tidak wajar",
+              "Deviasi dari kontak panitia resmi meningkatkan risiko penipuan",
+              "Kurangnya detail spesifik dan formalitas yang sesuai dengan konteks akademik grup",
+              "Analisis social_context mendukung anomali sosial dan tekanan waktu yang tidak biasa"
+            ],
+            "evidence": {
+              "style_deviation": 0.7,
+              "urgency_score": 0.9,
+              "social_engineering_detected": true,
+              "linguistic_anomalies": [
+                "Permintaan mendadak tanpa konteks detail",
+                "Penggunaan bahasa informal untuk permintaan finansial dalam setting akademik",
+                "Penyebutan kontak alternatif tanpa penjelasan resmi"
+              ]
+            }
+          }
+        ],
+        "total_tokens": 4299,
+        "total_processing_time_ms": 16039,
+        "variant": "mad3"
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 30,
+      "text": "Pengumuman lomba coding internasional ini benar ga ya https://globalcode-challenge.site",
+      "expected": "SUSPICIOUS",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 15750,
+      "tokens_total": 2651,
+      "tokens_input": 604,
+      "tokens_output": 140,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": {
+        "classification": "SUSPICIOUS",
+        "confidence": 0.7,
+        "reasoning": "Pesan mengumumkan lomba coding internasional dengan URL domain 'globalcode-challenge.site' yang tidak dikenal dan tidak terkait dengan institusi akademik seperti UIR atau platform terpercaya. Meskipun konteks akademik relevan, domain mencurigakan dan kurangnya verifikasi meningkatkan risiko phishing.",
+        "risk_factors": [
+          "URL domain tidak dikenal (TLD .site)",
+          "Konteks tidak langsung terkait aktivitas akademik UIR",
+          "Kurangnya informasi pengirim dan perilaku baseline"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "SUSPICIOUS classification requires multi-agent verification",
+        "tokens_input": 604,
+        "tokens_output": 140,
+        "processing_time_ms": 5590
+      },
+      "mad_result": {
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "content_analyzer": "SUSPICIOUS",
+          "security_validator": "SUSPICIOUS",
+          "social_context": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "content_analyzer",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.7,
+            "key_arguments": [
+              "URL menggunakan domain .site yang tidak umum untuk acara akademik resmi",
+              "Konteks pesan tidak langsung terkait aktivitas akademik UIR",
+              "Kurangnya informasi pengirim dan referensi otoritas",
+              "Pertanyaan 'ini benar ga ya' menunjukkan keraguan yang tidak biasa untuk pengumuman resmi"
+            ],
+            "evidence": {
+              "style_deviation": 0.6,
+              "urgency_score": 0.2,
+              "social_engineering_detected": true,
+              "linguistic_anomalies": [
+                "Pertanyaan verifikasi dalam pengumuman (tidak konsisten dengan gaya otoritatif)",
+                "Penggunaan bahasa informal 'ga ya' dalam konteks akademik"
+              ]
+            }
+          },
+          {
+            "agent_type": "security_validator",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.65,
+            "key_arguments": [
+              "Domain baru dengan TLD .site yang umum untuk situs sementara atau promosi",
+              "Risk score eksternal 0.20 menunjukkan beberapa risiko terdeteksi",
+              "LLM classification juga menilai SUSPICIOUS dengan confidence 70%",
+              "Tidak ada bukti domain terpercaya atau whitelisted"
+            ],
+            "evidence": {
+              "url_risk_score": 0.2,
+              "domain_trusted": false,
+              "is_shortened": false,
+              "tld_suspicious": true,
+              "security_checks": {
+                "external_scanner_status": "AMAN dengan risk score 0.20",
+                "llm_classification": "SUSPICIOUS dengan confidence 70%",
+                "whitelist_status": "Tidak ada dalam whitelist",
+                "tld_analysis": ".site sering digunakan untuk situs baru/eksperimental"
+              }
+            }
+          },
+          {
+            "agent_type": "social_context",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.65,
+            "key_arguments": [
+              "Pengirim tidak dikenal (@unknown) tanpa riwayat perilaku, meningkatkan risiko phishing karena tidak ada baseline untuk verifikasi keaslian.",
+              "Pesan tentang lomba coding internasional mungkin relevan untuk grup mahasiswa Teknik Informatika, tetapi tautan domain tidak umum (.site) mencurigakan dan tidak sesuai dengan konteks akademik formal.",
+              "Waktu posting (19:41) tidak spesifik mencurigakan, tetapi kurangnya detail atau konteks tambahan membuatnya tidak wajar untuk pengumuman resmi di grup akademik.",
+              "Konteks akademik tidak sepenuhnya cocok karena pengumuman lomba biasanya datang dari sumber terpercaya seperti dosen atau organisasi kampus, bukan dari pengirim anonim."
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.8,
+              "context_relevance": 0.6,
+              "timing_appropriate": true,
+              "academic_context_match": false
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1907,
+        "total_processing_time_ms": 8711,
+        "variant": "mad3"
+      },
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 31,
+      "text": "Ada yang pernah pakai platform ini untuk sertifikasi https://career-boost-now.com",
+      "expected": "SUSPICIOUS",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 15264,
+      "tokens_total": 2605,
+      "tokens_input": 606,
+      "tokens_output": 167,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": {
+        "classification": "SUSPICIOUS",
+        "confidence": 0.65,
+        "reasoning": "Pesan menanyakan pengalaman dengan platform sertifikasi di luar konteks akademik UIR, dengan URL domain umum yang tidak terkait institusi pendidikan atau platform terpercaya yang dikenal. Meskipun tidak ada indikator phishing langsung seperti urgensi atau permintaan data, konteksnya tidak relevan dengan aktivitas grup mahasiswa Teknik Informatika UIR.",
+        "risk_factors": [
+          "URL domain umum (career-boost-now.com) tidak terasosiasi dengan kampus atau platform akademik terpercaya",
+          "Konteks pesan (sertifikasi) di luar diskusi akademik tipikal grup"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "SUSPICIOUS classification requires multi-agent verification",
+        "tokens_input": 606,
+        "tokens_output": 167,
+        "processing_time_ms": 6061
+      },
+      "mad_result": {
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "content_analyzer": "SUSPICIOUS",
+          "social_context": "SUSPICIOUS",
+          "security_validator": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "content_analyzer",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.65,
+            "key_arguments": [
+              "URL domain umum (career-boost-now.com) tidak terasosiasi dengan kampus atau platform akademik terpercaya",
+              "Konteks pesan (sertifikasi) di luar diskusi akademik tipikal grup"
+            ],
+            "evidence": {
+              "style_deviation": 0.5,
+              "urgency_score": 0.0,
+              "social_engineering_detected": false,
+              "linguistic_anomalies": [
+                "Pertanyaan umum tanpa konteks spesifik",
+                "Referensi ke platform eksternal tanpa penjelasan"
+              ]
+            }
+          },
+          {
+            "agent_type": "social_context",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.7,
+            "key_arguments": [
+              "Pengirim tidak dikenal (@unknown) tanpa riwayat perilaku, meningkatkan risiko anomali sosial",
+              "Pesan berisi tautan eksternal yang tidak terkait langsung dengan aktivitas akademik grup Teknik Informatika UIR",
+              "Waktu posting (malam hari) mungkin tidak sesuai dengan pola komunikasi akademik formal, meski bisa terjadi dalam diskusi informal",
+              "Konteks akademik tidak mendukung pesan tentang sertifikasi tanpa referensi spesifik ke kurikulum atau acara universitas"
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.8,
+              "context_relevance": 0.3,
+              "timing_appropriate": false,
+              "academic_context_match": false
+            }
+          },
+          {
+            "agent_type": "security_validator",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.65,
+            "key_arguments": [
+              "URL tidak dalam whitelist",
+              "Analisis eksternal menunjukkan status aman namun LLM mengklasifikasikan sebagai mencurigakan",
+              "Domain baru atau kurang dikenal untuk platform sertifikasi",
+              "Struktur URL sederhana tanpa tanda obfuscation jelas"
+            ],
+            "evidence": {
+              "url_risk_score": 0.0,
+              "domain_trusted": false,
+              "is_shortened": false,
+              "tld_suspicious": false,
+              "security_checks": {
+                "external_scanner": "AMAN (Risk Score: 0.00 dari virustotal+heuristic)",
+                "llm_classification": "SUSPICIOUS (Confidence: 65%)",
+                "whitelist_status": "Tidak terdaftar",
+                "https": "Ya",
+                "tld_analysis": ".com - umum, tidak mencurigakan"
+              }
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1832,
+        "total_processing_time_ms": 8296,
+        "variant": "mad3"
+      },
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 32,
+      "text": "Tiba-tiba ada pesan DM minta bantu vote kompetisi pakai login akun kampus",
+      "expected": "SUSPICIOUS",
+      "predicted": "SAFE",
+      "confidence": 1.0,
+      "decided_by": "triage",
+      "action": "none",
+      "processing_time_ms": 0,
+      "tokens_total": 0,
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": null,
+      "mad_result": null,
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 33,
+      "text": "Grup dapat link undangan webinar berhadiah saldo, tapi penyelenggara kurang jelas",
+      "expected": "SUSPICIOUS",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 13688,
+      "tokens_total": 2477,
+      "tokens_input": 600,
+      "tokens_output": 120,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "SUSPICIOUS",
+        "confidence": 0.65,
+        "reasoning": "Pesan mengindikasikan link undangan webinar berhadiah saldo dengan penyelenggara tidak jelas, yang tidak relevan dengan aktivitas akademik dan mengandung kata kunci phishing seperti 'berhadiah saldo', menimbulkan risiko social engineering.",
+        "risk_factors": [
+          "konteks tidak relevan dengan akademik",
+          "indikasi social engineering (hadiah saldo)",
+          "penyelenggara tidak jelas"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "SUSPICIOUS classification requires multi-agent verification",
+        "tokens_input": 600,
+        "tokens_output": 120,
+        "processing_time_ms": 4762
+      },
+      "mad_result": {
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "content_analyzer": "SUSPICIOUS",
+          "security_validator": "SUSPICIOUS",
+          "social_context": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "content_analyzer",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.65,
+            "key_arguments": [
+              "konteks tidak relevan dengan aktivitas akademik grup",
+              "indikasi social engineering melalui janji hadiah saldo",
+              "penyelenggara webinar tidak jelas atau tidak terverifikasi"
+            ],
+            "evidence": {
+              "style_deviation": 0.4,
+              "urgency_score": 0.3,
+              "social_engineering_detected": true,
+              "linguistic_anomalies": [
+                "penggunaan kata 'berhadiah saldo' yang tidak umum dalam konteks akademik",
+                "struktur pesan yang singkat dan ambigu tentang detail webinar"
+              ]
+            }
+          },
+          {
+            "agent_type": "security_validator",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.65,
+            "key_arguments": [
+              "Tidak ada URL tersedia untuk analisis langsung",
+              "Pesan mengindikasikan penyelenggara tidak jelas",
+              "Konteks webinar berhadiah saldo sering digunakan dalam skema phishing",
+              "Risk score 20 menunjukkan potensi risiko moderat"
+            ],
+            "evidence": {
+              "url_risk_score": 0.2,
+              "domain_trusted": false,
+              "is_shortened": false,
+              "tld_suspicious": false,
+              "security_checks": {
+                "url_availability": "Tidak ada URL ditemukan",
+                "message_analysis": "Penyelenggara tidak jelas dan konteks mencurigakan",
+                "risk_assessment": "Risk score 20 dari triage"
+              }
+            }
+          },
+          {
+            "agent_type": "social_context",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.7,
+            "key_arguments": [
+              "Pengirim tidak dikenal (@unknown) tanpa riwayat perilaku yang jelas, meningkatkan risiko anomali sosial",
+              "Pesan menawarkan hadiah saldo dalam konteks webinar, yang tidak umum dalam aktivitas akademik formal",
+              "Penyelenggara webinar tidak jelas, mengurangi kredibilitas dan relevansi dengan tujuan akademik grup",
+              "Waktu posting (malam hari) mungkin kurang sesuai untuk komunikasi akademik resmi, meski tidak pasti",
+              "Kurangnya data baseline membuat evaluasi konteks sosial lebih bergantung pada fitur pesan yang mencurigakan"
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.8,
+              "context_relevance": 0.3,
+              "timing_appropriate": false,
+              "academic_context_match": false
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1757,
+        "total_processing_time_ms": 8925,
+        "variant": "mad3"
+      },
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 34,
+      "text": "Kak tingkat share link database soal premium gratis 24 jam, saya ragu ini legal",
+      "expected": "SUSPICIOUS",
+      "predicted": "SAFE",
+      "confidence": 1.0,
+      "decided_by": "triage",
+      "action": "none",
+      "processing_time_ms": 0,
+      "tokens_total": 0,
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": null,
+      "mad_result": null,
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 35,
+      "text": "Ada info rekrutmen volunteer diminta kirim KTP dan selfie lewat bot Telegram",
+      "expected": "SUSPICIOUS",
+      "predicted": "SAFE",
+      "confidence": 1.0,
+      "decided_by": "triage",
+      "action": "none",
+      "processing_time_ms": 0,
+      "tokens_total": 0,
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": null,
+      "mad_result": null,
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 36,
+      "text": "Pesan ini mengatasnamakan fakultas dan minta update data kontak via link baru",
+      "expected": "SUSPICIOUS",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 12163,
+      "tokens_total": 2459,
+      "tokens_input": 599,
+      "tokens_output": 97,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "SUSPICIOUS",
+        "confidence": 0.7,
+        "reasoning": "Pesan mengatasnamakan fakultas dan meminta update data kontak via link baru, yang merupakan taktik social engineering umum dalam phishing, tetapi tidak ada URL yang diberikan untuk analisis lebih lanjut.",
+        "risk_factors": [
+          "phishing_keywords",
+          "social_engineering",
+          "permintaan_data_kontak"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "SUSPICIOUS classification requires multi-agent verification",
+        "tokens_input": 599,
+        "tokens_output": 97,
+        "processing_time_ms": 4126
+      },
+      "mad_result": {
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "content_analyzer": "SUSPICIOUS",
+          "security_validator": "SUSPICIOUS",
+          "social_context": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "content_analyzer",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.7,
+            "key_arguments": [
+              "Pesan mengatasnamakan fakultas tanpa konteks spesifik",
+              "Permintaan update data kontak via link baru yang tidak biasa",
+              "Menggunakan taktik otoritas palsu untuk legitimasi",
+              "Kurangnya detail akademik yang relevan"
+            ],
+            "evidence": {
+              "style_deviation": 0.6,
+              "urgency_score": 0.3,
+              "social_engineering_detected": true,
+              "linguistic_anomalies": [
+                "Pesan terlalu singkat dan ambigu",
+                "Penggunaan 'mengatasnamakan' tanpa verifikasi",
+                "Link baru tanpa penjelasan keamanan"
+              ]
+            }
+          },
+          {
+            "agent_type": "security_validator",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.7,
+            "key_arguments": [
+              "Tidak ada URL untuk dianalisis secara langsung",
+              "Pesan mengatasnamakan fakultas dan meminta update data kontak",
+              "Risk score 20 menunjukkan potensi risiko sedang",
+              "Single-shot LLM mengklasifikasikan sebagai SUSPICIOUS dengan confidence 70%"
+            ],
+            "evidence": {
+              "url_risk_score": 0.2,
+              "domain_trusted": false,
+              "is_shortened": false,
+              "tld_suspicious": false,
+              "security_checks": {
+                "no_url_provided": "Tidak dapat melakukan analisis URL karena tidak ada URL yang ditemukan",
+                "message_content_analysis": "Pesan meminta update data kontak mengatasnamakan fakultas, pola umum phishing",
+                "risk_score_interpretation": "Risk score 20/100 menunjukkan risiko sedang"
+              }
+            }
+          },
+          {
+            "agent_type": "social_context",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.65,
+            "key_arguments": [
+              "Pengirim tidak dikenal (@unknown) tanpa riwayat perilaku yang jelas, meningkatkan risiko anomali sosial",
+              "Permintaan update data kontak via link baru tidak umum dalam konteks akademik tanpa konteks spesifik seperti registrasi atau acara",
+              "Waktu posting (19:42) di luar jam kerja akademik standar, meskipun tidak sepenuhnya tidak wajar untuk mahasiswa",
+              "Pesan mengatasnamakan fakultas tanpa verifikasi langsung, rentan terhadap penyalahgunaan identitas dalam grup mahasiswa"
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.8,
+              "context_relevance": 0.4,
+              "timing_appropriate": false,
+              "academic_context_match": false
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1763,
+        "total_processing_time_ms": 8036,
+        "variant": "mad3"
+      },
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 37,
+      "text": "Dapat file APK materi kuliah dari nomor asing, katanya wajib install untuk akses modul",
+      "expected": "SUSPICIOUS",
+      "predicted": "SAFE",
+      "confidence": 1.0,
+      "decided_by": "triage",
+      "action": "none",
+      "processing_time_ms": 0,
+      "tokens_total": 0,
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": null,
+      "mad_result": null,
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 38,
+      "text": "Ada tawaran jadi admin marketplace kampus dengan gaji tinggi tapi proses seleksi sangat singkat",
+      "expected": "SUSPICIOUS",
+      "predicted": "SUSPICIOUS",
+      "confidence": 0.5,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 13909,
+      "tokens_total": 2485,
+      "tokens_input": 599,
+      "tokens_output": 117,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "SUSPICIOUS",
+        "confidence": 0.65,
+        "reasoning": "Pesan menawarkan pekerjaan admin marketplace kampus dengan gaji tinggi dan proses seleksi singkat, yang tidak sesuai dengan konteks akademik tipikal grup dan mengandung indikator social engineering seperti urgensi berlebihan.",
+        "risk_factors": [
+          "taktik social engineering (urgensi)",
+          "konteks tidak relevan dengan aktivitas akademik",
+          "tidak ada URL untuk verifikasi lebih lanjut"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "SUSPICIOUS classification requires multi-agent verification",
+        "tokens_input": 599,
+        "tokens_output": 117,
+        "processing_time_ms": 4594
+      },
+      "mad_result": {
+        "decision": "SUSPICIOUS",
+        "confidence": 0.5,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "content_analyzer": "SUSPICIOUS",
+          "security_validator": "SUSPICIOUS",
+          "social_context": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "content_analyzer",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.65,
+            "key_arguments": [
+              "taktik social engineering (urgensi) karena proses seleksi sangat singkat",
+              "konteks tidak relevan dengan aktivitas akademik grup",
+              "tawaran gaji tinggi yang tidak biasa untuk admin marketplace kampus"
+            ],
+            "evidence": {
+              "style_deviation": 0.4,
+              "urgency_score": 0.7,
+              "social_engineering_detected": true,
+              "linguistic_anomalies": [
+                "penggunaan kata 'sangat singkat' yang menciptakan urgensi",
+                "tawaran gaji tinggi yang mungkin berlebihan untuk konteks akademik"
+              ]
+            }
+          },
+          {
+            "agent_type": "security_validator",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.65,
+            "key_arguments": [
+              "Tidak ada URL untuk dianalisis, sehingga verifikasi teknis tidak mungkin",
+              "Pesan mengandung indikator phishing: tawaran pekerjaan dengan gaji tinggi dan proses seleksi singkat",
+              "Risk score 20 menunjukkan potensi risiko moderat tanpa konteks URL"
+            ],
+            "evidence": {
+              "url_risk_score": 0.2,
+              "domain_trusted": false,
+              "is_shortened": false,
+              "tld_suspicious": false,
+              "security_checks": {
+                "url_presence": "Tidak ada URL",
+                "message_analysis": "Indikator phishing terdeteksi dalam pesan"
+              }
+            }
+          },
+          {
+            "agent_type": "social_context",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.7,
+            "key_arguments": [
+              "Pesan menawarkan posisi admin marketplace kampus dengan gaji tinggi dan proses seleksi singkat, yang tidak umum dalam konteks akademik formal",
+              "Pengirim tidak dikenal (@unknown) dan tidak ada riwayat perilaku untuk validasi, meningkatkan risiko",
+              "Waktu posting (19:42) tidak spesifik untuk aktivitas akademik, tetapi tidak terlalu aneh untuk komunikasi mahasiswa",
+              "Konteks grup mahasiswa Teknik Informatika UIR mungkin relevan untuk tawaran terkait teknologi, tetapi tawaran ini terkesan terlalu bagus untuk jadi kenyataan",
+              "Proses seleksi singkat sering dikaitkan dengan skema phishing yang memanfaatkan ketergesaan"
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.8,
+              "context_relevance": 0.4,
+              "timing_appropriate": true,
+              "academic_context_match": false
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1769,
+        "total_processing_time_ms": 9315,
+        "variant": "mad3"
+      },
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 39,
+      "text": "Seseorang kirim link verifikasi akun organisasi di domain yang mirip tapi bukan domain resmi",
+      "expected": "SUSPICIOUS",
+      "predicted": "PHISHING",
+      "confidence": 1.0,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 17288,
+      "tokens_total": 2632,
+      "tokens_input": 600,
+      "tokens_output": 156,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "SUSPICIOUS",
+        "confidence": 0.6,
+        "reasoning": "Pesan ini melaporkan aktivitas mencurigakan berupa link verifikasi akun organisasi di domain yang mirip tapi bukan domain resmi, yang merupakan indikator potensial phishing. Namun, karena pesan ini adalah laporan dari pihak ketiga dan bukan pesan phishing langsung, serta tidak ada detail URL atau konteks spesifik, klasifikasi didasarkan pada peringatan yang diberikan.",
+        "risk_factors": [
+          "phishing_keywords",
+          "domain mencurigakan (mirip tapi bukan resmi)",
+          "konteks tidak langsung (laporan bukan pesan asli)"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "SUSPICIOUS classification requires multi-agent verification",
+        "tokens_input": 600,
+        "tokens_output": 156,
+        "processing_time_ms": 5992
+      },
+      "mad_result": {
+        "decision": "PHISHING",
+        "confidence": 1.0,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "majority",
+        "agent_votes": {
+          "content_analyzer": "PHISHING",
+          "social_context": "PHISHING",
+          "security_validator": "SUSPICIOUS"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "content_analyzer",
+            "stance": "PHISHING",
+            "confidence": 0.85,
+            "key_arguments": [
+              "Domain mencurigakan yang mirip tapi bukan resmi menunjukkan upaya spoofing",
+              "Konteks tidak langsung sebagai laporan bukan pesan asli mengurangi keaslian",
+              "Kata kunci phishing seperti 'link verifikasi akun' dan 'domain' menandakan ancaman umum"
+            ],
+            "evidence": {
+              "style_deviation": 0.7,
+              "urgency_score": 0.3,
+              "social_engineering_detected": true,
+              "linguistic_anomalies": [
+                "Pesan bersifat laporan bukan interaksi langsung",
+                "Frasa 'domain yang mirip tapi bukan domain resmi' adalah pola umum phishing"
+              ]
+            }
+          },
+          {
+            "agent_type": "social_context",
+            "stance": "PHISHING",
+            "confidence": 0.85,
+            "key_arguments": [
+              "Pengirim tidak dikenal (@unknown) tanpa riwayat perilaku yang dapat diverifikasi, meningkatkan risiko",
+              "Link verifikasi akun organisasi dikirim dari domain yang mirip tetapi bukan domain resmi, indikasi kuat phishing",
+              "Konteks grup mahasiswa Teknik Informatika UIR membuat pesan ini relevan secara akademik, tetapi domain tidak resmi mencurigakan",
+              "Waktu posting (19:42) mungkin normal untuk aktivitas mahasiswa, tetapi tidak mengurangi risiko dari domain palsu"
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.9,
+              "context_relevance": 0.8,
+              "timing_appropriate": true,
+              "academic_context_match": true
+            }
+          },
+          {
+            "agent_type": "security_validator",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.6,
+            "key_arguments": [
+              "URL tidak ditemukan dalam pesan, sehingga tidak dapat dianalisis secara langsung",
+              "Pesan menggambarkan link verifikasi akun organisasi di domain yang mirip tapi bukan domain resmi, yang merupakan indikasi umum phishing",
+              "Risk score 20 menunjukkan risiko rendah hingga sedang, tetapi informasi tidak lengkap untuk penilaian definitif",
+              "Single-Shot LLM mengklasifikasikan sebagai SUSPICIOUS dengan confidence 60%, mendukung kecurigaan"
+            ],
+            "evidence": {
+              "url_risk_score": 0.2,
+              "domain_trusted": false,
+              "is_shortened": false,
+              "tld_suspicious": false,
+              "security_checks": {
+                "url_analysis": "Tidak ada URL tersedia untuk analisis struktur atau obfuscation",
+                "domain_reputation": "Domain tidak dapat diverifikasi karena tidak ada URL, tetapi pesan menyebut domain mirip bukan resmi",
+                "link_purpose": "Link verifikasi akun organisasi, target umum phishing",
+                "historical_phishing_match": "Tidak ada data historis tersedia tanpa URL spesifik",
+                "https_status": "Tidak dapat ditentukan tanpa URL",
+                "url_shortener_check": "Tidak dapat ditentukan tanpa URL"
+              }
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1876,
+        "total_processing_time_ms": 11296,
+        "variant": "mad3"
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 40,
+      "text": "Info donasi bencana dari akun anonim, rekening penerima tidak jelas asalnya",
+      "expected": "SUSPICIOUS",
+      "predicted": "SAFE",
+      "confidence": 1.0,
+      "decided_by": "triage",
+      "action": "none",
+      "processing_time_ms": 0,
+      "tokens_total": 0,
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": null,
+      "mad_result": null,
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 41,
+      "text": "Katanya bisa buka blokir wifi kampus dengan login ulang di portal mirror",
+      "expected": "SUSPICIOUS",
+      "predicted": "SAFE",
+      "confidence": 1.0,
+      "decided_by": "triage",
+      "action": "none",
+      "processing_time_ms": 0,
+      "tokens_total": 0,
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": null,
+      "mad_result": null,
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 42,
+      "text": "Link pengisian survei alumni ini valid ga, tampilannya mirip situs resmi tapi URL beda",
+      "expected": "SUSPICIOUS",
+      "predicted": "SAFE",
+      "confidence": 1.0,
+      "decided_by": "triage",
+      "action": "none",
+      "processing_time_ms": 0,
+      "tokens_total": 0,
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": null,
+      "mad_result": null,
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 43,
+      "text": "Ada promo kuota belajar murah, diminta pembayaran melalui e-wallet pribadi",
+      "expected": "SUSPICIOUS",
+      "predicted": "PHISHING",
+      "confidence": 1.0,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 20978,
+      "tokens_total": 5013,
+      "tokens_input": 599,
+      "tokens_output": 146,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "SUSPICIOUS",
+        "confidence": 0.7,
+        "reasoning": "Pesan menawarkan promo kuota belajar dengan pembayaran melalui e-wallet pribadi, yang tidak relevan dengan konteks akademik grup dan mengandung kata kunci phishing seperti 'promo' dan 'pembayaran' yang dapat memanfaatkan urgensi. Namun, tanpa URL atau detail lebih lanjut, tidak dapat dipastikan sebagai phishing.",
+        "risk_factors": [
+          "taktik social engineering (promo menarik)",
+          "konteks tidak relevan dengan aktivitas akademik",
+          "permintaan pembayaran pribadi"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "SUSPICIOUS classification requires multi-agent verification",
+        "tokens_input": 599,
+        "tokens_output": 146,
+        "processing_time_ms": 5409
+      },
+      "mad_result": {
+        "decision": "PHISHING",
+        "confidence": 1.0,
+        "rounds_executed": 2,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "social_context": "PHISHING",
+          "content_analyzer": "PHISHING",
+          "security_validator": "PHISHING"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "content_analyzer",
+            "stance": "PHISHING",
+            "confidence": 0.85,
+            "key_arguments": [
+              "promo kuota belajar murah mencurigakan karena tidak relevan dengan aktivitas akademik grup",
+              "permintaan pembayaran melalui e-wallet pribadi adalah taktik umum phishing untuk menghindari jejak",
+              "gaya bahasa singkat dan langsung tidak sesuai dengan komunikasi akademik formal"
+            ],
+            "evidence": {
+              "style_deviation": 0.7,
+              "urgency_score": 0.3,
+              "social_engineering_detected": true,
+              "linguistic_anomalies": [
+                "promo kuota belajar murah",
+                "diminta pembayaran melalui e-wallet pribadi"
+              ]
+            }
+          },
+          {
+            "agent_type": "security_validator",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.7,
+            "key_arguments": [
+              "No URL provided for analysis",
+              "Message content suggests potential phishing due to request for personal e-wallet payment",
+              "Risk score of 20 indicates moderate suspicion",
+              "Single-shot LLM classification aligns with suspicious stance"
+            ],
+            "evidence": {
+              "url_risk_score": 0.2,
+              "domain_trusted": false,
+              "is_shortened": false,
+              "tld_suspicious": false,
+              "security_checks": {
+                "url_presence": "No URL found",
+                "message_analysis": "Promotional message with personal payment request",
+                "llm_alignment": "Single-shot LLM classification matches suspicious stance"
+              }
+            }
+          },
+          {
+            "agent_type": "social_context",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.75,
+            "key_arguments": [
+              "Pengirim tidak dikenal (@unknown) tanpa riwayat perilaku, meningkatkan risiko phishing dalam grup akademik",
+              "Promo kuota belajar melalui e-wallet pribadi tidak lazim dalam konteks akademik formal",
+              "Waktu malam (19:43) tidak sesuai untuk komunikasi akademik resmi, meski mungkin untuk promosi informal",
+              "Kurangnya relevansi langsung dengan aktivitas akademik Teknik Informatika UIR"
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.8,
+              "context_relevance": 0.3,
+              "timing_appropriate": false,
+              "academic_context_match": false
+            }
+          }
+        ],
+        "round_2_summary": [
+          {
+            "agent_type": "social_context",
+            "stance": "PHISHING",
+            "confidence": 0.8,
+            "key_arguments": [
+              "Pengirim tidak dikenal tanpa riwayat perilaku meningkatkan risiko phishing dalam grup akademik",
+              "Promo kuota belajar melalui e-wallet pribadi tidak lazim dan merupakan taktik umum phishing untuk menghindari jejak",
+              "Kurangnya relevansi langsung dengan aktivitas akademik Teknik Informatika UIR, mencurigakan dalam konteks sosial grup",
+              "Waktu malam (19:43) tidak sesuai untuk komunikasi akademik resmi, mendukung pola perilaku anomali"
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.85,
+              "context_relevance": 0.2,
+              "timing_appropriate": false,
+              "academic_context_match": false
+            }
+          },
+          {
+            "agent_type": "content_analyzer",
+            "stance": "PHISHING",
+            "confidence": 0.9,
+            "key_arguments": [
+              "promo kuota belajar murah mencurigakan karena tidak relevan dengan aktivitas akademik grup",
+              "permintaan pembayaran melalui e-wallet pribadi adalah taktik umum phishing untuk menghindari jejak",
+              "gaya bahasa singkat dan langsung tidak sesuai dengan komunikasi akademik formal",
+              "pengirim tidak dikenal (@unknown) tanpa riwayat perilaku meningkatkan risiko phishing",
+              "waktu malam (19:43) tidak sesuai untuk komunikasi akademik resmi, mendukung taktik urgensi"
+            ],
+            "evidence": {
+              "style_deviation": 0.8,
+              "urgency_score": 0.7,
+              "social_engineering_detected": true,
+              "linguistic_anomalies": [
+                "gaya bahasa singkat dan langsung",
+                "fokus pada pembayaran pribadi",
+                "kurangnya detail akademik"
+              ]
+            }
+          },
+          {
+            "agent_type": "security_validator",
+            "stance": "PHISHING",
+            "confidence": 0.8,
+            "key_arguments": [
+              "Message lacks URL, but content analysis reveals phishing tactics: request for personal e-wallet payment to avoid traceability",
+              "Promo for cheap learning quota is suspicious and irrelevant in academic context, aligning with phishing lures",
+              "Sender is unknown (@unknown) with no behavioral history, increasing risk in academic group",
+              "Language style is direct and informal, inconsistent with formal academic communication, typical of phishing attempts",
+              "Time of message (19:43) is unusual for official academic promotions, supporting suspicion"
+            ],
+            "evidence": {
+              "url_risk_score": 0.2,
+              "domain_trusted": false,
+              "is_shortened": false,
+              "tld_suspicious": false,
+              "security_checks": {
+                "content_analysis": "phishing indicators present",
+                "social_context": "high risk due to unknown sender and context mismatch",
+                "historical_phishing_patterns": "matches common tactics (e-wallet payment, irrelevant promo)"
+              }
+            }
+          }
+        ],
+        "total_tokens": 4268,
+        "total_processing_time_ms": 15568,
+        "variant": "mad3"
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 44,
+      "text": "Saya dapat pesan lowongan asisten dosen tapi diminta bayar biaya administrasi dulu",
+      "expected": "SUSPICIOUS",
+      "predicted": "PHISHING",
+      "confidence": 1.0,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 24182,
+      "tokens_total": 5172,
+      "tokens_input": 601,
+      "tokens_output": 147,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "SUSPICIOUS",
+        "confidence": 0.65,
+        "reasoning": "Pesan ini mencurigakan karena membahas lowongan asisten dosen dengan permintaan pembayaran biaya administrasi, yang tidak lazim dalam konteks akademik di Indonesia dan dapat mengindikasikan upaya penipuan atau phishing untuk meminta uang. Namun, tanpa informasi lebih lanjut seperti URL atau detail pengirim, klasifikasi tidak dapat dipastikan.",
+        "risk_factors": [
+          "phishing_keywords",
+          "permintaan pembayaran yang tidak biasa",
+          "konteks tidak relevan dengan diskusi akademik tipikal"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "SUSPICIOUS classification requires multi-agent verification",
+        "tokens_input": 601,
+        "tokens_output": 147,
+        "processing_time_ms": 6313
+      },
+      "mad_result": {
+        "decision": "PHISHING",
+        "confidence": 1.0,
+        "rounds_executed": 2,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "security_validator": "PHISHING",
+          "content_analyzer": "PHISHING",
+          "social_context": "PHISHING"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "content_analyzer",
+            "stance": "PHISHING",
+            "confidence": 0.85,
+            "key_arguments": [
+              "Permintaan pembayaran untuk lowongan kerja akademik tidak wajar",
+              "Konteks pesan tidak relevan dengan aktivitas akademik grup",
+              "Menggunakan taktik social engineering dengan menawarkan peluang kerja"
+            ],
+            "evidence": {
+              "style_deviation": 0.7,
+              "urgency_score": 0.6,
+              "social_engineering_detected": true,
+              "linguistic_anomalies": [
+                "Penyebutan 'biaya administrasi' dalam konteks lowongan asisten dosen",
+                "Struktur pesan singkat dan langsung ke permintaan pembayaran"
+              ]
+            }
+          },
+          {
+            "agent_type": "security_validator",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.65,
+            "key_arguments": [
+              "No URL provided for analysis",
+              "Message content suggests potential scam (request for upfront payment)",
+              "Risk score of 20 indicates moderate suspicion",
+              "Single-shot LLM classification aligns with SUSPICIOUS stance"
+            ],
+            "evidence": {
+              "url_risk_score": 0.2,
+              "domain_trusted": false,
+              "is_shortened": false,
+              "tld_suspicious": false,
+              "security_checks": {
+                "url_presence": "No URL found",
+                "message_analysis": "Request for upfront payment in job offer context",
+                "llm_alignment": "Single-shot LLM classification matches stance"
+              }
+            }
+          },
+          {
+            "agent_type": "social_context",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.7,
+            "key_arguments": [
+              "Pesan meminta pembayaran biaya administrasi untuk lowongan asisten dosen, yang tidak lazim dalam konteks akademik formal di Indonesia",
+              "Pengirim tidak dikenal (@unknown) dan tidak ada riwayat perilaku untuk memvalidasi kredibilitas",
+              "Waktu posting (19:43) mungkin normal untuk aktivitas mahasiswa, tetapi konten tidak relevan dengan aktivitas akademik yang sedang berlangsung",
+              "Lowongan asisten dosen biasanya diumumkan melalui saluran resmi kampus, bukan grup mahasiswa tanpa konteks spesifik",
+              "Dinamika sosial dalam grup mahasiswa cenderung tidak melibatkan transaksi keuangan untuk kesempatan akademik"
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.8,
+              "context_relevance": 0.2,
+              "timing_appropriate": true,
+              "academic_context_match": false
+            }
+          }
+        ],
+        "round_2_summary": [
+          {
+            "agent_type": "security_validator",
+            "stance": "PHISHING",
+            "confidence": 0.75,
+            "key_arguments": [
+              "Message requests upfront payment for academic job, which is highly unusual and aligns with scam tactics",
+              "No URL provided, but content alone indicates high risk of phishing based on social engineering",
+              "Social context analysis confirms lack of formal channels and unknown sender, increasing suspicion",
+              "Consensus from other agents supports phishing stance with strong arguments"
+            ],
+            "evidence": {
+              "url_risk_score": 0.0,
+              "domain_trusted": false,
+              "is_shortened": false,
+              "tld_suspicious": false,
+              "security_checks": {
+                "content_analysis": "Request for payment in job offer is a common phishing indicator",
+                "social_validation": "Sender unknown and context inappropriate for academic settings"
+              }
+            }
+          },
+          {
+            "agent_type": "content_analyzer",
+            "stance": "PHISHING",
+            "confidence": 0.9,
+            "key_arguments": [
+              "Permintaan pembayaran untuk lowongan kerja akademik tidak wajar dan mencurigakan",
+              "Konteks pesan tidak relevan dengan aktivitas akademik grup dan tidak melalui saluran resmi",
+              "Menggunakan taktik social engineering dengan menawarkan peluang kerja untuk memicu urgensi",
+              "Analisis agent lain mendukung kecurigaan dengan bukti sosial dan keamanan yang konsisten"
+            ],
+            "evidence": {
+              "style_deviation": 0.8,
+              "urgency_score": 0.7,
+              "social_engineering_detected": true,
+              "linguistic_anomalies": [
+                "Permintaan pembayaran di muka untuk lowongan akademik",
+                "Bahasa informal yang tidak sesuai dengan komunikasi resmi kampus"
+              ]
+            }
+          },
+          {
+            "agent_type": "social_context",
+            "stance": "PHISHING",
+            "confidence": 0.8,
+            "key_arguments": [
+              "Permintaan pembayaran biaya administrasi untuk lowongan asisten dosen sangat tidak lazim dalam konteks akademik formal di Indonesia, mengindikasikan potensi penipuan",
+              "Pengirim tidak dikenal (@unknown) tanpa riwayat perilaku yang dapat divalidasi, meningkatkan risiko",
+              "Lowongan asisten dosen biasanya diumumkan melalui saluran resmi kampus, bukan grup mahasiswa tanpa konteks spesifik, menunjukkan ketidaksesuaian sosial",
+              "Konten pesan tidak relevan dengan aktivitas akademik yang sedang berlangsung dalam grup, mendukung taktik social engineering",
+              "Analisis agent lain (content_analyzer) menguatkan bahwa permintaan pembayaran tidak wajar dan menggunakan peluang kerja sebagai umpan"
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.9,
+              "context_relevance": 0.2,
+              "timing_appropriate": true,
+              "academic_context_match": false
+            }
+          }
+        ],
+        "total_tokens": 4424,
+        "total_processing_time_ms": 17869,
+        "variant": "mad3"
+      },
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 45,
+      "text": "SELAMAT nomor anda terpilih menerima hadiah 50 juta, klaim sekarang di https://hadiah-cepat.win/claim",
+      "expected": "PHISHING",
+      "predicted": "PHISHING",
+      "confidence": 1.0,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 16857,
+      "tokens_total": 2735,
+      "tokens_input": 632,
+      "tokens_output": 152,
+      "triage_risk_score": 35,
+      "triage_flags": [
+        "phishing_keywords",
+        "urgency_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini mengandung URL mencurigakan dengan domain 'hadiah-cepat.win' yang tidak terkait dengan aktivitas akademik, menggunakan taktik social engineering seperti klaim hadiah uang besar dan urgensi, serta tidak sesuai dengan konteks grup mahasiswa Teknik Informatika UIR.",
+        "risk_factors": [
+          "URL mencurigakan dengan TLD aneh (.win)",
+          "taktik social engineering (urgensi dan hadiah uang)",
+          "konteks tidak relevan dengan aktivitas akademik",
+          "permintaan klaim yang dapat mengarah ke data sensitif"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 632,
+        "tokens_output": 152,
+        "processing_time_ms": 5789
+      },
+      "mad_result": {
+        "decision": "PHISHING",
+        "confidence": 1.0,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "content_analyzer": "PHISHING",
+          "social_context": "PHISHING",
+          "security_validator": "PHISHING"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "content_analyzer",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "URL mencurigakan dengan TLD aneh (.win)",
+              "taktik social engineering (urgensi dan hadiah uang)",
+              "konteks tidak relevan dengan aktivitas akademik",
+              "permintaan klaim yang dapat mengarah ke data sensitif"
+            ],
+            "evidence": {
+              "style_deviation": 0.9,
+              "urgency_score": 0.9,
+              "social_engineering_detected": true,
+              "linguistic_anomalies": [
+                "penggunaan kata 'SELAMAT' dalam huruf kapital untuk menarik perhatian",
+                "kalimat pendek dan langsung tanpa konteks akademik",
+                "bahasa Indonesia yang tidak wajar untuk komunikasi formal grup"
+              ]
+            }
+          },
+          {
+            "agent_type": "social_context",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "Pesan menawarkan hadiah uang tunai besar tanpa konteks akademik yang relevan untuk grup mahasiswa Teknik Informatika",
+              "Pengirim tidak dikenal (@unknown) dan tidak ada data riwayat perilaku untuk validasi",
+              "Waktu posting (malam hari) tidak sesuai dengan aktivitas akademik formal seperti pengumuman kuliah atau tugas",
+              "Konten tidak masuk akal dalam konteks sosial grup mahasiswa yang biasanya berfokus pada diskusi akademik, tugas, atau kegiatan kampus",
+              "Hasil Single-Shot LLM mendukung klasifikasi phishing dengan confidence tinggi"
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.9,
+              "context_relevance": 0.1,
+              "timing_appropriate": false,
+              "academic_context_match": false
+            }
+          },
+          {
+            "agent_type": "security_validator",
+            "stance": "PHISHING",
+            "confidence": 0.85,
+            "key_arguments": [
+              "URL mengandung kata 'hadiah-cepat' yang umum dalam skema phishing",
+              "Domain .win sering digunakan untuk situs mencurigakan",
+              "Pesan mempromosikan hadiah uang besar yang tidak realistis",
+              "Risk score eksternal 0.30 menunjukkan risiko moderat",
+              "LLM classification mendukung phishing dengan confidence tinggi"
+            ],
+            "evidence": {
+              "url_risk_score": 0.65,
+              "domain_trusted": false,
+              "is_shortened": false,
+              "tld_suspicious": true,
+              "security_checks": {
+                "url_structure": "Pattern mencurigakan dengan kata-kata memikat",
+                "domain_reputation": "TLD .win tidak umum untuk situs resmi",
+                "message_context": "Pesan hadiah uang besar tanpa konteks jelas",
+                "external_verification": "VirusTotal menunjukkan risiko 0.30, LLM classification PHISHING 95%"
+              }
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1951,
+        "total_processing_time_ms": 9623,
+        "variant": "mad3"
+      },
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 46,
+      "text": "Akun bank anda akan dibekukan hari ini, verifikasi m-banking di http://bank-verifikasi-login.com",
+      "expected": "PHISHING",
+      "predicted": "PHISHING",
+      "confidence": 1.0,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 19310,
+      "tokens_total": 2693,
+      "tokens_input": 621,
+      "tokens_output": 147,
+      "triage_risk_score": 15,
+      "triage_flags": [
+        "urgency_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan mengandung URL mencurigakan dengan domain 'bank-verifikasi-login.com' yang tidak terkait dengan aktivitas akademik, menggunakan taktik social engineering dengan urgensi palsu tentang pembekuan akun bank, dan meminta verifikasi m-banking yang tidak relevan untuk grup mahasiswa.",
+        "risk_factors": [
+          "URL mencurigakan (domain tidak dikenal)",
+          "Taktik social engineering (urgensi berlebihan)",
+          "Permintaan data sensitif (verifikasi m-banking)",
+          "Konteks tidak relevan dengan aktivitas akademik"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 621,
+        "tokens_output": 147,
+        "processing_time_ms": 5807
+      },
+      "mad_result": {
+        "decision": "PHISHING",
+        "confidence": 1.0,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "content_analyzer": "PHISHING",
+          "social_context": "PHISHING",
+          "security_validator": "PHISHING"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "content_analyzer",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "URL mencurigakan dengan domain tidak dikenal",
+              "Taktik social engineering menggunakan urgensi berlebihan",
+              "Permintaan verifikasi m-banking yang meminta data sensitif",
+              "Konteks tidak relevan dengan aktivitas akademik grup"
+            ],
+            "evidence": {
+              "style_deviation": 0.8,
+              "urgency_score": 0.9,
+              "social_engineering_detected": true,
+              "linguistic_anomalies": [
+                "Peringatan ancaman langsung tanpa konteks",
+                "Instruksi untuk mengklik link eksternal"
+              ]
+            }
+          },
+          {
+            "agent_type": "social_context",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "Pesan berisi tautan verifikasi bank yang tidak relevan dengan konteks akademik mahasiswa Teknik Informatika",
+              "Pengirim tidak dikenal (@unknown) tanpa riwayat perilaku yang dapat diverifikasi",
+              "Pesan tidak terkait dengan aktivitas akademik, tugas, atau diskusi grup mahasiswa",
+              "Waktu posting (malam hari) tidak sesuai dengan pola komunikasi akademik yang umumnya terjadi pada jam kerja atau kuliah"
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.9,
+              "context_relevance": 0.1,
+              "timing_appropriate": false,
+              "academic_context_match": false
+            }
+          },
+          {
+            "agent_type": "security_validator",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "URL menggunakan HTTP bukan HTTPS, menunjukkan kurangnya enkripsi dan keamanan dasar",
+              "Domain 'bank-verifikasi-login.com' meniru nama resmi bank dengan kata-kata umum untuk phishing (verifikasi, login)",
+              "Pesan konteks mengancam pembekuan akun bank, tipikal taktik phishing untuk memicu kepanikan",
+              "Risk score internal 15 dan eksternal 0.10 menunjukkan risiko rendah secara teknis, tetapi pola domain dan konteks pesan sangat mencurigakan",
+              "Single-Shot LLM mengklasifikasikan sebagai PHISHING dengan confidence tinggi (95%)"
+            ],
+            "evidence": {
+              "url_risk_score": 0.15,
+              "domain_trusted": false,
+              "is_shortened": false,
+              "tld_suspicious": false,
+              "security_checks": {
+                "http_vs_https": "HTTP (tidak aman, tanpa enkripsi)",
+                "domain_mimicry": "Domain meniru layanan bank dengan kata-kata umum",
+                "context_analysis": "Pesan ancaman pembekuan akun, pola phishing umum",
+                "external_check": "VirusTotal+heuristic: AMAN dengan risk score 0.10",
+                "llm_classification": "PHISHING dengan confidence 95%"
+              }
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1925,
+        "total_processing_time_ms": 12085,
+        "variant": "mad3"
+      },
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 47,
+      "text": "Pemberitahuan resmi kampus palsu, diminta login SSO melalui https://uir-login-security.xyz",
+      "expected": "PHISHING",
+      "predicted": "PHISHING",
+      "confidence": 1.0,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 21702,
+      "tokens_total": 2850,
+      "tokens_input": 619,
+      "tokens_output": 193,
+      "triage_risk_score": 15,
+      "triage_flags": [
+        "suspicious_tld"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan mengklaim 'pemberitahuan resmi kampus palsu' dengan tautan ke domain 'uir-login-security.xyz' yang mencurigakan karena menggunakan TLD .xyz yang tidak umum untuk institusi resmi seperti UIR, dan domain ini tidak sesuai dengan domain kampus yang terpercaya (misalnya, .ac.id). Konteksnya adalah permintaan login SSO, yang merupakan taktik umum phishing untuk mencuri data sensitif, dan pesan ini tidak relevan dengan aktivitas akademik normal di grup.",
+        "risk_factors": [
+          "suspicious_tld (.xyz)",
+          "domain tidak sesuai dengan institusi resmi",
+          "permintaan login SSO yang mencurigakan",
+          "konteks tidak relevan dengan aktivitas akademik"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 619,
+        "tokens_output": 193,
+        "processing_time_ms": 7612
+      },
+      "mad_result": {
+        "decision": "PHISHING",
+        "confidence": 1.0,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "content_analyzer": "PHISHING",
+          "social_context": "PHISHING",
+          "security_validator": "PHISHING"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "content_analyzer",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "domain menggunakan TLD .xyz yang tidak umum untuk institusi resmi",
+              "domain 'uir-login-security.xyz' tidak sesuai dengan domain resmi kampus",
+              "permintaan login SSO dalam konteks pemberitahuan palsu",
+              "pesan singkat dan langsung meminta tindakan login"
+            ],
+            "evidence": {
+              "style_deviation": 0.8,
+              "urgency_score": 0.6,
+              "social_engineering_detected": true,
+              "linguistic_anomalies": [
+                "penggunaan kata 'palsu' yang tidak wajar dalam konteks resmi",
+                "struktur pesan yang terlalu sederhana untuk pemberitahuan kampus"
+              ]
+            }
+          },
+          {
+            "agent_type": "social_context",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "Pengirim tidak dikenal (@unknown) tanpa riwayat perilaku yang dapat diverifikasi, meningkatkan risiko anomali sosial",
+              "Pesan mengklaim sebagai 'pemberitahuan resmi kampus palsu', yang tidak masuk akal dalam konteks akademik resmi dan mencurigakan",
+              "Permintaan login SSO melalui domain eksternal (uir-login-security.xyz) tidak sesuai dengan praktik keamanan standar kampus yang biasanya menggunakan domain resmi",
+              "Konteks grup mahasiswa Teknik Informatika UIR membuat pesan ini tampak relevan, tetapi konten yang tidak logis dan tautan mencurigakan mengindikasikan upaya phishing",
+              "Waktu posting (19:44) mungkin normal untuk aktivitas mahasiswa, tetapi tidak cukup untuk mengimbangi faktor risiko lainnya"
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.9,
+              "context_relevance": 0.8,
+              "timing_appropriate": true,
+              "academic_context_match": false
+            }
+          },
+          {
+            "agent_type": "security_validator",
+            "stance": "PHISHING",
+            "confidence": 0.85,
+            "key_arguments": [
+              "URL menggunakan TLD .xyz yang mencurigakan",
+              "Domain 'uir-login-security.xyz' tidak terdaftar dalam whitelist dan meniru nama resmi kampus (UIR)",
+              "Pesan konteks menunjukkan upaya phishing dengan pemberitahuan kampus palsu",
+              "Risk score dari analisis URL tinggi (15) meskipun checker eksternal melaporkan aman"
+            ],
+            "evidence": {
+              "url_risk_score": 0.7,
+              "domain_trusted": false,
+              "is_shortened": false,
+              "tld_suspicious": true,
+              "security_checks": {
+                "url_structure": "Domain menyerupai institusi resmi (UIR) dengan kata 'login-security' yang umum dalam phishing",
+                "domain_reputation": "Tidak ada data whitelist, TLD .xyz sering digunakan untuk domain baru atau mencurigakan",
+                "external_verification": "Checker eksternal (VirusTotal) melaporkan risk score 0.40 dan status aman, tetapi ini bertentangan dengan analisis internal dan konteks pesan",
+                "phishing_database_match": "Klasifikasi LLM sebagai PHISHING dengan confidence 95% mendukung indikasi phishing"
+              }
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 2038,
+        "total_processing_time_ms": 12319,
+        "variant": "mad3"
+      },
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 48,
+      "text": "Shopee Loyalty: akun anda berhak voucher 5 juta, isi OTP di https://shopee-bonus-id.top",
+      "expected": "PHISHING",
+      "predicted": "PHISHING",
+      "confidence": 1.0,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 22534,
+      "tokens_total": 2798,
+      "tokens_input": 628,
+      "tokens_output": 189,
+      "triage_risk_score": 35,
+      "triage_flags": [
+        "phishing_keywords",
+        "suspicious_tld"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini menunjukkan tanda-tanda phishing yang jelas: URL mencurigakan dengan domain 'shopee-bonus-id.top' yang tidak sesuai dengan domain resmi Shopee (shopee.co.id), menggunakan taktik social engineering dengan menawarkan voucher 5 juta untuk memancing respons, dan meminta OTP yang merupakan data sensitif. Konteks pesan tidak relevan dengan aktivitas akademik grup mahasiswa Teknik Informatika UIR.",
+        "risk_factors": [
+          "URL mencurigakan (TLD aneh, domain mirip tapi beda)",
+          "Taktik social engineering (urgensi berlebihan, iming-iming hadiah)",
+          "Permintaan data sensitif (OTP)",
+          "Konteks tidak relevan dengan aktivitas akademik"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 628,
+        "tokens_output": 189,
+        "processing_time_ms": 7541
+      },
+      "mad_result": {
+        "decision": "PHISHING",
+        "confidence": 1.0,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "social_context": "PHISHING",
+          "content_analyzer": "PHISHING",
+          "security_validator": "PHISHING"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "social_context",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "Pesan tidak relevan dengan konteks akademik mahasiswa Teknik Informatika",
+              "Pengirim tidak dikenal dan tidak ada baseline perilaku",
+              "Waktu posting (malam) tidak sesuai untuk aktivitas akademik formal",
+              "Konten promosi Shopee tidak masuk akal dalam grup akademik"
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.9,
+              "context_relevance": 0.1,
+              "timing_appropriate": false,
+              "academic_context_match": false
+            }
+          },
+          {
+            "agent_type": "content_analyzer",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "URL mencurigakan dengan domain mirip tapi berbeda dan TLD aneh",
+              "Taktik social engineering menggunakan iming-iming hadiah besar",
+              "Permintaan data sensitif (OTP) yang tidak aman",
+              "Konteks tidak relevan dengan aktivitas akademik grup"
+            ],
+            "evidence": {
+              "style_deviation": 0.8,
+              "urgency_score": 0.7,
+              "social_engineering_detected": true,
+              "linguistic_anomalies": [
+                "Penggunaan bahasa Indonesia yang tidak wajar untuk pesan resmi",
+                "Struktur pesan singkat dan langsung menuju permintaan OTP"
+              ]
+            }
+          },
+          {
+            "agent_type": "security_validator",
+            "stance": "PHISHING",
+            "confidence": 0.85,
+            "key_arguments": [
+              "URL menggunakan TLD .top yang mencurigakan dan tidak umum untuk situs resmi Shopee",
+              "Domain 'shopee-bonus-id.top' meniru nama merek Shopee dengan kata tambahan 'bonus-id' yang tipikal dalam phishing",
+              "Pesan meminta OTP, yang merupakan taktik umum phishing untuk mencuri kredensial",
+              "Meskipun checker eksternal melaporkan 'AMAN', skor risiko internal (35) dan flag 'suspicious_tld' mengindikasikan ancaman"
+            ],
+            "evidence": {
+              "url_risk_score": 0.35,
+              "domain_trusted": false,
+              "is_shortened": false,
+              "tld_suspicious": true,
+              "security_checks": {
+                "tld_analysis": "TLD .top sering digunakan dalam situs phishing karena murah dan kurang teregulasi",
+                "brand_impersonation": "Domain meniru Shopee dengan pola 'shopee-[kata]-id.top' yang tidak sesuai dengan domain resmi shopee.co.id",
+                "message_content": "Pesan meminta OTP, yang tidak pernah dilakukan oleh layanan resmi Shopee untuk penawaran voucher",
+                "external_check_conflict": "Checker eksternal (virustotal+heuristic) melaporkan risk score 0.20, tetapi LLM dan analisis internal menunjukkan indikasi phishing kuat"
+              }
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1981,
+        "total_processing_time_ms": 13217,
+        "variant": "mad3"
+      },
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 49,
+      "text": "BRImo notice: transaksi mencurigakan terdeteksi, konfirmasi PIN dan password di link berikut",
+      "expected": "PHISHING",
+      "predicted": "PHISHING",
+      "confidence": 1.0,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 15287,
+      "tokens_total": 2572,
+      "tokens_input": 604,
+      "tokens_output": 154,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini menunjukkan tanda-tanda phishing yang jelas dengan menggunakan taktik social engineering yang menciptakan urgensi palsu terkait transaksi mencurigakan di BRImo, meminta konfirmasi PIN dan password melalui link yang tidak disebutkan, yang tidak sesuai dengan konteks akademik grup mahasiswa Teknik Informatika UIR.",
+        "risk_factors": [
+          "taktik social engineering (urgensi berlebihan)",
+          "permintaan data sensitif (PIN dan password)",
+          "konteks tidak relevan dengan aktivitas akademik",
+          "URL tidak disebutkan sehingga mencurigakan"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 604,
+        "tokens_output": 154,
+        "processing_time_ms": 6425
+      },
+      "mad_result": {
+        "decision": "PHISHING",
+        "confidence": 1.0,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "security_validator": "PHISHING",
+          "content_analyzer": "PHISHING",
+          "social_context": "PHISHING"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "security_validator",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "Pesan meminta konfirmasi PIN dan password tanpa URL yang valid",
+              "Risk score 20 menunjukkan risiko tinggi",
+              "Single-Shot LLM mengklasifikasikan sebagai PHISHING dengan confidence 95%",
+              "Tidak ada URL untuk diverifikasi, tetapi konteks pesan mencurigakan"
+            ],
+            "evidence": {
+              "url_risk_score": 0.2,
+              "domain_trusted": false,
+              "is_shortened": false,
+              "tld_suspicious": false,
+              "security_checks": {
+                "no_url_provided": "true",
+                "message_analysis": "suspicious_request_for_credentials",
+                "llm_classification": "PHISHING"
+              }
+            }
+          },
+          {
+            "agent_type": "content_analyzer",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "taktik social engineering dengan urgensi berlebihan",
+              "permintaan data sensitif (PIN dan password) yang tidak wajar",
+              "konteks tidak relevan dengan aktivitas akademik grup",
+              "URL tidak disebutkan sehingga mencurigakan",
+              "pola linguistik menyerupai notifikasi phishing umum"
+            ],
+            "evidence": {
+              "style_deviation": 0.8,
+              "urgency_score": 0.9,
+              "social_engineering_detected": true,
+              "linguistic_anomalies": [
+                "penggunaan kata 'notice' yang tidak umum dalam bahasa Indonesia informal",
+                "struktur pesan singkat dan langsung yang tidak konsisten dengan komunikasi akademik",
+                "permintaan konfirmasi PIN dan password melalui link tanpa konteks yang jelas"
+              ]
+            }
+          },
+          {
+            "agent_type": "social_context",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "Pesan berisi permintaan konfirmasi PIN dan password melalui link, yang tidak sesuai dengan konteks akademik grup mahasiswa Teknik Informatika UIR.",
+              "Pengirim tidak dikenal (@unknown) dan tidak ada riwayat perilaku baseline, meningkatkan risiko pesan mencurigakan.",
+              "Waktu posting (19:45) mungkin tidak relevan dengan aktivitas akademik formal, meskipun tidak terlalu aneh untuk komunikasi informal.",
+              "Konten pesan terkait transaksi bank (BRImo) tidak relevan dengan diskusi akademik atau sosial dalam grup mahasiswa teknik informatika."
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.8,
+              "context_relevance": 0.1,
+              "timing_appropriate": false,
+              "academic_context_match": false
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1814,
+        "total_processing_time_ms": 8862,
+        "variant": "mad3"
+      },
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 50,
+      "text": "WhatsApp support: nomor anda akan dinonaktifkan, klik tautan untuk aktifkan ulang akun",
+      "expected": "PHISHING",
+      "predicted": "SAFE",
+      "confidence": 1.0,
+      "decided_by": "triage",
+      "action": "none",
+      "processing_time_ms": 0,
+      "tokens_total": 0,
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": null,
+      "mad_result": null,
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 51,
+      "text": "Anda menang undian iPhone, bayar pajak admin 150 ribu agar hadiah dikirim",
+      "expected": "PHISHING",
+      "predicted": "PHISHING",
+      "confidence": 1.0,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 14192,
+      "tokens_total": 2511,
+      "tokens_input": 600,
+      "tokens_output": 127,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan mengandung klaim menang undian iPhone dengan permintaan pembayaran pajak admin, yang merupakan taktik phishing umum untuk menipu korban. Tidak ada konteks akademik yang relevan dengan grup mahasiswa Teknik Informatika UIR.",
+        "risk_factors": [
+          "taktik social engineering (urgensi palsu)",
+          "permintaan transfer uang",
+          "konteks tidak relevan dengan aktivitas akademik",
+          "keyword phishing terdeteksi"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 600,
+        "tokens_output": 127,
+        "processing_time_ms": 5535
+      },
+      "mad_result": {
+        "decision": "PHISHING",
+        "confidence": 1.0,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "content_analyzer": "PHISHING",
+          "security_validator": "PHISHING",
+          "social_context": "PHISHING"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "content_analyzer",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "taktik social engineering dengan janji hadiah iPhone",
+              "permintaan pembayaran pajak admin 150 ribu untuk klaim hadiah",
+              "konteks tidak relevan dengan aktivitas akademik grup",
+              "penggunaan urgensi palsu untuk memicu tindakan cepat"
+            ],
+            "evidence": {
+              "style_deviation": 0.9,
+              "urgency_score": 0.8,
+              "social_engineering_detected": true,
+              "linguistic_anomalies": [
+                "struktur pesan singkat dan langsung ke permintaan uang",
+                "bahasa Indonesia formal namun dengan tujuan manipulatif",
+                "tidak ada konteks akademik atau identifikasi pengirim yang jelas"
+              ]
+            }
+          },
+          {
+            "agent_type": "security_validator",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "Pesan mengandung tawaran undian palsu dengan permintaan pembayaran",
+              "Tidak ada URL yang disediakan untuk validasi, tetapi konteks pesan sangat mencurigakan",
+              "Risk score awal menunjukkan tingkat risiko sedang (20/100)"
+            ],
+            "evidence": {
+              "url_risk_score": 0.2,
+              "domain_trusted": false,
+              "is_shortened": false,
+              "tld_suspicious": false,
+              "security_checks": {
+                "message_analysis": "Scam pattern detected - lottery win with admin fee request",
+                "url_presence": "No URL provided for direct verification",
+                "llm_classification_alignment": "Matches phishing classification with high confidence"
+              }
+            }
+          },
+          {
+            "agent_type": "social_context",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "Pesan menawarkan hadiah iPhone dengan biaya admin, pola umum dalam penipuan phishing yang tidak relevan dengan konteks akademik",
+              "Pengirim tidak dikenal (@unknown) tanpa riwayat perilaku yang dapat diverifikasi, meningkatkan risiko",
+              "Konteks grup mahasiswa Teknik Informatika UIR tidak mendukung pesan tentang undian hadiah, yang lebih cocok untuk aktivitas sosial atau komersial non-akademik",
+              "Waktu posting (19:45) tidak spesifik untuk aktivitas akademik, tetapi tidak cukup untuk mengubah klasifikasi karena konten yang tidak masuk akal"
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.9,
+              "context_relevance": 0.1,
+              "timing_appropriate": false,
+              "academic_context_match": false
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1784,
+        "total_processing_time_ms": 8656,
+        "variant": "mad3"
+      },
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 52,
+      "text": "Dana bantuan pemerintah cair, cek NIK dan PIN ATM di portal khusus penerima",
+      "expected": "PHISHING",
+      "predicted": "PHISHING",
+      "confidence": 1.0,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 14553,
+      "tokens_total": 2472,
+      "tokens_input": 598,
+      "tokens_output": 141,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini mengandung kata kunci phishing yang umum seperti 'cek NIK dan PIN ATM' dan 'portal khusus penerima', yang meminta data sensitif di luar konteks akademik grup mahasiswa Teknik Informatika UIR. Tidak ada URL yang disebutkan, tetapi kontennya sangat mencurigakan dan tidak relevan dengan aktivitas akademik.",
+        "risk_factors": [
+          "phishing_keywords",
+          "permintaan_data_sensitif",
+          "konteks_tidak_relevan",
+          "taktik_social_engineering"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 598,
+        "tokens_output": 141,
+        "processing_time_ms": 5817
+      },
+      "mad_result": {
+        "decision": "PHISHING",
+        "confidence": 1.0,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "content_analyzer": "PHISHING",
+          "social_context": "PHISHING",
+          "security_validator": "PHISHING"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "content_analyzer",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "pesan mengandung kata kunci phishing umum seperti 'cek NIK dan PIN ATM'",
+              "meminta data sensitif tanpa konteks yang jelas",
+              "menggunakan taktik urgensi dengan kata 'cair'",
+              "tidak relevan dengan aktivitas akademik grup"
+            ],
+            "evidence": {
+              "style_deviation": 0.8,
+              "urgency_score": 0.9,
+              "social_engineering_detected": true,
+              "linguistic_anomalies": [
+                "penggunaan bahasa Indonesia yang tidak formal dan mencurigakan",
+                "struktur pesan singkat dan langsung ke permintaan data"
+              ]
+            }
+          },
+          {
+            "agent_type": "social_context",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "Pesan tidak relevan dengan konteks akademik mahasiswa Teknik Informatika UIR",
+              "Pengirim tidak dikenal (@unknown) tanpa riwayat perilaku yang dapat diverifikasi",
+              "Konten mencurigakan karena meminta informasi sensitif (NIK dan PIN ATM) di luar konteks akademik",
+              "Waktu posting (19:45) tidak sesuai dengan aktivitas akademik formal, meningkatkan kecurigaan"
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.9,
+              "context_relevance": 0.1,
+              "timing_appropriate": false,
+              "academic_context_match": false
+            }
+          },
+          {
+            "agent_type": "security_validator",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "Pesan mengandung klaim dana bantuan pemerintah tanpa URL yang valid",
+              "Tidak ada URL untuk verifikasi, meningkatkan risiko karena tidak dapat memeriksa reputasi domain",
+              "Analisis triage menunjukkan risk score 20, mengindikasikan potensi ancaman",
+              "Single-shot LLM mengklasifikasikan sebagai phishing dengan confidence tinggi"
+            ],
+            "evidence": {
+              "url_risk_score": 0.2,
+              "domain_trusted": false,
+              "is_shortened": false,
+              "tld_suspicious": false,
+              "security_checks": {
+                "url_presence": "No URL found",
+                "message_analysis": "Contains government aid claim without verifiable link",
+                "triage_risk_score": "20",
+                "llm_classification": "PHISHING with 95% confidence"
+              }
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1733,
+        "total_processing_time_ms": 8736,
+        "variant": "mad3"
+      },
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 53,
+      "text": "Tagihan listrik menunggak, hindari pemutusan dengan login PLN di domain ini pln-cek-tagihan.site",
+      "expected": "PHISHING",
+      "predicted": "SAFE",
+      "confidence": 1.0,
+      "decided_by": "triage",
+      "action": "none",
+      "processing_time_ms": 0,
+      "tokens_total": 0,
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": null,
+      "mad_result": null,
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 54,
+      "text": "Telegram Security Alert: sesi anda dibajak, masukkan kode verifikasi di bot @secure_recovery_now",
+      "expected": "PHISHING",
+      "predicted": "SAFE",
+      "confidence": 1.0,
+      "decided_by": "triage",
+      "action": "none",
+      "processing_time_ms": 0,
+      "tokens_total": 0,
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": null,
+      "mad_result": null,
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 55,
+      "text": "BPJS update data peserta, kirim foto KTP depan belakang dan selfie sekarang juga",
+      "expected": "PHISHING",
+      "predicted": "PHISHING",
+      "confidence": 1.0,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 14932,
+      "tokens_total": 2517,
+      "tokens_input": 598,
+      "tokens_output": 144,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini meminta data sensitif (foto KTP dan selfie) dengan urgensi berlebihan ('sekarang juga'), yang merupakan taktik social engineering umum dalam phishing. Konteksnya tidak relevan dengan aktivitas akademik grup mahasiswa Teknik Informatika UIR, dan tidak ada URL yang disebutkan, tetapi permintaan data pribadi langsung mencurigakan.",
+        "risk_factors": [
+          "permintaan data sensitif",
+          "taktik social engineering (urgensi)",
+          "konteks tidak relevan dengan akademik"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 598,
+        "tokens_output": 144,
+        "processing_time_ms": 5786
+      },
+      "mad_result": {
+        "decision": "PHISHING",
+        "confidence": 1.0,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "content_analyzer": "PHISHING",
+          "security_validator": "PHISHING",
+          "social_context": "PHISHING"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "content_analyzer",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "permintaan data sensitif (foto KTP dan selfie)",
+              "taktik social engineering dengan urgensi tinggi ('sekarang juga')",
+              "konteks tidak relevan dengan aktivitas akademik grup",
+              "pola bahasa yang tidak wajar untuk komunikasi akademik"
+            ],
+            "evidence": {
+              "style_deviation": 0.8,
+              "urgency_score": 0.9,
+              "social_engineering_detected": true,
+              "linguistic_anomalies": [
+                "perintah langsung tanpa konteks akademik",
+                "penggunaan 'sekarang juga' yang menciptakan tekanan"
+              ]
+            }
+          },
+          {
+            "agent_type": "security_validator",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "No URL provided in message, but message content is highly suspicious",
+              "Message requests sensitive personal data (KTP photos and selfie) urgently",
+              "Typical phishing tactic: impersonating official entity (BPJS) to pressure immediate action",
+              "No legitimate URL to verify, increasing risk as no safe link is present"
+            ],
+            "evidence": {
+              "url_risk_score": 0.2,
+              "domain_trusted": false,
+              "is_shortened": false,
+              "tld_suspicious": false,
+              "security_checks": {
+                "url_presence": "No URL found",
+                "message_analysis": "High-pressure request for sensitive data",
+                "entity_impersonation": "BPJS mentioned",
+                "urgency_flag": "Immediate action demanded"
+              }
+            }
+          },
+          {
+            "agent_type": "social_context",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "Pesan meminta data pribadi sensitif (foto KTP dan selfie) yang tidak relevan dalam konteks akademik mahasiswa Teknik Informatika",
+              "Pengirim tidak dikenal (@unknown) tanpa riwayat perilaku yang dapat diverifikasi, meningkatkan risiko",
+              "Waktu posting (19:45) mungkin tidak sesuai untuk aktivitas akademik formal, meskipun tidak pasti, tetapi konten tidak terkait dengan kegiatan kuliah atau tugas",
+              "Tidak ada kaitan dengan aktivitas akademik yang sedang berlangsung seperti perkuliahan, ujian, atau proyek grup",
+              "Permintaan mendesak ('sekarang juga') sering digunakan dalam skema phishing untuk menciptakan tekanan"
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.9,
+              "context_relevance": 0.1,
+              "timing_appropriate": false,
+              "academic_context_match": false
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1775,
+        "total_processing_time_ms": 9145,
+        "variant": "mad3"
+      },
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 56,
+      "text": "Paket anda tertahan bea cukai, bayar biaya penanganan melalui link pembayaran cepat",
+      "expected": "PHISHING",
+      "predicted": "PHISHING",
+      "confidence": 1.0,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 13952,
+      "tokens_total": 2453,
+      "tokens_input": 602,
+      "tokens_output": 142,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini mengandung indikator phishing yang jelas: menggunakan taktik social engineering dengan menciptakan urgensi palsu terkait paket tertahan bea cukai, meminta pembayaran melalui link yang tidak disebutkan, dan tidak relevan dengan konteks akademik grup mahasiswa Teknik Informatika UIR.",
+        "risk_factors": [
+          "taktik social engineering (urgensi palsu)",
+          "permintaan pembayaran tanpa konteks",
+          "tidak relevan dengan aktivitas akademik",
+          "keyword phishing terdeteksi"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 602,
+        "tokens_output": 142,
+        "processing_time_ms": 5948
+      },
+      "mad_result": {
+        "decision": "PHISHING",
+        "confidence": 1.0,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "content_analyzer": "PHISHING",
+          "social_context": "PHISHING",
+          "security_validator": "PHISHING"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "content_analyzer",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "taktik social engineering dengan urgensi palsu",
+              "permintaan pembayaran tanpa konteks yang jelas",
+              "tidak relevan dengan aktivitas akademik grup",
+              "keyword phishing terdeteksi (link pembayaran cepat)"
+            ],
+            "evidence": {
+              "style_deviation": 0.8,
+              "urgency_score": 0.9,
+              "social_engineering_detected": true,
+              "linguistic_anomalies": [
+                "penggunaan bahasa Indonesia yang tidak wajar dalam konteks akademik",
+                "struktur pesan singkat dan langsung ke permintaan pembayaran"
+              ]
+            }
+          },
+          {
+            "agent_type": "social_context",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "Pesan tidak relevan dengan konteks akademik mahasiswa Teknik Informatika",
+              "Tidak ada baseline perilaku pengirim yang dapat diverifikasi",
+              "Waktu malam tidak lazim untuk komunikasi akademik resmi",
+              "Konteks bea cukai dan pembayaran tidak sesuai dengan aktivitas grup mahasiswa"
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.9,
+              "context_relevance": 0.1,
+              "timing_appropriate": false,
+              "academic_context_match": false
+            }
+          },
+          {
+            "agent_type": "security_validator",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "Tidak ada URL yang ditemukan dalam pesan, sehingga tidak dapat diverifikasi",
+              "Pesan mengklaim paket tertahan bea cukai dan meminta pembayaran melalui link, pola umum phishing",
+              "Risk score 20 menunjukkan tingkat risiko sedang hingga tinggi",
+              "Analisis LLM sebelumnya mengklasifikasikan sebagai phishing dengan confidence tinggi"
+            ],
+            "evidence": {
+              "url_risk_score": 0.2,
+              "domain_trusted": false,
+              "is_shortened": false,
+              "tld_suspicious": false,
+              "security_checks": {
+                "url_presence": "no_url_found",
+                "message_pattern": "urgent_payment_request",
+                "llm_previous_analysis": "phishing_classification"
+              }
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1709,
+        "total_processing_time_ms": 8003,
+        "variant": "mad3"
+      },
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 57,
+      "text": "Anda terpilih jadi penerima bansos tambahan 2 juta, registrasi akun dan PIN dompet digital",
+      "expected": "PHISHING",
+      "predicted": "PHISHING",
+      "confidence": 1.0,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 14005,
+      "tokens_total": 2493,
+      "tokens_input": 604,
+      "tokens_output": 142,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan mengandung kata kunci phishing seperti 'bansos tambahan 2 juta' dan 'registrasi akun dan PIN dompet digital' yang tidak relevan dengan konteks akademik grup mahasiswa Teknik Informatika UIR, serta menggunakan taktik social engineering dengan janji uang.",
+        "risk_factors": [
+          "taktik social engineering (janji uang)",
+          "permintaan data sensitif (akun dan PIN)",
+          "konteks tidak relevan dengan aktivitas akademik",
+          "kata kunci phishing terdeteksi"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 604,
+        "tokens_output": 142,
+        "processing_time_ms": 6188
+      },
+      "mad_result": {
+        "decision": "PHISHING",
+        "confidence": 1.0,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "content_analyzer": "PHISHING",
+          "security_validator": "PHISHING",
+          "social_context": "PHISHING"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "content_analyzer",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "janji uang bansos tanpa konteks akademik",
+              "permintaan data sensitif (akun dan PIN)",
+              "penggunaan taktik social engineering (urgensi dan iming-iming)",
+              "bahasa Indonesia tidak wajar untuk komunikasi akademik"
+            ],
+            "evidence": {
+              "style_deviation": 0.9,
+              "urgency_score": 0.8,
+              "social_engineering_detected": true,
+              "linguistic_anomalies": [
+                "kata 'bansos' dan 'dompet digital' tidak relevan dengan grup akademik",
+                "struktur pesan singkat dan langsung tanpa konteks"
+              ]
+            }
+          },
+          {
+            "agent_type": "security_validator",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "Pesan mengandung tawaran finansial mencurigakan tanpa URL",
+              "Risk score 20 menunjukkan risiko moderat",
+              "Analisis LLM mengklasifikasikan sebagai phishing dengan keyakinan tinggi",
+              "Tidak ada URL untuk verifikasi langsung, tetapi konteks pesan mengindikasikan penipuan"
+            ],
+            "evidence": {
+              "url_risk_score": 0.2,
+              "domain_trusted": false,
+              "is_shortened": false,
+              "tld_suspicious": false,
+              "security_checks": {
+                "no_url_provided": "true",
+                "message_analysis": "suspicious_financial_offer",
+                "llm_classification": "PHISHING"
+              }
+            }
+          },
+          {
+            "agent_type": "social_context",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "Pesan menawarkan bansos tambahan 2 juta yang tidak relevan dengan konteks akademik mahasiswa Teknik Informatika UIR",
+              "Pengirim tidak dikenal (@unknown) tanpa riwayat perilaku yang dapat diverifikasi",
+              "Waktu posting (19:46) tidak terkait dengan aktivitas akademik formal",
+              "Registrasi akun dan PIN dompet digital mencurigakan dan tidak sesuai dengan dinamika sosial grup mahasiswa"
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.9,
+              "context_relevance": 0.1,
+              "timing_appropriate": false,
+              "academic_context_match": false
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1747,
+        "total_processing_time_ms": 7817,
+        "variant": "mad3"
+      },
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 58,
+      "text": "Instagram warning: akun akan suspend dalam 2 jam, login di halaman pemulihan ini",
+      "expected": "PHISHING",
+      "predicted": "SAFE",
+      "confidence": 1.0,
+      "decided_by": "triage",
+      "action": "none",
+      "processing_time_ms": 0,
+      "tokens_total": 0,
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": null,
+      "mad_result": null,
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 59,
+      "text": "Pajak kendaraan jatuh tempo, klik link ini dan isi data kartu debit untuk validasi",
+      "expected": "PHISHING",
+      "predicted": "PHISHING",
+      "confidence": 1.0,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 13593,
+      "tokens_total": 2472,
+      "tokens_input": 602,
+      "tokens_output": 114,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan mengandung permintaan data sensitif (kartu debit) dan konteks tidak relevan dengan aktivitas akademik grup mahasiswa Teknik Informatika UIR, serta menggunakan taktik urgensi palsu.",
+        "risk_factors": [
+          "Permintaan data sensitif",
+          "Konteks tidak relevan dengan akademik",
+          "Taktik social engineering (urgensi)",
+          "Keyword phishing terdeteksi"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 602,
+        "tokens_output": 114,
+        "processing_time_ms": 5034
+      },
+      "mad_result": {
+        "decision": "PHISHING",
+        "confidence": 1.0,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "content_analyzer": "PHISHING",
+          "social_context": "PHISHING",
+          "security_validator": "PHISHING"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "content_analyzer",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "Permintaan data kartu debit untuk validasi pajak kendaraan tidak relevan dengan konteks akademik grup",
+              "Menggunakan taktik urgensi dengan menyebut 'jatuh tempo'",
+              "Link yang tidak jelas dan meminta data sensitif merupakan indikasi phishing"
+            ],
+            "evidence": {
+              "style_deviation": 0.8,
+              "urgency_score": 0.9,
+              "social_engineering_detected": true,
+              "linguistic_anomalies": [
+                "Permintaan data kartu debit untuk validasi pajak kendaraan tidak wajar dalam konteks akademik",
+                "Frasa 'klik link ini' umum dalam serangan phishing"
+              ]
+            }
+          },
+          {
+            "agent_type": "social_context",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "Pesan tentang pajak kendaraan tidak relevan dengan konteks akademik mahasiswa Teknik Informatika",
+              "Pengirim tidak dikenal (@unknown) tanpa riwayat perilaku yang dapat diverifikasi",
+              "Permintaan untuk mengisi data kartu debit sangat mencurigakan dalam grup mahasiswa",
+              "Waktu malam (19:46) tidak lazim untuk komunikasi akademik resmi"
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.9,
+              "context_relevance": 0.1,
+              "timing_appropriate": false,
+              "academic_context_match": false
+            }
+          },
+          {
+            "agent_type": "security_validator",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "Tidak ada URL yang ditemukan dalam pesan, sehingga tidak dapat diverifikasi secara langsung",
+              "Pesan meminta data kartu debit untuk validasi pajak kendaraan, yang merupakan taktik umum phishing",
+              "Risk score 20 menunjukkan tingkat risiko yang signifikan",
+              "Analisis Single-Shot LLM mengklasifikasikan sebagai phishing dengan keyakinan tinggi"
+            ],
+            "evidence": {
+              "url_risk_score": 0.2,
+              "domain_trusted": false,
+              "is_shortened": false,
+              "tld_suspicious": false,
+              "security_checks": {
+                "url_presence": "Tidak ada URL ditemukan",
+                "message_content_analysis": "Meminta data sensitif untuk validasi pajak",
+                "llm_classification": "PHISHING dengan confidence 95%"
+              }
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1756,
+        "total_processing_time_ms": 8558,
+        "variant": "mad3"
+      },
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 60,
+      "text": "Kami dari pihak kampus minta reset password email mahasiswa lewat form ini segera",
+      "expected": "PHISHING",
+      "predicted": "PHISHING",
+      "confidence": 1.0,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 21620,
+      "tokens_total": 4790,
+      "tokens_input": 604,
+      "tokens_output": 123,
+      "triage_risk_score": 40,
+      "triage_flags": [
+        "phishing_keywords",
+        "authority_impersonation"
+      ],
+      "single_shot_result": {
+        "classification": "SUSPICIOUS",
+        "confidence": 0.75,
+        "reasoning": "Pesan menunjukkan otoritas palsu ('pihak kampus') dan meminta reset password melalui form yang tidak disebutkan, yang tidak sesuai dengan praktik akademik standar di UIR. Namun, tanpa URL atau detail lebih lanjut, tidak dapat dikonfirmasi sebagai phishing.",
+        "risk_factors": [
+          "authority_impersonation",
+          "phishing_keywords",
+          "request_for_sensitive_data",
+          "lack_of_contextual_relevance"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "SUSPICIOUS classification requires multi-agent verification",
+        "tokens_input": 604,
+        "tokens_output": 123,
+        "processing_time_ms": 5379
+      },
+      "mad_result": {
+        "decision": "PHISHING",
+        "confidence": 1.0,
+        "rounds_executed": 2,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "content_analyzer": "PHISHING",
+          "security_validator": "PHISHING",
+          "social_context": "PHISHING"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "content_analyzer",
+            "stance": "PHISHING",
+            "confidence": 0.85,
+            "key_arguments": [
+              "Authority impersonation using 'Kami dari pihak kampus'",
+              "Urgent request for password reset via an unspecified form",
+              "Lack of contextual details or verification methods",
+              "Phishing keywords detected in message"
+            ],
+            "evidence": {
+              "style_deviation": 0.7,
+              "urgency_score": 0.8,
+              "social_engineering_detected": true,
+              "linguistic_anomalies": [
+                "Unnatural phrasing for official communication",
+                "Vague reference to 'form ini' without specifics",
+                "High urgency implied by 'segera'"
+              ]
+            }
+          },
+          {
+            "agent_type": "security_validator",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.75,
+            "key_arguments": [
+              "No URL provided for analysis",
+              "Message requests password reset via unspecified form",
+              "Risk score indicates moderate suspicion",
+              "LLM classification aligns with suspicious stance"
+            ],
+            "evidence": {
+              "url_risk_score": 0.4,
+              "domain_trusted": false,
+              "is_shortened": false,
+              "tld_suspicious": false,
+              "security_checks": {
+                "url_presence": "No URL found",
+                "message_analysis": "Password reset request without verifiable link",
+                "external_verification": "Cannot verify due to missing URL"
+              }
+            }
+          },
+          {
+            "agent_type": "social_context",
+            "stance": "SUSPICIOUS",
+            "confidence": 0.7,
+            "key_arguments": [
+              "Pengirim tidak dikenal (@unknown) tanpa identitas jelas",
+              "Pesan meminta reset password melalui form eksternal tanpa konteks resmi",
+              "Tidak ada baseline perilaku pengirim untuk perbandingan",
+              "Pesan bersifat mendesak ('segera') tanpa penjelasan detail",
+              "Konteks akademik biasanya menggunakan saluran resmi untuk reset password"
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.8,
+              "context_relevance": 0.3,
+              "timing_appropriate": false,
+              "academic_context_match": false
+            }
+          }
+        ],
+        "round_2_summary": [
+          {
+            "agent_type": "content_analyzer",
+            "stance": "PHISHING",
+            "confidence": 0.8,
+            "key_arguments": [
+              "Authority impersonation using 'Kami dari pihak kampus'",
+              "Urgent request for password reset via an unspecified form ('segera')",
+              "Lack of contextual details or verification methods typical in academic settings",
+              "Phishing keywords and social engineering tactics detected",
+              "Pengirim tidak dikenal (@unknown) tanpa identitas jelas, aligning with suspicious sender patterns"
+            ],
+            "evidence": {
+              "style_deviation": 0.7,
+              "urgency_score": 0.8,
+              "social_engineering_detected": true,
+              "linguistic_anomalies": [
+                "Use of vague authority claim ('Kami dari pihak kampus')",
+                "Unspecified form reference without official context",
+                "Urgent language ('segera') without justification"
+              ]
+            }
+          },
+          {
+            "agent_type": "security_validator",
+            "stance": "PHISHING",
+            "confidence": 0.8,
+            "key_arguments": [
+              "Authority impersonation using 'Kami dari pihak kampus'",
+              "Urgent request for password reset via an unspecified form",
+              "Lack of URL for security validation, preventing domain and HTTPS checks",
+              "Social context indicates unknown sender and absence of official channels",
+              "Phishing keywords and urgency tactics detected"
+            ],
+            "evidence": {
+              "url_risk_score": 0.9,
+              "domain_trusted": false,
+              "is_shortened": false,
+              "tld_suspicious": false,
+              "security_checks": {
+                "url_analysis": "No URL provided, preventing direct validation",
+                "domain_reputation": "Cannot assess due to missing URL",
+                "https_verification": "Not applicable without URL",
+                "phishing_database_match": "Message content aligns with phishing patterns"
+              }
+            }
+          },
+          {
+            "agent_type": "social_context",
+            "stance": "PHISHING",
+            "confidence": 0.8,
+            "key_arguments": [
+              "Pengirim tidak dikenal (@unknown) tanpa identitas jelas, mencurigakan untuk pesan resmi kampus",
+              "Pesan meminta reset password melalui form eksternal tanpa konteks resmi, bertentangan dengan prosedur akademik standar",
+              "Authority impersonation menggunakan 'Kami dari pihak kampus' tanpa verifikasi, meningkatkan risiko phishing",
+              "Pesan bersifat mendesak ('segera') tanpa penjelasan detail, pola umum dalam serangan phishing",
+              "Konteks akademik biasanya menggunakan saluran resmi (e.g., portal kampus, IT support) untuk reset password, bukan form eksternal",
+              "Tidak ada baseline perilaku pengirim untuk perbandingan, mengindikasikan anomali sosial dalam grup"
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.9,
+              "context_relevance": 0.2,
+              "timing_appropriate": false,
+              "academic_context_match": false
+            }
+          }
+        ],
+        "total_tokens": 4063,
+        "total_processing_time_ms": 16241,
+        "variant": "mad3"
+      },
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 61,
+      "text": "Kartu SIM anda akan diblokir permanen, verifikasi data biometrik dan OTP sekarang",
+      "expected": "PHISHING",
+      "predicted": "PHISHING",
+      "confidence": 1.0,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 14580,
+      "tokens_total": 2537,
+      "tokens_input": 606,
+      "tokens_output": 111,
+      "triage_risk_score": 35,
+      "triage_flags": [
+        "phishing_keywords",
+        "urgency_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini mengandung kata kunci phishing dan urgensi yang tinggi terkait verifikasi data sensitif seperti OTP, yang tidak relevan dengan konteks akademik grup mahasiswa Teknik Informatika UIR.",
+        "risk_factors": [
+          "phishing_keywords",
+          "urgency_keywords",
+          "permintaan data sensitif (OTP)",
+          "konteks tidak relevan dengan aktivitas akademik"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 606,
+        "tokens_output": 111,
+        "processing_time_ms": 4868
+      },
+      "mad_result": {
+        "decision": "PHISHING",
+        "confidence": 1.0,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "content_analyzer": "PHISHING",
+          "social_context": "PHISHING",
+          "security_validator": "PHISHING"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "content_analyzer",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "Pesan mengancam blokir permanen kartu SIM tanpa konteks akademik",
+              "Meminta verifikasi data biometrik dan OTP yang sensitif",
+              "Menggunakan taktik urgensi tinggi untuk memaksa tindakan cepat",
+              "Gaya bahasa tidak konsisten dengan komunikasi akademik grup"
+            ],
+            "evidence": {
+              "style_deviation": 0.9,
+              "urgency_score": 0.95,
+              "social_engineering_detected": true,
+              "linguistic_anomalies": [
+                "Penggunaan kata 'diblokir permanen' yang mengancam",
+                "Permintaan data sensitif (OTP) dalam pesan singkat",
+                "Tidak ada konteks akademik atau relevansi dengan grup"
+              ]
+            }
+          },
+          {
+            "agent_type": "social_context",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "Pesan tidak relevan dengan konteks akademik grup mahasiswa Teknik Informatika UIR",
+              "Pengirim tidak dikenal (@unknown) tanpa riwayat perilaku yang dapat diverifikasi",
+              "Isi pesan tentang blokir SIM dan verifikasi data biometrik/OTP tidak sesuai dengan aktivitas umum grup mahasiswa",
+              "Waktu posting (malam hari) tidak spesifik menunjukkan anomali, tetapi konten tidak masuk akal untuk konteks sosial grup"
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.9,
+              "context_relevance": 0.1,
+              "timing_appropriate": false,
+              "academic_context_match": false
+            }
+          },
+          {
+            "agent_type": "security_validator",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "Pesan mengandung ancaman mendesak (blokir SIM permanen) yang umum dalam phishing",
+              "Tidak ada URL yang ditemukan, tetapi konteks pesan mencurigakan",
+              "Risk score 35 menunjukkan tingkat risiko sedang hingga tinggi",
+              "Analisis LLM sebelumnya mengklasifikasikan sebagai phishing dengan confidence tinggi"
+            ],
+            "evidence": {
+              "url_risk_score": 0.35,
+              "domain_trusted": false,
+              "is_shortened": false,
+              "tld_suspicious": false,
+              "security_checks": {
+                "message_analysis": "Ancaman mendesak dan permintaan data sensitif (biometrik, OTP) tanpa konteks yang jelas",
+                "url_presence": "Tidak ada URL untuk dianalisis, tetapi pesan itu sendiri mencurigakan",
+                "historical_pattern": "Pola umum phishing dengan ancaman blokir akun dan permintaan verifikasi mendesak"
+              }
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1820,
+        "total_processing_time_ms": 9712,
+        "variant": "mad3"
+      },
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 62,
+      "text": "Undangan kerja paruh waktu palsu, diminta transfer deposit untuk aktivasi akun",
+      "expected": "PHISHING",
+      "predicted": "PHISHING",
+      "confidence": 1.0,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 16008,
+      "tokens_total": 2547,
+      "tokens_input": 597,
+      "tokens_output": 148,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan ini secara eksplisit menggambarkan skema phishing yang umum dengan menyebut 'kerja paruh waktu palsu' dan 'diminta transfer deposit untuk aktivasi akun', yang sesuai dengan kriteria phishing seperti taktik social engineering (menjanjikan pekerjaan palsu) dan permintaan data sensitif (transfer uang). Meskipun tidak ada URL yang disebutkan, kontennya jelas merujuk pada upaya penipuan.",
+        "risk_factors": [
+          "phishing_keywords",
+          "social_engineering",
+          "permintaan_transfer_uang"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 597,
+        "tokens_output": 148,
+        "processing_time_ms": 6368
+      },
+      "mad_result": {
+        "decision": "PHISHING",
+        "confidence": 1.0,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "content_analyzer": "PHISHING",
+          "security_validator": "PHISHING",
+          "social_context": "PHISHING"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "content_analyzer",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "Pesan mengandung kata kunci phishing seperti 'kerja paruh waktu palsu' dan 'transfer deposit'",
+              "Menggunakan taktik social engineering dengan menawarkan pekerjaan palsu untuk meminta uang",
+              "Tidak relevan dengan konteks akademik grup, menunjukkan anomali dalam tujuan pesan",
+              "Struktur pesan singkat dan langsung, fokus pada permintaan transfer uang tanpa detail legitimasi"
+            ],
+            "evidence": {
+              "style_deviation": 0.8,
+              "urgency_score": 0.7,
+              "social_engineering_detected": true,
+              "linguistic_anomalies": [
+                "Penggunaan kata 'palsu' yang tidak wajar dalam undangan resmi",
+                "Permintaan transfer deposit tanpa konteks yang jelas atau otorisasi"
+              ]
+            }
+          },
+          {
+            "agent_type": "security_validator",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "Pesan mengandung indikasi scam (undangan kerja palsu dengan permintaan transfer deposit)",
+              "Tidak ada URL untuk diverifikasi, tetapi konteks pesan sangat mencurigakan",
+              "Risk score dari analisis triage menunjukkan risiko sedang (20)",
+              "Klasifikasi LLM mendukung phishing dengan confidence tinggi"
+            ],
+            "evidence": {
+              "url_risk_score": 0.2,
+              "domain_trusted": false,
+              "is_shortened": false,
+              "tld_suspicious": false,
+              "security_checks": {
+                "message_analysis": "Scam pattern detected",
+                "url_presence": "No URL provided",
+                "triage_risk_score": "20",
+                "llm_classification": "PHISHING with 95% confidence"
+              }
+            }
+          },
+          {
+            "agent_type": "social_context",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "Pesan meminta transfer deposit untuk aktivasi akun, yang merupakan taktik umum phishing untuk mengeksploitasi mahasiswa yang mencari pekerjaan paruh waktu.",
+              "Pengirim tidak dikenal (@unknown) tanpa riwayat perilaku yang jelas, meningkatkan kecurigaan dalam konteks grup akademik yang biasanya memiliki anggota terverifikasi.",
+              "Konteks grup mahasiswa Teknik Informatika UIR tidak relevan dengan tawaran kerja yang meminta deposit, karena aktivitas akademik tidak melibatkan transfer uang untuk pekerjaan.",
+              "Waktu posting (19:47) mungkin normal untuk aktivitas sosial, tetapi konten yang mencurigakan mengalahkan kesesuaian waktu."
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.9,
+              "context_relevance": 0.1,
+              "timing_appropriate": true,
+              "academic_context_match": false
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1802,
+        "total_processing_time_ms": 9639,
+        "variant": "mad3"
+      },
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 63,
+      "text": "Pemenang giveaway e-wallet, kirim nomor kartu dan CVV agar saldo bisa masuk",
+      "expected": "PHISHING",
+      "predicted": "PHISHING",
+      "confidence": 1.0,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 12876,
+      "tokens_total": 2439,
+      "tokens_input": 601,
+      "tokens_output": 121,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan meminta data sensitif seperti nomor kartu dan CVV dalam konteks giveaway e-wallet, yang merupakan taktik phishing umum untuk mencuri informasi keuangan, tidak relevan dengan aktivitas akademik grup.",
+        "risk_factors": [
+          "Permintaan data sensitif (nomor kartu, CVV)",
+          "Taktik social engineering (giveaway palsu)",
+          "Konteks tidak relevan dengan aktivitas akademik"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 601,
+        "tokens_output": 121,
+        "processing_time_ms": 5191
+      },
+      "mad_result": {
+        "decision": "PHISHING",
+        "confidence": 1.0,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "content_analyzer": "PHISHING",
+          "social_context": "PHISHING",
+          "security_validator": "PHISHING"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "content_analyzer",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "Permintaan data sensitif (nomor kartu, CVV)",
+              "Taktik social engineering (giveaway palsu)",
+              "Konteks tidak relevan dengan aktivitas akademik",
+              "Urgensi palsu dalam klaim pemenang"
+            ],
+            "evidence": {
+              "style_deviation": 0.8,
+              "urgency_score": 0.9,
+              "social_engineering_detected": true,
+              "linguistic_anomalies": [
+                "Penggunaan giveaway e-wallet yang tidak umum dalam konteks akademik",
+                "Instruksi langsung untuk mengirim data sensitif tanpa konteks yang jelas"
+              ]
+            }
+          },
+          {
+            "agent_type": "social_context",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "Pesan meminta data sensitif (nomor kartu dan CVV) yang tidak pernah relevan dalam konteks akademik",
+              "Tidak ada giveaway yang masuk akal dalam grup mahasiswa Teknik Informatika",
+              "Pengirim tidak dikenal (@unknown) tanpa riwayat perilaku yang dapat diverifikasi",
+              "Pesan muncul di luar konteks aktivitas akademik yang sedang berlangsung"
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.9,
+              "context_relevance": 0.1,
+              "timing_appropriate": false,
+              "academic_context_match": false
+            }
+          },
+          {
+            "agent_type": "security_validator",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "Pesan meminta informasi sensitif seperti nomor kartu dan CVV tanpa konteks yang aman",
+              "Tidak ada URL untuk diverifikasi, tetapi pesan itu sendiri menunjukkan pola phishing umum",
+              "Risk score awal 20 menunjukkan kecurigaan moderat"
+            ],
+            "evidence": {
+              "url_risk_score": 0.2,
+              "domain_trusted": false,
+              "is_shortened": false,
+              "tld_suspicious": false,
+              "security_checks": {
+                "message_analysis": "Permintaan data finansial sensitif dalam konteks giveaway yang tidak diverifikasi",
+                "url_presence": "Tidak ada URL untuk dianalisis, mengurangi kemampuan validasi langsung"
+              }
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1717,
+        "total_processing_time_ms": 7684,
+        "variant": "mad3"
+      },
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 64,
+      "text": "Akun marketplace anda terdeteksi fraud, login ulang melalui tautan berikut untuk banding",
+      "expected": "PHISHING",
+      "predicted": "SAFE",
+      "confidence": 1.0,
+      "decided_by": "triage",
+      "action": "none",
+      "processing_time_ms": 0,
+      "tokens_total": 0,
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "triage_risk_score": 0,
+      "triage_flags": [],
+      "single_shot_result": null,
+      "mad_result": null,
+      "correct": false,
+      "error": null
+    },
+    {
+      "index": 65,
+      "text": "Sistem anti-hack mendeteksi ancaman, klik link dan instal plugin keamanan palsu",
+      "expected": "PHISHING",
+      "predicted": "PHISHING",
+      "confidence": 1.0,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 14570,
+      "tokens_total": 2505,
+      "tokens_input": 600,
+      "tokens_output": 134,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan mengandung kata kunci phishing seperti 'anti-hack', 'ancaman', dan 'instal plugin keamanan palsu' yang menciptakan urgensi palsu dan meminta tindakan berbahaya, tidak relevan dengan konteks akademik grup.",
+        "risk_factors": [
+          "taktik social engineering (urgensi palsu)",
+          "permintaan instalasi plugin mencurigakan",
+          "konteks tidak sesuai aktivitas akademik",
+          "kata kunci phishing terdeteksi"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 600,
+        "tokens_output": 134,
+        "processing_time_ms": 5447
+      },
+      "mad_result": {
+        "decision": "PHISHING",
+        "confidence": 1.0,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "content_analyzer": "PHISHING",
+          "security_validator": "PHISHING",
+          "social_context": "PHISHING"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "content_analyzer",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "taktik social engineering dengan ancaman palsu (anti-hack)",
+              "permintaan instalasi plugin mencurigakan",
+              "konteks tidak relevan dengan aktivitas akademik grup",
+              "kata kunci phishing terdeteksi (link, instal, keamanan palsu)"
+            ],
+            "evidence": {
+              "style_deviation": 0.8,
+              "urgency_score": 0.9,
+              "social_engineering_detected": true,
+              "linguistic_anomalies": [
+                "penggunaan istilah teknis palsu (anti-hack)",
+                "instruksi langsung tanpa konteks akademik",
+                "bahasa Indonesia formal namun mencurigakan"
+              ]
+            }
+          },
+          {
+            "agent_type": "security_validator",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "Pesan mengandung peringatan ancaman palsu tanpa URL",
+              "Meminta instalasi plugin keamanan palsu",
+              "Risk score 20 menunjukkan risiko sedang",
+              "LLM klasifikasi phishing dengan confidence tinggi"
+            ],
+            "evidence": {
+              "url_risk_score": 0.2,
+              "domain_trusted": false,
+              "is_shortened": false,
+              "tld_suspicious": false,
+              "security_checks": {
+                "no_url_found": "Tidak ada URL untuk dianalisis",
+                "message_analysis": "Pesan tipikal phishing dengan ancaman dan permintaan aksi"
+              }
+            }
+          },
+          {
+            "agent_type": "social_context",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "Pengirim tidak dikenal (@unknown) tanpa riwayat perilaku yang dapat diverifikasi, meningkatkan risiko phishing dalam konteks grup akademik.",
+              "Pesan meminta tindakan segera (klik link dan instal plugin) yang tidak sesuai dengan aktivitas akademik normal di grup mahasiswa Teknik Informatika.",
+              "Konteks grup akademik biasanya berfokus pada diskusi kuliah, tugas, atau acara kampus, bukan peringatan keamanan mendesak dari sumber tidak dikenal.",
+              "Waktu posting (19:47) mungkin di luar jam aktif akademik, tetapi ini kurang relevan karena konten pesan itu sendiri sangat mencurigakan."
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.9,
+              "context_relevance": 0.1,
+              "timing_appropriate": false,
+              "academic_context_match": false
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1771,
+        "total_processing_time_ms": 9122,
+        "variant": "mad3"
+      },
+      "correct": true,
+      "error": null
+    },
+    {
+      "index": 66,
+      "text": "Surat pemanggilan sidang online palsu, minta pembayaran denda lewat virtual account pribadi",
+      "expected": "PHISHING",
+      "predicted": "PHISHING",
+      "confidence": 1.0,
+      "decided_by": "mad",
+      "action": "flag_review",
+      "processing_time_ms": 14697,
+      "tokens_total": 2526,
+      "tokens_input": 604,
+      "tokens_output": 109,
+      "triage_risk_score": 20,
+      "triage_flags": [
+        "phishing_keywords"
+      ],
+      "single_shot_result": {
+        "classification": "PHISHING",
+        "confidence": 0.95,
+        "reasoning": "Pesan mengandung kata kunci phishing yang umum seperti 'palsu' dan 'minta pembayaran denda lewat virtual account pribadi', yang mengindikasikan upaya penipuan dengan menciptakan urgensi palsu terkait sidang akademik.",
+        "risk_factors": [
+          "phishing_keywords",
+          "social_engineering_urgency",
+          "request_for_payment"
+        ],
+        "should_escalate_to_mad": true,
+        "escalation_reason": "PHISHING classification always requires MAD verification (confidence: 95%)",
+        "tokens_input": 604,
+        "tokens_output": 109,
+        "processing_time_ms": 4783
+      },
+      "mad_result": {
+        "decision": "PHISHING",
+        "confidence": 1.0,
+        "rounds_executed": 1,
+        "consensus_reached": true,
+        "consensus_type": "unanimous",
+        "agent_votes": {
+          "social_context": "PHISHING",
+          "security_validator": "PHISHING",
+          "content_analyzer": "PHISHING"
+        },
+        "round_1_summary": [
+          {
+            "agent_type": "social_context",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "Pesan meminta pembayaran denda ke virtual account pribadi, yang tidak sesuai prosedur akademik resmi",
+              "Surat pemanggilan sidang online palsu menunjukkan upaya penipuan dengan memanfaatkan konteks akademik",
+              "Pengirim tidak dikenal (@unknown) tanpa riwayat perilaku yang dapat diverifikasi",
+              "Waktu posting (malam hari) kurang umum untuk komunikasi resmi akademik"
+            ],
+            "evidence": {
+              "behavior_anomaly_score": 0.9,
+              "context_relevance": 0.1,
+              "timing_appropriate": false,
+              "academic_context_match": false
+            }
+          },
+          {
+            "agent_type": "security_validator",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "Pesan menggambarkan skema phishing umum (pemanggilan sidang palsu dengan permintaan pembayaran)",
+              "Tidak ada URL untuk diverifikasi, tetapi konteks pesan sangat mencurigakan",
+              "Risk score 20 menunjukkan risiko moderat berdasarkan analisis awal",
+              "Single-shot LLM mengklasifikasikan sebagai phishing dengan confidence tinggi"
+            ],
+            "evidence": {
+              "url_risk_score": 0.2,
+              "domain_trusted": false,
+              "is_shortened": false,
+              "tld_suspicious": false,
+              "security_checks": {
+                "message_analysis": "Skema phishing tipikal terdeteksi",
+                "url_presence": "Tidak ada URL untuk dianalisis",
+                "context_risk": "Tinggi berdasarkan deskripsi pesan"
+              }
+            }
+          },
+          {
+            "agent_type": "content_analyzer",
+            "stance": "PHISHING",
+            "confidence": 0.95,
+            "key_arguments": [
+              "Pesan mengklaim surat pemanggilan sidang online palsu, yang merupakan taktik umum phishing untuk menciptakan otoritas palsu.",
+              "Meminta pembayaran denda melalui virtual account pribadi, yang tidak sesuai dengan prosedur resmi akademik dan mencurigakan.",
+              "Menggunakan kata-kata seperti 'palsu' yang mungkin dimaksudkan untuk menciptakan urgensi atau ketakutan, meskipun konteksnya ambigu."
+            ],
+            "evidence": {
+              "style_deviation": 0.8,
+              "urgency_score": 0.7,
+              "social_engineering_detected": true,
+              "linguistic_anomalies": [
+                "Penggunaan 'palsu' dalam konteks ini tidak wajar dan mungkin merupakan upaya untuk memanipulasi emosi.",
+                "Struktur pesan singkat dan langsung ke permintaan pembayaran, deviasi dari komunikasi akademik formal yang biasanya lebih detail."
+              ]
+            }
+          }
+        ],
+        "round_2_summary": null,
+        "total_tokens": 1813,
+        "total_processing_time_ms": 9912,
+        "variant": "mad3"
+      },
+      "correct": true,
+      "error": null
+    }
+  ],
+  "metrics": {
+    "accuracy": 0.6818,
+    "precision": 0.68,
+    "recall": 0.7727,
+    "f1_score": 0.7234,
+    "detection_rate": 0.7727,
+    "confusion_matrix": {
+      "tp": 17,
+      "fp": 8,
+      "fn": 5,
+      "tn": 36,
+      "tp_detected": 17,
+      "fn_missed": 5
+    },
+    "total": 66,
+    "correct": 45,
+    "wrong": 21,
+    "errors": 0,
+    "expected_distribution": {
+      "SAFE": 22,
+      "SUSPICIOUS": 22,
+      "PHISHING": 22
+    },
+    "predicted_distribution": {
+      "SAFE": 35,
+      "SUSPICIOUS": 6,
+      "PHISHING": 25
+    },
+    "stage_distribution": {
+      "single_shot": 2,
+      "triage": 33,
+      "mad": 31
+    },
+    "stage_percentage": {
+      "single_shot": 3.0,
+      "triage": 50.0,
+      "mad": 47.0
+    },
+    "stage_accuracy": {
+      "single_shot": 1.0,
+      "triage": 0.6061,
+      "mad": 0.7419
+    },
+    "avg_time_ms": 8521.5,
+    "min_time_ms": 0,
+    "max_time_ms": 28401,
+    "total_time_seconds": 562.47,
+    "total_tokens": 102409,
+    "total_tokens_input": 20153,
+    "total_tokens_output": 4482,
+    "avg_tokens_per_msg": 1551.7,
+    "total_cost_usd": 0.007525,
+    "avg_cost_per_msg": 0.000114,
+    "avg_confidence_correct": 0.9311,
+    "avg_confidence_wrong": 1.0
+  },
+  "dataset_size": 66,
+  "mad_mode": "mad3",
+  "total_time_seconds": 562.47
+}

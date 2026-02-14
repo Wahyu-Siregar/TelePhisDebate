@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluation Modes — TelePhisDebate</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/iconoir-icons/iconoir@7.11.0/css/iconoir.css" />
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a href="/" class="nav-back" title="Back to Dashboard">
+                <i class="iconoir-arrow-left"></i>
+            </a>
+            <span class="nav-icon"><i class="iconoir-shield"></i></span>
+            <span class="nav-title">TelePhisDebate</span>
+            <span class="nav-separator">/</span>
+            <span class="nav-page-title">Mode Comparison</span>
+        </div>
+        <div class="nav-right">
+            <a href="/evaluation" class="nav-link" title="Evaluation">
+                <i class="iconoir-clipboard-check"></i>
+                <span>Evaluation</span>
+            </a>
+            <a href="/evaluation/compare" class="nav-link" title="MAD Comparison">
+                <i class="iconoir-stats-report"></i>
+                <span>MAD Compare</span>
+            </a>
+            <div class="nav-status">
+                <span class="status-dot"></span>
+                <span id="modeCompareTimestamp">Loading...</span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="compare-header">
+            <h1><i class="iconoir-git-pull-request"></i> PIPELINE VS MAD_ONLY</h1>
+            <p class="section-desc">
+                Perbandingan mode evaluasi untuk varian MAD yang sama.
+            </p>
+            <div class="compare-controls">
+                <label for="modeMadSelect">MAD Variant</label>
+                <select id="modeMadSelect">
+                    <option value="mad3">mad3</option>
+                    <option value="mad5" selected>mad5</option>
+                </select>
+            </div>
+        </section>
+
+        <section class="compare-run-grid">
+            <div class="compare-run-card">
+                <h3><i class="iconoir-branching"></i> PIPELINE</h3>
+                <p>Status: <span id="pipelineStatus" class="compare-status">—</span></p>
+                <p>Timestamp: <span id="pipelineTimestamp">—</span></p>
+                <p>File: <span id="pipelineFile">—</span></p>
+            </div>
+            <div class="compare-run-card">
+                <h3><i class="iconoir-multi-mac-os-window"></i> MAD_ONLY</h3>
+                <p>Status: <span id="madOnlyStatus" class="compare-status">—</span></p>
+                <p>Timestamp: <span id="madOnlyTimestamp">—</span></p>
+                <p>File: <span id="madOnlyFile">—</span></p>
+            </div>
+        </section>
+
+        <section class="compare-section">
+            <h2><i class="iconoir-percentage"></i> METRICS COMPARISON</h2>
+            <div class="table-container">
+                <table class="compare-table">
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Pipeline</th>
+                            <th>MAD_only</th>
+                            <th>Delta (MAD_only - Pipeline)</th>
+                            <th>Winner</th>
+                        </tr>
+                    </thead>
+                    <tbody id="modeMetricsBody">
+                        <tr><td colspan="5" class="loading">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="compare-section">
+            <h2><i class="iconoir-light-bulb"></i> QUICK SUMMARY</h2>
+            <div id="modeSummary" class="compare-summary">Loading...</div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>TelePhisDebate Evaluation Mode Comparison</p>
+        <p id="modeCompareFooterInfo">—</p>
+    </footer>
+
+    <script src="/static/js/evaluation_modes.js"></script>
+</body>
+</html>

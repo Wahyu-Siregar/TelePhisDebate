@@ -1,0 +1,82 @@
+flowchart TD
+    %% TelePhisDebate Alur Sistem Ringkas - Indonesia
+
+    START([Pesan Telegram]) --> FILTER{Filter Pesan}
+    FILTER -->|Tidak lolos| SKIP[Lewati Pesan]
+    FILTER -->|Lolos| CONTEXT[Bangun Konteks User]
+
+    CONTEXT --> CTX1[Bangun Info Pengirim]
+    CTX1 --> CTX2[Muat Baseline User dari DB]
+    CTX2 --> CTX3[Pastikan Registrasi User]
+    CTX3 --> URLCHECK[Cek URL Async]
+    URLCHECK --> FEATURES[Data Pesan dan URL Checks]
+
+    FEATURES --> TRIAGE[Tahap 1 Triage Rule Based]
+    TRIAGE --> TRIAGE_DECISION{Keputusan Triage}
+    TRIAGE_DECISION -->|Risk nol dan URL tepercaya atau tidak ada URL| FINAL_SAFE_TRIAGE[Final SAFE oleh Triage]
+    TRIAGE_DECISION -->|Selain itu| LLM[Tahap 2 Single Shot LLM]
+
+    LLM --> LLM_RESULT[Klasifikasi dan Confidence]
+    LLM_RESULT --> ESCALATE{Aturan Eskalasi}
+    ESCALATE -->|SAFE confidence 0.90 atau lebih| FINAL_SAFE_SS[Final SAFE oleh Single Shot]
+    ESCALATE -->|PHISHING confidence berapa pun| MAD[Tahap 3 Multi Agent Debate]
+    ESCALATE -->|SUSPICIOUS| MAD
+    ESCALATE -->|Confidence kurang dari 0.70| MAD
+    ESCALATE -->|Triage risk 50 atau lebih dan confidence kurang dari 0.80| MAD
+    ESCALATE -->|Fallback karena llm error| MAD
+    ESCALATE -->|Kondisi lainnya| FINAL_SAFE_SS
+
+    MAD --> ROUND1[Round 1 Analisis Independen]
+    ROUND1 --> CONSENSUS{Cek Konsensus}
+    CONSENSUS -->|Konsensus kuat dan skip aktif| AGGREGATE[Agregasi Voting Berbobot]
+    CONSENSUS -->|Tidak konsensus atau skip nonaktif| ROUND2[Round 2 Deliberasi]
+    ROUND2 --> AGGREGATE
+    AGGREGATE --> NORMALIZE[Normalisasi LEGITIMATE jadi SAFE]
+
+    FINAL_SAFE_TRIAGE --> FINAL{Klasifikasi Akhir}
+    FINAL_SAFE_SS --> FINAL
+    NORMALIZE --> FINAL
+
+    FINAL -->|SAFE| ACTION_NONE[Aksi none]
+    FINAL -->|SUSPICIOUS confidence 0.60 atau lebih| ACTION_WARN[Aksi warn]
+    FINAL -->|SUSPICIOUS confidence kurang dari 0.60| ACTION_FLAG[Aksi flag review]
+    FINAL -->|PHISHING selalu| ACTION_PHISH[Aksi flag review]
+
+    ACTION_WARN --> WARN_REPLY[Balas peringatan di grup]
+    ACTION_FLAG --> ADMIN_NOTIFY[Kirim notifikasi admin]
+    ACTION_PHISH --> PHISH_REPLY[Balas alert phishing di grup]
+    PHISH_REPLY --> ADMIN_NOTIFY
+
+    ACTION_NONE --> LOG1[Tulis Messages]
+    WARN_REPLY --> LOG1
+    ADMIN_NOTIFY --> LOG1
+    LOG1 --> LOG2[Tulis Detection Logs]
+    LOG2 --> LOG3[Tulis API Usage dan Biaya]
+    LOG3 --> DATABASE[Database Supabase]
+    DATABASE --> DASHBOARD[Dashboard Monitoring]
+    DASHBOARD --> METRICS[Metrik Deteksi]
+    DASHBOARD --> COST_ALERTS[Penggunaan API dan Biaya]
+
+    URLCHECK -.-> VIRUS_TOTAL[API VirusTotal]
+    LLM -.-> DEEPSEEK_API[API DeepSeek]
+    MAD -.-> DEEPSEEK_API
+
+    %% Styling
+    classDef inputStyle fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
+    classDef triageStyle fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    classDef llmStyle fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
+    classDef madStyle fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    classDef actionStyle fill:#ffebee,stroke:#d32f2f,stroke-width:2px
+    classDef safeStyle fill:#e8f5e8,stroke:#4caf50,stroke-width:2px
+    classDef dbStyle fill:#f5f5f5,stroke:#616161,stroke-width:2px
+    classDef apiStyle fill:#fafafa,stroke:#9e9e9e,stroke-width:1px,stroke-dasharray:5 5
+
+    class START,FILTER,CONTEXT,CTX1,CTX2,CTX3,URLCHECK,FEATURES inputStyle
+    class TRIAGE,TRIAGE_DECISION,FINAL_SAFE_TRIAGE triageStyle
+    class LLM,LLM_RESULT,ESCALATE,FINAL_SAFE_SS llmStyle
+    class MAD,ROUND1,CONSENSUS,ROUND2,AGGREGATE,NORMALIZE madStyle
+    class ACTION_WARN,ACTION_FLAG,ACTION_PHISH,WARN_REPLY,ADMIN_NOTIFY,PHISH_REPLY actionStyle
+    class FINAL,ACTION_NONE safeStyle
+    class LOG1,LOG2,LOG3,DATABASE,DASHBOARD,METRICS,COST_ALERTS dbStyle
+    class VIRUS_TOTAL,DEEPSEEK_API apiStyle
+    class SKIP actionStyle
