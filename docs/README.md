@@ -911,7 +911,9 @@ Semua konfigurasi dimuat dari environment variables (file `.env`):
 ```env
 # === Wajib ===
 TELEGRAM_BOT_TOKEN=         # Token dari @BotFather
-DEEPSEEK_API_KEY=           # API key DeepSeek
+LLM_PROVIDER=deepseek       # Pilih provider LLM: deepseek (default) / gemini
+DEEPSEEK_API_KEY=           # API key DeepSeek (wajib jika LLM_PROVIDER=deepseek)
+GEMINI_API_KEY=             # API key Gemini (wajib jika LLM_PROVIDER=gemini)
 SUPABASE_URL=               # URL project Supabase
 SUPABASE_KEY=               # Service role key Supabase
 

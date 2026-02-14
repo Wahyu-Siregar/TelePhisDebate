@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Evaluation Modes — TelePhisDebate</title>
+    <title>LLM Provider Comparison — TelePhisDebate</title>
     <link rel="stylesheet" href="/static/css/style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/iconoir-icons/iconoir@7.11.0/css/iconoir.css" />
 </head>
@@ -16,10 +16,10 @@
             <span class="nav-icon"><i class="iconoir-shield"></i></span>
             <span class="nav-title">TelePhisDebate</span>
             <span class="nav-separator">/</span>
-            <span class="nav-page-title">Mode Comparison</span>
+            <span class="nav-page-title">LLM Comparison</span>
         </div>
         <div class="nav-right">
-            <a href="/evaluation" class="nav-link" title="Evaluation">
+            <a href="/evaluation" class="nav-link" title="Evaluation Results">
                 <i class="iconoir-clipboard-check"></i>
                 <span>Evaluation</span>
             </a>
@@ -27,26 +27,32 @@
                 <i class="iconoir-stats-report"></i>
                 <span>MAD Compare</span>
             </a>
-            <a href="/evaluation/providers" class="nav-link" title="LLM Provider Comparison">
-                <i class="iconoir-brain"></i>
-                <span>LLM Compare</span>
+            <a href="/evaluation/modes" class="nav-link" title="Mode Comparison">
+                <i class="iconoir-git-pull-request"></i>
+                <span>Mode Compare</span>
             </a>
             <div class="nav-status">
                 <span class="status-dot"></span>
-                <span id="modeCompareTimestamp">Loading...</span>
+                <span id="providerCompareTimestamp">Loading...</span>
             </div>
         </div>
     </nav>
 
     <main class="container">
         <section class="compare-header">
-            <h1><i class="iconoir-git-pull-request"></i> PIPELINE VS MAD_ONLY</h1>
+            <h1><i class="iconoir-brain"></i> DEEPSEEK VS GEMINI</h1>
             <p class="section-desc">
-                Perbandingan mode evaluasi untuk varian MAD yang sama.
+                Perbandingan metrik evaluasi berdasarkan provider LLM. Pastikan kamu menyimpan hasil evaluasi
+                ke <code>results/deepseek/...</code> dan <code>results/gemini/...</code> (recommended).
             </p>
             <div class="compare-controls">
-                <label for="modeMadSelect">MAD Variant</label>
-                <select id="modeMadSelect">
+                <label for="providerEvalMode">Eval Mode</label>
+                <select id="providerEvalMode">
+                    <option value="pipeline" selected>pipeline</option>
+                    <option value="mad_only">mad_only</option>
+                </select>
+                <label for="providerMadMode">MAD Variant</label>
+                <select id="providerMadMode">
                     <option value="mad3">mad3</option>
                     <option value="mad5" selected>mad5</option>
                 </select>
@@ -55,16 +61,18 @@
 
         <section class="compare-run-grid">
             <div class="compare-run-card">
-                <h3><i class="iconoir-branching"></i> PIPELINE</h3>
-                <p>Status: <span id="pipelineStatus" class="compare-status">—</span></p>
-                <p>Timestamp: <span id="pipelineTimestamp">—</span></p>
-                <p>File: <span id="pipelineFile">—</span></p>
+                <h3><i class="iconoir-network"></i> DEEPSEEK</h3>
+                <p>Status: <span id="deepseekStatus" class="compare-status">—</span></p>
+                <p>Timestamp: <span id="deepseekTimestamp">—</span></p>
+                <p>Model: <span id="deepseekModel">—</span></p>
+                <p>File: <span id="deepseekFile">—</span></p>
             </div>
             <div class="compare-run-card">
-                <h3><i class="iconoir-multi-mac-os-window"></i> MAD_ONLY</h3>
-                <p>Status: <span id="madOnlyStatus" class="compare-status">—</span></p>
-                <p>Timestamp: <span id="madOnlyTimestamp">—</span></p>
-                <p>File: <span id="madOnlyFile">—</span></p>
+                <h3><i class="iconoir-google"></i> GEMINI</h3>
+                <p>Status: <span id="geminiStatus" class="compare-status">—</span></p>
+                <p>Timestamp: <span id="geminiTimestamp">—</span></p>
+                <p>Model: <span id="geminiModel">—</span></p>
+                <p>File: <span id="geminiFile">—</span></p>
             </div>
         </section>
 
@@ -75,13 +83,13 @@
                     <thead>
                         <tr>
                             <th>Metric</th>
-                            <th>Pipeline</th>
-                            <th>MAD_only</th>
-                            <th>Delta (MAD_only - Pipeline)</th>
+                            <th>DeepSeek</th>
+                            <th>Gemini</th>
+                            <th>Delta (Gemini - DeepSeek)</th>
                             <th>Winner</th>
                         </tr>
                     </thead>
-                    <tbody id="modeMetricsBody">
+                    <tbody id="providerMetricsBody">
                         <tr><td colspan="5" class="loading">Loading...</td></tr>
                     </tbody>
                 </table>
@@ -90,15 +98,16 @@
 
         <section class="compare-section">
             <h2><i class="iconoir-light-bulb"></i> QUICK SUMMARY</h2>
-            <div id="modeSummary" class="compare-summary">Loading...</div>
+            <div id="providerSummary" class="compare-summary">Loading...</div>
         </section>
     </main>
 
     <footer class="footer">
-        <p>TelePhisDebate Evaluation Mode Comparison</p>
-        <p id="modeCompareFooterInfo">—</p>
+        <p>TelePhisDebate LLM Provider Comparison</p>
+        <p id="providerCompareFooterInfo">—</p>
     </footer>
 
-    <script src="/static/js/evaluation_modes.js"></script>
+    <script src="/static/js/provider_compare.js"></script>
 </body>
 </html>
+

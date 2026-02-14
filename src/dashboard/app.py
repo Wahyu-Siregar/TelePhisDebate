@@ -146,6 +146,8 @@ def create_app():
             "eval_timestamp": _format_eval_timestamp(timestamp_str),
             "eval_mode": full_data.get("eval_mode", "pipeline"),
             "mad_mode": full_data.get("mad_mode"),
+            "llm_provider": full_data.get("llm_provider"),
+            "llm_model": full_data.get("llm_model"),
             "run_dir": os.path.relpath(base_dir, project_root),
             "timestamp_key": timestamp_str,
             "files": {
@@ -174,7 +176,8 @@ def create_app():
 
     def _find_latest_evaluation_recursive(
         mad_mode: str | None = None,
-        eval_mode: str | None = None
+        eval_mode: str | None = None,
+        llm_provider: str | None = None,
     ) -> dict | None:
         """Find latest evaluation recursively in results/ filtered by modes."""
         full_files = sorted(
@@ -192,10 +195,20 @@ def create_app():
 
             run_mad_mode = full_data.get("mad_mode")
             run_eval_mode = full_data.get("eval_mode", "pipeline")
+            run_provider = (full_data.get("llm_provider") or "").strip().lower() or None
+            if not run_provider:
+                # Best-effort: infer from directory structure if legacy eval_full has no provider metadata.
+                base_dir_lower = os.path.dirname(full_path).lower()
+                if "gemini" in base_dir_lower:
+                    run_provider = "gemini"
+                elif "deepseek" in base_dir_lower:
+                    run_provider = "deepseek"
 
             if mad_mode and run_mad_mode != mad_mode:
                 continue
             if eval_mode and run_eval_mode != eval_mode:
+                continue
+            if llm_provider and run_provider != llm_provider:
                 continue
 
             base_dir = os.path.dirname(full_path)
@@ -233,6 +246,11 @@ def create_app():
     def evaluation_modes():
         """Pipeline vs MAD-only comparison page."""
         return render_template('evaluation_modes.html')
+
+    @app.route('/evaluation/providers')
+    def evaluation_providers():
+        """LLM provider comparison page (deepseek vs gemini)."""
+        return render_template('provider_compare.html')
     
     @app.route('/api/evaluation')
     def get_evaluation_data():
@@ -314,6 +332,88 @@ def create_app():
                     "timestamp": mad5.get("eval_timestamp") if mad5 else None,
                     "files": mad5.get("files") if mad5 else None,
                     "metrics": mad5_metrics,
+                },
+                "deltas": deltas,
+            })
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
+    @app.route('/api/evaluation/providers')
+    def get_evaluation_provider_comparison():
+        """Compare latest DeepSeek vs Gemini runs for the same MAD variant and eval mode."""
+        try:
+            requested_eval_mode = request.args.get("eval_mode", "pipeline")
+            if requested_eval_mode not in {"pipeline", "mad_only"}:
+                return jsonify({"error": "eval_mode must be 'pipeline' or 'mad_only'"}), 400
+
+            mad_mode = request.args.get("mad_mode", "mad5")
+            if mad_mode not in {"mad3", "mad5"}:
+                return jsonify({"error": "mad_mode must be 'mad3' or 'mad5'"}), 400
+
+            # Preferred convention:
+            # results/deepseek/{mad_mode} and results/gemini/{mad_mode}
+            # results/deepseek/{mad_mode}_mad_only and results/gemini/{mad_mode}_mad_only
+            suffix = "" if requested_eval_mode == "pipeline" else "_mad_only"
+            deepseek_dir = os.path.join(results_dir, "deepseek", f"{mad_mode}{suffix}")
+            gemini_dir = os.path.join(results_dir, "gemini", f"{mad_mode}{suffix}")
+
+            deepseek_run = _load_latest_evaluation(deepseek_dir) or _find_latest_evaluation_recursive(
+                mad_mode=mad_mode, eval_mode=requested_eval_mode, llm_provider="deepseek"
+            )
+            gemini_run = _load_latest_evaluation(gemini_dir) or _find_latest_evaluation_recursive(
+                mad_mode=mad_mode, eval_mode=requested_eval_mode, llm_provider="gemini"
+            )
+
+            if not deepseek_run and not gemini_run:
+                return jsonify({
+                    "error": (
+                        f"No provider comparison runs found for mad_mode='{mad_mode}', eval_mode='{requested_eval_mode}'. "
+                        "Run evaluate.py for deepseek and gemini, and save results (recommended dirs: "
+                        f"results/deepseek/{mad_mode}{suffix} and results/gemini/{mad_mode}{suffix})."
+                    )
+                }), 404
+
+            deepseek_metrics = _metric_snapshot(deepseek_run)
+            gemini_metrics = _metric_snapshot(gemini_run)
+
+            deltas = {}
+            if deepseek_metrics and gemini_metrics:
+                for key in [
+                    "accuracy",
+                    "precision",
+                    "recall",
+                    "f1_score",
+                    "detection_rate",
+                    "avg_time_ms",
+                    "avg_tokens_per_msg",
+                    "total_cost_usd",
+                ]:
+                    deltas[key] = gemini_metrics.get(key, 0) - deepseek_metrics.get(key, 0)
+
+            return jsonify({
+                "requested_eval_mode": requested_eval_mode,
+                "requested_mad_mode": mad_mode,
+                "deepseek": {
+                    "available": deepseek_run is not None,
+                    "eval_mode": deepseek_run.get("eval_mode") if deepseek_run else None,
+                    "mad_mode": deepseek_run.get("mad_mode") if deepseek_run else mad_mode,
+                    "llm_provider": (deepseek_run.get("llm_provider") if deepseek_run else "deepseek") or "deepseek",
+                    "llm_model": deepseek_run.get("llm_model") if deepseek_run else None,
+                    "run_dir": deepseek_run.get("run_dir") if deepseek_run else os.path.relpath(deepseek_dir, project_root),
+                    "timestamp": deepseek_run.get("eval_timestamp") if deepseek_run else None,
+                    "files": deepseek_run.get("files") if deepseek_run else None,
+                    "metrics": deepseek_metrics,
+                },
+                "gemini": {
+                    "available": gemini_run is not None,
+                    "eval_mode": gemini_run.get("eval_mode") if gemini_run else None,
+                    "mad_mode": gemini_run.get("mad_mode") if gemini_run else mad_mode,
+                    "llm_provider": (gemini_run.get("llm_provider") if gemini_run else "gemini") or "gemini",
+                    "llm_model": gemini_run.get("llm_model") if gemini_run else None,
+                    "run_dir": gemini_run.get("run_dir") if gemini_run else os.path.relpath(gemini_dir, project_root),
+                    "timestamp": gemini_run.get("eval_timestamp") if gemini_run else None,
+                    "files": gemini_run.get("files") if gemini_run else None,
+                    "metrics": gemini_metrics,
                 },
                 "deltas": deltas,
             })
@@ -413,6 +513,8 @@ def create_app():
                         "run_dir": os.path.relpath(os.path.dirname(full_path), project_root),
                         "mad_mode": full_data.get("mad_mode"),
                         "eval_mode": full_data.get("eval_mode", "pipeline"),
+                        "llm_provider": full_data.get("llm_provider"),
+                        "llm_model": full_data.get("llm_model"),
                     }
                 )
             

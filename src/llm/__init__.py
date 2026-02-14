@@ -2,6 +2,16 @@
 LLM module - DeepSeek API wrapper and utilities
 """
 
-from .deepseek_client import DeepSeekClient, deepseek
+from .factory import llm
 
-__all__ = ["DeepSeekClient", "deepseek"]
+
+def deepseek():
+    """
+    Backward-compatible alias.
+
+    Historically, the code imported `deepseek()` everywhere.
+    Now it routes to the configured provider via LLM_PROVIDER.
+    """
+    return llm()
+
+__all__ = ["deepseek", "llm"]

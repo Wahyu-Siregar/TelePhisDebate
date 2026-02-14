@@ -30,6 +30,7 @@ from collections import Counter
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent))
 
+from src.config import config as app_config
 from src.detection import (
     PhishingDetectionPipeline,
     close_url_checker_sync,
@@ -76,6 +77,16 @@ COST_INPUT = 0.28 / 1_000_000   # $0.28 per 1M tokens
 COST_OUTPUT = 0.42 / 1_000_000  # $0.42 per 1M tokens
 
 logger = logging.getLogger(__name__)
+
+
+def _llm_identity() -> tuple[str, str]:
+    provider = (app_config.LLM_PROVIDER or "deepseek").strip().lower()
+    if provider == "gemini":
+        model = (app_config.GEMINI_MODEL or "gemini-1.5-flash").strip()
+        return provider, model
+
+    # DeepSeek client currently hardcodes `deepseek-chat`.
+    return "deepseek", "deepseek-chat"
 
 
 def load_dataset(csv_path: str, text_col: str = "chat", label_col: str = "tipe",
@@ -219,6 +230,8 @@ def evaluate_dataset(pipeline, dataset: list[dict], verbose: bool = True) -> dic
         "dataset_size": len(dataset),
         "eval_mode": "pipeline",
         "mad_mode": getattr(pipeline, "mad_mode", "mad3"),
+        "llm_provider": _llm_identity()[0],
+        "llm_model": _llm_identity()[1],
         "total_time_seconds": round(total_time, 2),
     }
 
@@ -392,6 +405,8 @@ def evaluate_dataset_mad_only(
         "dataset_size": len(dataset),
         "eval_mode": "mad_only",
         "mad_mode": mad_mode,
+        "llm_provider": _llm_identity()[0],
+        "llm_model": _llm_identity()[1],
         "total_time_seconds": round(total_time, 2),
     }
 
