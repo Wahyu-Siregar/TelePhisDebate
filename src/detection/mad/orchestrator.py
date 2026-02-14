@@ -25,11 +25,14 @@ class DebateResult:
     rounds_executed: int
     consensus_reached: bool
     consensus_type: str
+    consensus_round: int | None
+    stop_reason: str  # consensus | max_rounds | timeout
     
     # Agent responses
     agent_votes: dict[str, str]
     round_1_summary: list[dict]
     round_2_summary: list[dict] | None
+    round_summaries: list[list[dict]]
     
     # Metadata
     total_tokens: int
@@ -42,9 +45,12 @@ class DebateResult:
             "rounds_executed": self.rounds_executed,
             "consensus_reached": self.consensus_reached,
             "consensus_type": self.consensus_type,
+            "consensus_round": self.consensus_round,
+            "stop_reason": self.stop_reason,
             "agent_votes": self.agent_votes,
             "round_1_summary": self.round_1_summary,
             "round_2_summary": self.round_2_summary,
+            "round_summaries": self.round_summaries,
             "total_tokens": self.total_tokens,
             "total_processing_time_ms": self.total_processing_time_ms
         }
@@ -64,7 +70,12 @@ class MultiAgentDebate:
     4. Aggregation: Weighted voting produces final decision
     """
     
-    def __init__(self, skip_round_2_on_consensus: bool = True):
+    def __init__(
+        self,
+        skip_round_2_on_consensus: bool = True,
+        max_rounds: int = 2,
+        max_total_time_ms: int | None = None,
+    ):
         """
         Initialize debate system.
         
@@ -72,13 +83,13 @@ class MultiAgentDebate:
             skip_round_2_on_consensus: Skip Round 2 if consensus reached in Round 1
         """
         self.skip_round_2_on_consensus = skip_round_2_on_consensus
+        self.max_rounds = max(1, int(max_rounds or 2))
+        self.max_total_time_ms = int(max_total_time_ms) if max_total_time_ms else None
         
         # Initialize agents
-        self.agents = {
-            "content": ContentAnalyzer(),
-            "security": SecurityValidator(),
-            "social": SocialContextEvaluator()
-        }
+        # Key by agent_type for simpler multi-round orchestration.
+        agents_list = [ContentAnalyzer(), SecurityValidator(), SocialContextEvaluator()]
+        self.agents = {a.agent_type: a for a in agents_list}
         
         # Initialize aggregator
         self.aggregator = VotingAggregator()
@@ -132,36 +143,67 @@ class MultiAgentDebate:
             "recent_topics": []  # Could be populated from group history
         }
         
-        # Round 1: Independent Analysis
+        rounds: list[list[AgentResponse]] = []
+        consensus_round: int | None = None
+        stop_reason = "max_rounds"
+
+        # Round 1: Independent analysis
         round_1_responses = self._run_round_1(
             message_data, context, single_shot_result, parallel
         )
-        
-        # Check for early consensus
-        consensus, decision, confidence = self.aggregator.check_consensus(round_1_responses)
-        
-        round_2_responses = None
-        
-        if not consensus or not self.skip_round_2_on_consensus:
-            # Round 2: Deliberation
-            round_2_responses = self._run_round_2(
-                message_data, round_1_responses, context, parallel
+        rounds.append(round_1_responses)
+
+        # Track earliest consensus.
+        consensus, _, _ = self.aggregator.check_consensus(round_1_responses)
+        if consensus:
+            consensus_round = 1
+            if self.skip_round_2_on_consensus and self.max_rounds <= 1:
+                stop_reason = "consensus"
+
+        # Additional rounds: deliberation loop (Round 2..max_rounds)
+        previous_round = round_1_responses
+        for round_idx in range(2, self.max_rounds + 1):
+            if self.max_total_time_ms is not None:
+                elapsed_ms = int((time.time() - start_time) * 1000)
+                if elapsed_ms >= self.max_total_time_ms:
+                    stop_reason = "timeout"
+                    break
+
+            # Early termination: stop as soon as consensus is reached.
+            if self.skip_round_2_on_consensus:
+                consensus_now, _, _ = self.aggregator.check_consensus(previous_round)
+                if consensus_now:
+                    stop_reason = "consensus"
+                    break
+
+            next_round = self._run_deliberation_round(
+                message_data, previous_round, context, parallel
             )
-        
-        # Aggregate final decision
-        aggregated = self.aggregator.aggregate(round_1_responses, round_2_responses)
+            rounds.append(next_round)
+            previous_round = next_round
+
+            consensus_now, _, _ = self.aggregator.check_consensus(next_round)
+            if consensus_now and consensus_round is None:
+                consensus_round = round_idx
+
+        # Aggregate decision from the final round, accumulate tokens/time across all rounds.
+        aggregated = self.aggregator.aggregate_rounds(rounds)
         
         total_time = int((time.time() - start_time) * 1000)
         
+        round_summaries = [[r.to_dict() for r in resp_round] for resp_round in rounds]
         return DebateResult(
             decision=aggregated.decision,
             confidence=aggregated.confidence,
-            rounds_executed=2 if round_2_responses else 1,
+            rounds_executed=len(rounds),
             consensus_reached=aggregated.consensus_reached,
             consensus_type=aggregated.consensus_type,
+            consensus_round=consensus_round if aggregated.consensus_reached else None,
+            stop_reason=stop_reason,
             agent_votes=aggregated.agent_votes,
-            round_1_summary=[r.to_dict() for r in round_1_responses],
-            round_2_summary=[r.to_dict() for r in round_2_responses] if round_2_responses else None,
+            round_1_summary=round_summaries[0],
+            round_2_summary=round_summaries[1] if len(round_summaries) > 1 else None,
+            round_summaries=round_summaries,
             total_tokens=aggregated.total_tokens,
             total_processing_time_ms=total_time
         )
@@ -181,8 +223,8 @@ class MultiAgentDebate:
                 futures = {
                     executor.submit(
                         agent.analyze, message_data, context, previous_result
-                    ): name
-                    for name, agent in self.agents.items()
+                    ): agent.agent_type
+                    for agent in self.agents.values()
                 }
                 
                 for future in as_completed(futures):
@@ -207,38 +249,31 @@ class MultiAgentDebate:
                 for agent in self.agents.values()
             ]
     
-    def _run_round_2(
+    def _run_deliberation_round(
         self,
         message_data: dict,
-        round_1_responses: list[AgentResponse],
+        previous_round_responses: list[AgentResponse],
         context: dict,
         parallel: bool
     ) -> list[AgentResponse]:
-        """Run Round 2: Deliberation with cross-agent context"""
+        """Run a deliberation round using previous round as context."""
         
         # Map responses by agent type
-        response_map = {r.agent_type: r for r in round_1_responses}
-        
-        agent_type_map = {
-            "content": "content_analyzer",
-            "security": "security_validator",
-            "social": "social_context"
-        }
+        response_map = {r.agent_type: r for r in previous_round_responses}
         
         if parallel:
             responses = []
             with ThreadPoolExecutor(max_workers=3) as executor:
                 futures = {}
                 
-                for name, agent in self.agents.items():
-                    agent_type = agent_type_map[name]
+                for agent_type, agent in self.agents.items():
                     own_response = response_map.get(agent_type)
                     
                     if own_response is None:
                         continue
                     
                     other_responses = [
-                        r for r in round_1_responses 
+                        r for r in previous_round_responses
                         if r.agent_type != agent_type
                     ]
                     
@@ -248,7 +283,7 @@ class MultiAgentDebate:
                         own_response,
                         other_responses,
                         context
-                    )] = name
+                    )] = agent_type
                 
                 for future in as_completed(futures):
                     try:
@@ -256,7 +291,6 @@ class MultiAgentDebate:
                         responses.append(response)
                     except Exception as e:
                         agent_name = futures[future]
-                        agent_type = agent_type_map[agent_name]
                         # Keep original response on error
                         responses.append(response_map.get(agent_type, AgentResponse(
                             agent_type=agent_type,
@@ -268,15 +302,14 @@ class MultiAgentDebate:
             return responses
         else:
             responses = []
-            for name, agent in self.agents.items():
-                agent_type = agent_type_map[name]
+            for agent_type, agent in self.agents.items():
                 own_response = response_map.get(agent_type)
                 
                 if own_response is None:
                     continue
                 
                 other_responses = [
-                    r for r in round_1_responses 
+                    r for r in previous_round_responses
                     if r.agent_type != agent_type
                 ]
                 

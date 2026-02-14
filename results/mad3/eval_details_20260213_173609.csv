@@ -1,0 +1,314 @@
+index,text,expected,predicted,correct,confidence,decided_by,action,processing_time_ms,tokens_total,tokens_input,tokens_output,triage_risk_score,triage_flags,error
+1,"Assalamualaikum Warahmatullahi Wabarakatuh 🙏Di sampaikan Bantuan DTKS Rp.900.000 sd 2.000.000 tahun ini 2025 telah di cairkan, buruan daftar dan cek nama anda Berikut daftar penerima bantuan ● Guru ● Sd,smp,sma,mahasiswa ● Pekerja harian ● Bantuan keluarga ● Pegawai baru ● Lansia DLL CEK DAN DAFTAR PENERIMA👇 :https://portal19.rgester-now.web.id/",PHISHING,PHISHING,True,1.0,mad,flag_review,17188,3146,714,154,20,phishing_keywords,
+2,"Assalamualaikum warahmatullahi wabarakatuh 🙏Alhamdulillah Bantuan MAKAN BERGIZI GRATIS (BMG), PROGRAM KELUARGA HARAPAN (PKH), IURAN JAMINAN KESEHATAN (IJK), dan BANTUAN PANGAN NON-TUNAI (BPNT) sudah cair awal Desember 2025 - akhir JANUARI 2026. INFORMASI SELENGKAPNYA SILAHKAN CEK DI WEBSITE DI BAWAH INI: https://portal19.rgester-now.web.id/ #infobansos #bansosindonesia #bansoskmp #bansospkh #bansosbpntpos",PHISHING,PHISHING,True,1.0,mad,flag_review,17028,3367,763,173,20,phishing_keywords,
+3,"Ass,,Bpk/Ibu
+Tersedia Pinjmn
+Tmpa Agunan
+Dngn
+Bung 2%/Thn
+Miniml 5 jt S/D 500jt
+Untuk Inf0 Chat
+Whatsap 081377738575",PHISHING,PHISHING,True,1.0,mad,flag_review,15183,2769,636,139,20,phishing_keywords,
+4,"Selamat... Anda
+mndptkn hadiah
+dari shopee
+dgn kode
+pin:AD25MD47
+untk info klick:
+bit.ly/supershoppingday99-2020",PHISHING,PHISHING,True,1.0,mad,flag_review,16687,2832,704,109,30,shortened_url|phishing_keywords,
+5,"Yth BAPAK/IBU
+SPESIAL AWAL TAHUN
+PUNYA MASALAH DI SEGI FINANCIAL DAN BUTUH.
+PINJMN DANA DARURAT!!!???
+(NON BANK) 5jt-500jt
+INFO WA : 0852-8336-0989",PHISHING,PHISHING,True,1.0,mad,flag_review,13586,2854,660,144,35,caps_lock_abuse|phishing_keywords|excessive_punctuation,
+6,"JASA DUKUN SANTET & PELET RESMI TERPERCAYA
+1. Pesugihan 
+2. Santet
+3. Pasang Susuk
+4. Menang Perkara
+Tlp/Wa. 081240837779",PHISHING,SUSPICIOUS,False,0.6440677966101696,mad,warn,12690,2684,639,143,30,caps_lock_abuse|phishing_keywords,
+7,"Ass,,Bpk/Ibu
+Tersedia Pinjmn
+Tmpa Agunan
+Dngn
+Bung 2%/Thn
+Miniml 5 jt S/D 500jt
+Untuk Inf0 Chat
+Whatsap 081377738575",PHISHING,PHISHING,True,1.0,mad,flag_review,17088,2820,636,139,20,phishing_keywords,
+8,"Selamat... Anda
+mndptkn hadiah
+dari shopee
+dgn kode
+pin:AD25MD47
+untk info klick:
+bit.ly/supershoppingday99-2020",PHISHING,PHISHING,True,1.0,mad,flag_review,16550,2974,704,123,30,shortened_url|phishing_keywords,
+9,"Yth BAPAK/IBU
+SPESIAL AWAL TAHUN
+PUNYA MASALAH DI SEGI FINANCIAL DAN BUTUH.
+PINJMN DANA DARURAT!!!???
+(NON BANK) 5jt-500jt
+INFO WA : 0852-8336-0989",PHISHING,PHISHING,True,1.0,mad,flag_review,13905,2813,660,151,35,caps_lock_abuse|phishing_keywords|excessive_punctuation,
+10,"Asslm wr.wb kami mnawarkan
+Pinjaman dana untk usaha,
+Berobat dll, dgn bunga 2%
+Pertahun mnml pijmn 5-500jt
+Proses mudah&cepat info
+WA;087865547457",PHISHING,PHISHING,True,1.0,mad,flag_review,15329,2735,637,170,20,phishing_keywords,
+11,"BUAT BPK/IBU YG 
+LAGI BUTUH BIAYA TANBAHAN
+UNTUK USAHA DLL 
+KAMI SIAP MELAYANI
+ANDA DGN BUNGA 2%/PERTAHUN
+MIN 5 JT-500 JT
+INFO WASPPA:082260512778",PHISHING,PHISHING,True,1.0,mad,flag_review,16434,2911,650,156,10,caps_lock_abuse,
+12,KSP SEJAHTERA BERSAMA Mnawarkan pinjaman berbasis online tanpa agunan dan tanpa survei bunga rendah hanya 2% MIN pinjaman 5jt sampai 500jt info WA 087827398789,PHISHING,PHISHING,True,1.0,mad,flag_review,12658,2647,629,130,20,phishing_keywords,
+13,"kami menawarkan 
+pinjaman dana dengan bunga rendah
+dan cepat cair dijamin amanah
+minimal 5jt sampai 500jt
+minat chat whatsapp; 085333103541",PHISHING,PHISHING,True,1.0,mad,flag_review,12752,2660,623,149,20,phishing_keywords,
+14,"Alhamdulillah berkat bantuan AKI  JAGAT semua hutang  sy udah lunas,ingin sperti sy slahkan KLIK www.layanan-pesugihan.com",PHISHING,PHISHING,True,1.0,mad,flag_review,15224,2818,639,145,20,phishing_keywords,
+15,maaf mengganggu bpk/ibu saya bpk dermawan bisa membantu anda masalah keuangan hanya dgn bunga 2% info wa 087709373769,PHISHING,PHISHING,True,1.0,mad,flag_review,10826,2557,614,128,20,phishing_keywords,
+16,"Maaf Mengganggu Waktunya Pak/Ibu
+Kami Dari KOPERASI
+Menawarkan PINJAMAN-ONLINE
+5jt Sampai 500jt
+Poses Cepat Bunga 2% Pertahun
+Info Whatsapp :0823-1757-2717",PHISHING,PHISHING,True,1.0,mad,flag_review,12615,2682,642,133,20,phishing_keywords,
+17,Hanya Kk & Ktp Sudah Bisa buat modal usaha dengan bunga% Min 5-500jt Melayani Seluruh Indonesia Minat WA:087844302111 tks...,PHISHING,PHISHING,True,1.0,mad,flag_review,13413,2630,619,135,20,phishing_keywords,
+18,Info Pinjaman Tunai Cepat Cair Dan Terpercaya Tampa Agunan Tampa Riba Info Chat WA:085248724234,PHISHING,PHISHING,True,1.0,mad,flag_review,13561,2558,606,176,20,phishing_keywords,
+19,"KSP SB
+Butuh Dana Cepat? Buat
+-Modal
+-Biaya Pendidikan
+-Biaya Berobat
+-DLL Tampa Agunan
+Mulai 5jt S/D 500jt Dgn Bunga 2% PerTahun
+INFO http://bit.ly/2L9J21t",PHISHING,SUSPICIOUS,False,0.5884146341463414,mad,flag_review,18472,3267,755,148,30,shortened_url|phishing_keywords,
+20,"Ass, Bpk/Ibu, Kmi Menberikan Pinjaman Modal Dgn Bunga 2% Mdh Terjamin Dan Amanah, Chat di Wa: 087765378585",PHISHING,PHISHING,True,1.0,mad,flag_review,15116,2708,619,151,20,phishing_keywords,
+21,"dana pinjaman 
+berbaris online
+mulai 2Ojt s/d 1.milyar 
+minat chat wa;085348099737",PHISHING,PHISHING,True,1.0,mad,flag_review,13231,2605,613,159,20,phishing_keywords,
+22,"KSP.SEJAHTERA BERSAMA
+Menawarkan Pinjaman Dana Online (bunga 0.6%)
+Minat Chat/WA 085341977016
+Limit Sampai 500 Juta
+Tenor max 10 Tahun",PHISHING,PHISHING,True,1.0,mad,flag_review,12205,2691,632,137,20,phishing_keywords,
+23,"KSP. Sejahtra Bersama Melayani pinjaman degan bunga 4%, Min 5jt s/d 500jt, jaminan kk&ktp. Minat? wa: 085244082486",PHISHING,PHISHING,True,1.0,mad,flag_review,13400,2622,628,143,20,phishing_keywords,
+24,"MasterRupiah Bunga 0.6% Syarat Mudah Tanpa Deposit Awal & Biaya Admin, KTA Multiguna TakeOver NoBiChacking Wa:0816208901
+https://masterrupiah.com",PHISHING,PHISHING,True,1.0,mad,flag_review,19381,3003,633,158,0,,
+25,"Berbasis SYARIAH 100% Tanpa Riba
+Solusinya hanya di 
+KSP BAITUSSALAM
+MENWARKAN Pinjaman online
+Proses Cepat & Aman
+Minimal 5jt-250jt
+Minat WA : 0852 1413 4052",PHISHING,PHISHING,True,1.0,mad,flag_review,13753,2777,645,164,20,phishing_keywords,
+26,"KSP SEJAHTERA
+melayani pinjaman
+mulai 5jt-500jt
+cepat & mudah
+Bunga 4%
+U/info
+hub/chat 
+via WA:0853-4972-8464",PHISHING,SUSPICIOUS,False,0.6129032258064515,mad,warn,13062,2650,631,153,20,phishing_keywords,
+27,"KSP SEJAHTERA BERSAMA
+Butuh Dana Cepat? Buat
+-Modal
+-Biaya Pendidikan
+-Biaya Berobat
+-DLL
+Mulai 5jt S/D 500jt Dgn Bunga 0,6%
+PerTahun
+INFO Chat WA 082352241375",PHISHING,PHISHING,True,1.0,mad,flag_review,18572,2159,648,179,20,phishing_keywords,
+28,"(KSP SEJAHTERA BERSAMA)
+Melayani pengajuan pinjaman berbasis 
+ONLINE Tanpa agunan min pinjaman 5 s/d 250jt 
+Bunga Cuma 2% minat Chat Via WA: 085360130404",PHISHING,PHISHING,True,1.0,mad,flag_review,14445,2827,638,151,20,phishing_keywords,
+29,"Butuh Pinjaman Dana Tunai
+min 5jt-500jt
+Syarat KTP & KK
+Bunga Ringan 1%/thn
+BUAT MODAL USAHA
+RENOFASI RUMAH DLL,
+WA:082264377986
+klik: http://bit.ly/2YbKAv7",PHISHING,SUSPICIOUS,False,0.5714285714285714,mad,flag_review,17321,3145,728,158,30,shortened_url|phishing_keywords,
+30,"KSP.SEJAHTERA BERSAMA
+Menawarkan Dana Pinjaman Proses Mudah & Cepat
+PLAFOND 5 s/d 500 Juta
+TENOR 1 s/d 7 Tahun
+Bunga 0,6 %
+Minat Chat WA' 085246610231",PHISHING,PHISHING,True,1.0,mad,flag_review,14861,2802,645,175,20,phishing_keywords,
+31,"Salam Bpk/Ibu
+Kmi Ad pnwaran Modal Usaha DLL
+Dngan Bnga 2%/thun Proses Cair Dlam 2 jam
+AMan, Amanah & Tnpa Anggunan
+Mnat hub Whatsup 087788789777",PHISHING,PHISHING,True,1.0,mad,flag_review,14699,2802,641,168,20,phishing_keywords,
+32,"Asslm wr.wb kami 
+Dari koperasi mnawarkan
+Pinjaman dana untk usaha,
+Berobat dll, dgn bunga 2%
+Perthun mnml pijmn 5-500jt
+Proses mudah&cepat info
+WA;082217122699",PHISHING,PHISHING,True,1.0,mad,flag_review,14361,2833,643,171,20,phishing_keywords,
+33,"BIG PR0M0 CUCI GUDANG..!!!
+IPHONE:750ribu
+SAMSUNG:750ribu
+OPPO:750ribu
+VIVO:750ribu
+dan laptOp 1jt minat 
+Silahkan cat/wa 0852-4027-1562",PHISHING,PHISHING,True,1.0,mad,flag_review,16053,2857,647,137,5,excessive_punctuation,
+34,"Yuk berbagi kata cinta di SMS Hitz super ASYIK! Gabung GRATIS/1hr, balas SMS ini, ketik: OKE",PHISHING,SAFE,False,1.0,triage,none,1,0,0,0,0,,
+35,"Dptkan vocer 500rb, aktfkn RBT BEBAS AKSES 7hr prtma: Inul Daratista-Masa Lalu trf slnjtnya 7rb/30hr, 2rb/7hr, 1rb/3hr (sesuai pulsa) Balas sms ketik: UNTUNG2",PHISHING,SAFE,False,1.0,triage,none,0,0,0,0,0,,
+36,"SHOPEE
+Slmt.
+No.+6287784xxxxxx
+Anda resmi
+Men-dptkan hadiah
+Ke-2 cek tunai
+Rp.175jt KODE
+ID PEMENANG:(AD25MD47)
+U/info hadiah
+Klik.
+www.grandprize55.online",PHISHING,PHISHING,True,1.0,mad,flag_review,17830,3000,665,147,20,phishing_keywords,
+37,"SHOPEE INDONESIA
+Selamat No Anda
+resmi terpilih meraih
+Hadiah ke-2
+Rp.175jta
+dari SHOPEE
+ID pemenang
+(J7K2B59)
+U/info hadiah klik;
+bit.ly/shopee3347",PHISHING,PHISHING,True,1.0,mad,flag_review,18481,3056,708,173,30,shortened_url|phishing_keywords,
+38,"PESAN RESMI !!!
+SELAMAT ANDA
+TERPILIH SEBAGAI
+PEMENANG HADIAH
+KE-2 dr SHOPEE 2019 
+Code ID;25f4777 
+U/info klik;
+www.big-shopee37.blogspot.com",PHISHING,PHISHING,True,1.0,mad,flag_review,15791,2892,673,155,35,caps_lock_abuse|phishing_keywords|excessive_punctuation,
+39,"LAZADA ID
+Markatplace No 1
+Ucapkan SELAMAT
+Anda Trdaftar Pemenang
+LAZADA 11.11 Hadiah
+JUTAWAN Rp.125Jta
+ID:MP47AD7
+Info
+bit.ly/lazada-win11",PHISHING,PHISHING,True,1.0,mad,flag_review,21600,3096,709,210,30,shortened_url|phishing_keywords,
+40,"SELAMAT..
+Anda resmi
+men-dpatkan
+HADIAH KE-2
+Rp.175 juta.
+Dri LAZADA2019
+ID;02498123
+U/info hadiah klick;
+bit.ly/call-centerlazada29",PHISHING,PHISHING,True,1.0,mad,flag_review,17515,2971,710,138,30,shortened_url|phishing_keywords,
+41,"PT.SHOPEE
+MENGUCAPKAN
+SLAMAT!!!
+NO anda resmi
+m-dptkn hadiah
+Ke-2 cek tunai
+Rp.175jt
+dri pt.shopee
+PIN:B8337H9
+U/info klik:
+www.shopeetbk29.blogspot.com",PHISHING,PHISHING,True,1.0,mad,flag_review,17517,3008,670,167,25,phishing_keywords|excessive_punctuation,
+42,"Anda mendapat 700.000 TUNAI, silakan klik tautan untuk mendapatkannya: http://isat.ekontan.com/01/14bskn0y WA CS:085777640327",PHISHING,PHISHING,True,1.0,mad,flag_review,19249,2850,640,166,0,,
+43,"SIM C4RD ANDA
+M-dptkan
+1unit mobil T0Y0TA INN0VA
+dr myPERT4MIN4
+Pin Pemenang Anda: 789fr77
+Klik link: bit.ly/undianmypertamina",PHISHING,PHISHING,True,1.0,mad,flag_review,17267,2987,703,120,30,shortened_url|phishing_keywords,
+44,"sLMt!No whatsapp
+Anda Men-dptkn
+Rp.175.000.000
+PIN:D33C879
+cek di:
+bit.ly/info-resmi314",PHISHING,PHISHING,True,1.0,mad,flag_review,22245,2997,682,196,30,shortened_url|phishing_keywords,
+45,"sLMt!No whatsapp
+Anda Men-dptkn
+Rp.175.000.000
+PIN:D33C879
+cek di:
+bit.ly/info-resmi314",PHISHING,PHISHING,True,1.0,mad,flag_review,17541,3045,682,137,30,shortened_url|phishing_keywords,
+46,"Anda M-dptkan
+125,000.000.00
+ID Anda (AAQ2099)
+cek ID Anda
+bit.ly/promoshopee567",PHISHING,PHISHING,True,1.0,mad,flag_review,20134,3011,680,164,10,shortened_url,
+47,"PESAN RESMI !!!
+anda pemenan
+Rp150.000.000
+Dari SHOPEE SALE
+PIN ID:IJ4T547
+Cocokan PIN anda di
+bit.ly/mensaleshopee22coid",PHISHING,PHISHING,True,1.0,mad,flag_review,19114,3140,712,149,35,shortened_url|phishing_keywords|excessive_punctuation,
+48,"Anda Pemenang KE-2
+Rp.150.000.000,00
+SHOPEE REJEKI
+awal tahun 2020
+TOKEN ID (B8337H9
+Silahkan buka link di bawah:
+s.id/rejekianksholeh
+Cek HADIAH anda",PHISHING,PHISHING,True,1.0,mad,flag_review,14634,2901,709,97,40,shortened_url|phishing_keywords,
+49,"Anda Pemenang
+SHOPEE NEW YEAR
+Rp. 150.000.000,-
+PIN (iJ4T547)
+Info Klik Link :
+s.id/pt-shopeeawalthn",PHISHING,PHISHING,True,1.0,mad,flag_review,14778,2855,689,133,40,shortened_url|phishing_keywords,
+50,"Slmt No. Anda Mendapatkan
+Hadiah Rp.100jt Dari
+PT. WHATSAPP
+ID: UF77957
+INFO Klik Link URL di bawah ini:
+bit.ly/wa-2019",PHISHING,PHISHING,True,1.0,mad,flag_review,19293,3024,696,138,30,shortened_url|phishing_keywords,
+51,"SIMcard Anda Mendapatkan Penghargaan Ke.5 Dari ERA JAYA Kode pin (479kl278) U/info klik:
+https://bit.ly/info-erajaya29",PHISHING,PHISHING,True,1.0,mad,flag_review,19001,2952,691,119,30,shortened_url|phishing_keywords,
+52,"SHOPEE 9.9
+Slmt
+No.Anda Resmi
+Mendaptkan Hadiah
+Ke-2 Cek Tunai
+Rp.185jt Code ID
+Pemenang;(AD25MD47)
+U/Info Hadiah
+Klik.
+bit.ly/info-shoppingday99",PHISHING,PHISHING,True,1.0,mad,flag_review,19704,2978,714,148,30,shortened_url|phishing_keywords,
+53,"Selamat anda.
+Terdaftar di
+BPJS INDONESIA
+Sebagai Penerima 
+dana Bantuan.
+Rp.175juta
+U/info klik:
+bit.ly/dana-bpjs21-indonesia
+
+Masukkan PIN di Locked:
+57DL77",PHISHING,PHISHING,True,1.0,mad,flag_review,20618,3151,722,187,30,shortened_url|phishing_keywords,
+54,"selamatAnda M-dpatkan
+C3K Rp.189.000.000
+dari.PERTAMINA
+CODE ID;(717747)
+info lanjut;
+WA;0822-5016-9377
+Atau klik;
+bit.ly/pertamina377",PHISHING,PHISHING,True,1.0,mad,flag_review,20436,3042,693,137,10,shortened_url,
+55,"PT.WhatsApp
+Slmt.
+Men-dptkan hadiah
+Ke-2 cek tunai
+Rp.175jt KODE
+ID PEMENANG:[WHA012]
+U/info hadiah
+Klik.
+bit.ly/infohadiah-wa747",PHISHING,PHISHING,True,1.0,mad,flag_review,19201,3043,713,125,30,shortened_url|phishing_keywords,
+56,HADIAH KHUSUS UNTUK PENGGUNA TELEGRAM AKTIF 1)VOUCHER GRATIS UNTUK DI SEMUA OPERATOR 2) BEBAS KOUTA UNTUK AKSES DI SEMUA FITUR TELEGRAM SELAMA 3 BULAN HADIAH DI RESMI KAN DARI TELEGRAM DALAM RANGKA MENINGKATKAN PENGGUNA TELEGRAM CARA AMBIL HADIAH NYA SILAKAN LANGSUNG ISI LINK DI BAWAH👇 https://is.gd/gratispulsa500ktelegrampromo,PHISHING,PHISHING,True,1.0,mad,flag_review,19370,3424,806,130,65,shortened_url|caps_lock_abuse|urgency_keywords|phishing_keywords,

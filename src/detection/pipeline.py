@@ -4,6 +4,7 @@ Unified pipeline that orchestrates all detection stages
 """
 
 import logging
+import os
 import time
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -122,10 +123,39 @@ class PhishingDetectionPipeline:
         self.single_shot = SingleShotClassifier(triage=self.triage)
         self.mad_mode = (mad_mode or "mad3").strip().lower()
 
+        # MAD runtime tuning (optional). Defaults preserve existing behavior.
+        # Example: export MAD_MAX_ROUNDS=3
+        try:
+            mad_max_rounds = int(os.getenv("MAD_MAX_ROUNDS", "2"))
+        except ValueError:
+            mad_max_rounds = 2
+
+        mad_skip_round_on_consensus = os.getenv("MAD_EARLY_TERMINATION", "true").strip().lower() in {
+            "1",
+            "true",
+            "yes",
+            "y",
+            "on",
+        }
+
+        try:
+            mad_max_total_time_ms_raw = os.getenv("MAD_MAX_TOTAL_TIME_MS", "").strip()
+            mad_max_total_time_ms = int(mad_max_total_time_ms_raw) if mad_max_total_time_ms_raw else None
+        except ValueError:
+            mad_max_total_time_ms = None
+
         if self.mad_mode == "mad3":
-            self.mad = MultiAgentDebateV3(skip_round_2_on_consensus=True)
+            self.mad = MultiAgentDebateV3(
+                skip_round_2_on_consensus=mad_skip_round_on_consensus,
+                max_rounds=mad_max_rounds,
+                max_total_time_ms=mad_max_total_time_ms,
+            )
         elif self.mad_mode == "mad5":
-            self.mad = MultiAgentDebateV5(skip_round_2_on_consensus=True)
+            self.mad = MultiAgentDebateV5(
+                skip_round_2_on_consensus=mad_skip_round_on_consensus,
+                max_rounds=mad_max_rounds,
+                max_total_time_ms=mad_max_total_time_ms,
+            )
         else:
             raise ValueError(
                 f"Unsupported mad_mode='{mad_mode}'. Use 'mad3' or 'mad5'."

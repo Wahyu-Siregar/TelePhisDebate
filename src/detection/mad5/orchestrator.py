@@ -33,11 +33,14 @@ class DebateResult:
     rounds_executed: int
     consensus_reached: bool
     consensus_type: str
+    consensus_round: int | None
+    stop_reason: str  # consensus | max_rounds | timeout
 
     # Agent responses
     agent_votes: dict[str, str]
     round_1_summary: list[dict]
     round_2_summary: list[dict] | None
+    round_summaries: list[list[dict]]
 
     # Metadata
     total_tokens: int
@@ -51,9 +54,12 @@ class DebateResult:
             "rounds_executed": self.rounds_executed,
             "consensus_reached": self.consensus_reached,
             "consensus_type": self.consensus_type,
+            "consensus_round": self.consensus_round,
+            "stop_reason": self.stop_reason,
             "agent_votes": self.agent_votes,
             "round_1_summary": self.round_1_summary,
             "round_2_summary": self.round_2_summary,
+            "round_summaries": self.round_summaries,
             "total_tokens": self.total_tokens,
             "total_processing_time_ms": self.total_processing_time_ms,
         }
@@ -62,8 +68,15 @@ class DebateResult:
 class MultiAgentDebate:
     """Five-agent MAD implementation."""
 
-    def __init__(self, skip_round_2_on_consensus: bool = True):
+    def __init__(
+        self,
+        skip_round_2_on_consensus: bool = True,
+        max_rounds: int = 2,
+        max_total_time_ms: int | None = None,
+    ):
         self.skip_round_2_on_consensus = skip_round_2_on_consensus
+        self.max_rounds = max(1, int(max_rounds or 2))
+        self.max_total_time_ms = int(max_total_time_ms) if max_total_time_ms else None
         self.agents = {
             "detector": DetectorAgent(),
             "critic": CriticAgent(),
@@ -104,39 +117,68 @@ class MultiAgentDebate:
             "recent_topics": [],
         }
 
+        rounds: list[list[AgentResponse]] = []
+        consensus_round: int | None = None
+        stop_reason = "max_rounds"
+
         round_1_responses = self._run_round_1(
             message_data=message_data,
             context=context,
             previous_result=single_shot_result,
             parallel=parallel,
         )
+        rounds.append(round_1_responses)
 
         consensus, _, _ = self.aggregator.check_consensus(round_1_responses)
+        if consensus:
+            consensus_round = 1
+            if self.skip_round_2_on_consensus and self.max_rounds <= 1:
+                stop_reason = "consensus"
 
-        round_2_responses = None
-        if not consensus or not self.skip_round_2_on_consensus:
-            round_2_responses = self._run_round_2(
+        previous_round = round_1_responses
+        for round_idx in range(2, self.max_rounds + 1):
+            if self.max_total_time_ms is not None:
+                elapsed_ms = int((time.time() - start_time) * 1000)
+                if elapsed_ms >= self.max_total_time_ms:
+                    stop_reason = "timeout"
+                    break
+
+            if self.skip_round_2_on_consensus:
+                consensus_now, _, _ = self.aggregator.check_consensus(previous_round)
+                if consensus_now:
+                    stop_reason = "consensus"
+                    break
+
+            next_round = self._run_deliberation_round(
                 message_data=message_data,
-                round_1_responses=round_1_responses,
+                previous_round_responses=previous_round,
                 context=context,
                 parallel=parallel,
             )
+            rounds.append(next_round)
+            previous_round = next_round
 
-        aggregated = self.aggregator.aggregate(round_1_responses, round_2_responses)
+            consensus_now, _, _ = self.aggregator.check_consensus(next_round)
+            if consensus_now and consensus_round is None:
+                consensus_round = round_idx
+
+        aggregated = self.aggregator.aggregate_rounds(rounds)
         total_time = int((time.time() - start_time) * 1000)
 
+        round_summaries = [[response.to_dict() for response in resp_round] for resp_round in rounds]
         return DebateResult(
             variant="mad5",
             decision=aggregated.decision,
             confidence=aggregated.confidence,
-            rounds_executed=2 if round_2_responses else 1,
+            rounds_executed=len(rounds),
             consensus_reached=aggregated.consensus_reached,
             consensus_type=aggregated.consensus_type,
+            consensus_round=consensus_round if aggregated.consensus_reached else None,
+            stop_reason=stop_reason,
             agent_votes=aggregated.agent_votes,
-            round_1_summary=[response.to_dict() for response in round_1_responses],
-            round_2_summary=[response.to_dict() for response in round_2_responses]
-            if round_2_responses
-            else None,
+            round_1_summary=round_summaries[0],
+            round_2_summary=round_summaries[1] if len(round_summaries) > 1 else None,
+            round_summaries=round_summaries,
             total_tokens=aggregated.total_tokens,
             total_processing_time_ms=total_time,
         )
@@ -177,14 +219,14 @@ class MultiAgentDebate:
             for agent in self.agents.values()
         ]
 
-    def _run_round_2(
+    def _run_deliberation_round(
         self,
         message_data: dict,
-        round_1_responses: list[AgentResponse],
+        previous_round_responses: list[AgentResponse],
         context: dict,
         parallel: bool,
     ) -> list[AgentResponse]:
-        response_map = {response.agent_type: response for response in round_1_responses}
+        response_map = {response.agent_type: response for response in previous_round_responses}
 
         if parallel:
             responses: list[AgentResponse] = []
@@ -196,7 +238,7 @@ class MultiAgentDebate:
                         continue
                     other_responses = [
                         response
-                        for response in round_1_responses
+                        for response in previous_round_responses
                         if response.agent_type != agent.agent_type
                     ]
                     futures[
@@ -233,7 +275,7 @@ class MultiAgentDebate:
                 continue
             other_responses = [
                 response
-                for response in round_1_responses
+                for response in previous_round_responses
                 if response.agent_type != agent.agent_type
             ]
             responses.append(

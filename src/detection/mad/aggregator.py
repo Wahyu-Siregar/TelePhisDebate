@@ -133,8 +133,31 @@ class VotingAggregator:
         Returns:
             AggregatedDecision with final verdict
         """
-        # Use Round 2 responses if available
-        final_responses = round_2_responses if round_2_responses else responses
+        return self.aggregate_rounds([responses] + ([round_2_responses] if round_2_responses else []))
+
+    def aggregate_rounds(
+        self,
+        rounds: list[list[AgentResponse]],
+    ) -> AggregatedDecision:
+        """
+        Aggregate multi-round agent responses into final decision.
+
+        Decision is computed from the final round's responses; metadata (tokens/time)
+        is accumulated across all rounds.
+        """
+        if not rounds or not rounds[0]:
+            return AggregatedDecision(
+                decision="SUSPICIOUS",
+                confidence=0.5,
+                consensus_reached=False,
+                consensus_type="",
+                rounds_used=0,
+                total_tokens=0,
+                total_processing_time_ms=0,
+            )
+
+        round_1 = rounds[0]
+        final_responses = rounds[-1]
         
         # Calculate weighted scores
         phishing_score = 0.0
@@ -186,15 +209,13 @@ class VotingAggregator:
         else:
             consensus_type = "weighted"
         
-        # Calculate totals
-        total_tokens = sum(
-            r.tokens_input + r.tokens_output 
-            for r in responses + (round_2_responses or [])
-        )
-        total_time = sum(
-            r.processing_time_ms 
-            for r in responses + (round_2_responses or [])
-        )
+        # Calculate totals across all rounds
+        all_responses: list[AgentResponse] = []
+        for r in rounds:
+            all_responses.extend(r)
+
+        total_tokens = sum(r.tokens_input + r.tokens_output for r in all_responses)
+        total_time = sum(r.processing_time_ms for r in all_responses)
         
         return AggregatedDecision(
             decision=decision,
@@ -203,9 +224,10 @@ class VotingAggregator:
             weighted_score=phishing_prob,
             consensus_reached=consensus_reached,
             consensus_type=consensus_type,
-            rounds_used=2 if round_2_responses else 1,
-            round_1_responses=[r.to_dict() for r in responses],
-            round_2_responses=[r.to_dict() for r in round_2_responses] if round_2_responses else [],
+            rounds_used=len(rounds),
+            round_1_responses=[r.to_dict() for r in round_1],
+            # Keep "round_2_responses" as "post-round-1 deliberation responses" for compatibility.
+            round_2_responses=[r.to_dict() for r in final_responses] if len(rounds) > 1 else [],
             total_tokens=total_tokens,
             total_processing_time_ms=total_time
         )

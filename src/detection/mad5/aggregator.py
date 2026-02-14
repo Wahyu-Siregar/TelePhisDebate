@@ -96,7 +96,26 @@ class VotingAggregator:
         responses: list[AgentResponse],
         round_2_responses: list[AgentResponse] | None = None,
     ) -> AggregatedDecision:
-        final_responses = round_2_responses if round_2_responses else responses
+        return self.aggregate_rounds([responses] + ([round_2_responses] if round_2_responses else []))
+
+    def aggregate_rounds(
+        self,
+        rounds: list[list[AgentResponse]],
+    ) -> AggregatedDecision:
+        """Aggregate multi-round responses; decision comes from final round."""
+        if not rounds or not rounds[0]:
+            return AggregatedDecision(
+                decision="SUSPICIOUS",
+                confidence=0.5,
+                consensus_reached=False,
+                consensus_type="",
+                rounds_used=0,
+                total_tokens=0,
+                total_processing_time_ms=0,
+            )
+
+        round_1 = rounds[0]
+        final_responses = rounds[-1]
 
         phishing_score = 0.0
         legitimate_score = 0.0
@@ -135,7 +154,9 @@ class VotingAggregator:
         else:
             consensus_type = "weighted"
 
-        all_responses = responses + (round_2_responses or [])
+        all_responses: list[AgentResponse] = []
+        for r in rounds:
+            all_responses.extend(r)
         total_tokens = sum(r.tokens_input + r.tokens_output for r in all_responses)
         total_time = sum(r.processing_time_ms for r in all_responses)
 
@@ -146,7 +167,7 @@ class VotingAggregator:
             weighted_score=phishing_prob,
             consensus_reached=consensus_reached,
             consensus_type=consensus_type,
-            rounds_used=2 if round_2_responses else 1,
+            rounds_used=len(rounds),
             total_tokens=total_tokens,
             total_processing_time_ms=total_time,
         )
