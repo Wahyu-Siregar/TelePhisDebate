@@ -1,7 +1,9 @@
 """
 LLM client factory/router.
 
-Keeps a single in-process client instance based on env var LLM_PROVIDER.
+Supported providers:
+- deepseek: uses DeepSeekClient (OpenAI-compatible)
+- openrouter: uses OpenRouterClient (OpenAI-compatible), default model is GPT-OSS free
 """
 
 from __future__ import annotations
@@ -36,16 +38,16 @@ def llm() -> LLMClient:
         return _client
 
     if provider == "deepseek":
-        # Lazy import so non-DeepSeek installs don't require the `openai` dependency at import time.
         from .deepseek_client import DeepSeekClient
 
         _client = DeepSeekClient()
-    elif provider == "gemini":
-        from .gemini_client import GeminiClient
+    elif provider == "openrouter":
+        from .openrouter_client import OpenRouterClient
 
-        _client = GeminiClient()
+        _client = OpenRouterClient()
     else:
-        raise ValueError(f"Unsupported LLM_PROVIDER='{provider}'. Use 'deepseek' or 'gemini'.")
+        raise ValueError(f"Unsupported LLM_PROVIDER='{provider}'. Use 'deepseek' or 'openrouter'.")
 
     _provider = provider
     return _client
+

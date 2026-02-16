@@ -1,5 +1,5 @@
 /**
- * TelePhisDebate DeepSeek vs Gemini comparison page.
+ * TelePhisDebate provider comparison: DeepSeek vs OpenRouter (GPT-OSS free).
  */
 
 const API_BASE = '';
@@ -29,22 +29,22 @@ function formatDelta(value, type) {
     return `${sign}${Number(value).toFixed(2)}`;
 }
 
-function compareWinner(deepseekValue, geminiValue, higherBetter) {
+function compareWinner(vDeepSeek, vOpenRouter, higherBetter) {
     const EPS = 1e-9;
-    if (deepseekValue == null || geminiValue == null) {
-        return { winner: 'N/A', geminiBetter: false, tie: false };
+    if (vDeepSeek == null || vOpenRouter == null) {
+        return { winner: 'N/A', openrouterBetter: false, tie: false };
     }
-    if (Math.abs(geminiValue - deepseekValue) <= EPS) {
-        return { winner: 'Tie', geminiBetter: false, tie: true };
+    if (Math.abs(vOpenRouter - vDeepSeek) <= EPS) {
+        return { winner: 'Tie', openrouterBetter: false, tie: true };
     }
 
     if (higherBetter) {
-        if (geminiValue > deepseekValue) return { winner: 'Gemini', geminiBetter: true, tie: false };
-        return { winner: 'DeepSeek', geminiBetter: false, tie: false };
+        if (vOpenRouter > vDeepSeek) return { winner: 'OpenRouter', openrouterBetter: true, tie: false };
+        return { winner: 'DeepSeek', openrouterBetter: false, tie: false };
     }
 
-    if (geminiValue < deepseekValue) return { winner: 'Gemini', geminiBetter: true, tie: false };
-    return { winner: 'DeepSeek', geminiBetter: false, tie: false };
+    if (vOpenRouter < vDeepSeek) return { winner: 'OpenRouter', openrouterBetter: true, tie: false };
+    return { winner: 'DeepSeek', openrouterBetter: false, tie: false };
 }
 
 function setRunMeta(prefix, runData) {
@@ -72,14 +72,14 @@ function setRunMeta(prefix, runData) {
 function renderMetricRows(data) {
     const tbody = document.getElementById('providerMetricsBody');
     const deepseek = data.deepseek?.metrics;
-    const gemini = data.gemini?.metrics;
+    const openrouter = data.openrouter?.metrics;
     const deltas = data.deltas || {};
 
-    if (!deepseek || !gemini) {
+    if (!deepseek || !openrouter) {
         tbody.innerHTML = `
             <tr>
                 <td colspan="5" class="loading">
-                    Data belum lengkap. Jalankan evaluasi untuk deepseek dan gemini (mad_mode & eval_mode sama) lalu simpan ke results/.
+                    Data belum lengkap. Jalankan evaluasi untuk deepseek dan openrouter (mad_mode & eval_mode sama) lalu simpan ke results/.
                 </td>
             </tr>
         `;
@@ -88,20 +88,18 @@ function renderMetricRows(data) {
 
     tbody.innerHTML = METRICS_CONFIG.map(cfg => {
         const vD = deepseek[cfg.key];
-        const vG = gemini[cfg.key];
+        const vO = openrouter[cfg.key];
         const delta = deltas[cfg.key];
-        const verdict = compareWinner(vD, vG, cfg.higherBetter);
-        const deltaClass = verdict.tie
-            ? 'neutral'
-            : (verdict.geminiBetter ? 'better' : 'worse');
+        const verdict = compareWinner(vD, vO, cfg.higherBetter);
+        const stateClass = verdict.tie ? 'neutral' : (verdict.openrouterBetter ? 'better' : 'worse');
 
         return `
             <tr>
                 <td>${cfg.label}</td>
                 <td>${formatMetricValue(vD, cfg.type)}</td>
-                <td>${formatMetricValue(vG, cfg.type)}</td>
-                <td><span class="delta ${deltaClass}">${formatDelta(delta, cfg.type)}</span></td>
-                <td><span class="winner-tag ${deltaClass}">${verdict.winner}</span></td>
+                <td>${formatMetricValue(vO, cfg.type)}</td>
+                <td><span class="delta ${stateClass}">${formatDelta(delta, cfg.type)}</span></td>
+                <td><span class="winner-tag ${stateClass}">${verdict.winner}</span></td>
             </tr>
         `;
     }).join('');
@@ -110,9 +108,9 @@ function renderMetricRows(data) {
 function renderSummary(data) {
     const summaryEl = document.getElementById('providerSummary');
     const deepseek = data.deepseek?.metrics;
-    const gemini = data.gemini?.metrics;
+    const openrouter = data.openrouter?.metrics;
 
-    if (!deepseek || !gemini) {
+    if (!deepseek || !openrouter) {
         summaryEl.innerHTML = `
             <p class="compare-empty">
                 Data perbandingan belum lengkap. Jalankan evaluasi untuk kedua provider dan simpan hasilnya.
@@ -121,14 +119,14 @@ function renderSummary(data) {
         return;
     }
 
-    const f1Winner = compareWinner(deepseek.f1_score, gemini.f1_score, true).winner;
-    const accWinner = compareWinner(deepseek.accuracy, gemini.accuracy, true).winner;
-    const timeWinner = compareWinner(deepseek.avg_time_ms, gemini.avg_time_ms, false).winner;
+    const f1Winner = compareWinner(deepseek.f1_score, openrouter.f1_score, true).winner;
+    const accWinner = compareWinner(deepseek.accuracy, openrouter.accuracy, true).winner;
+    const timeWinner = compareWinner(deepseek.avg_time_ms, openrouter.avg_time_ms, false).winner;
 
     summaryEl.innerHTML = `
         <p><strong>Model quality:</strong> Accuracy winner: <strong>${accWinner}</strong>, F1 winner: <strong>${f1Winner}</strong>.</p>
         <p><strong>Performance:</strong> Time winner: <strong>${timeWinner}</strong>.</p>
-        <p><strong>Note:</strong> Bandingkan run pada dataset yang sama dan setting MAD yang sama (MAD_MAX_ROUNDS, early termination) untuk hasil yang fair.</p>
+        <p><strong>Note:</strong> Pastikan dataset dan konfigurasi MAD sama untuk run yang dibandingkan.</p>
     `;
 }
 
@@ -154,13 +152,13 @@ async function loadProviderComparison() {
                 <tr><td colspan="5" class="loading">No data</td></tr>
             `;
             setRunMeta('deepseek', null);
-            setRunMeta('gemini', null);
+            setRunMeta('openrouter', null);
             return;
         }
 
         const data = await response.json();
         setRunMeta('deepseek', data.deepseek);
-        setRunMeta('gemini', data.gemini);
+        setRunMeta('openrouter', data.openrouter);
         renderMetricRows(data);
         renderSummary(data);
 
@@ -168,9 +166,9 @@ async function loadProviderComparison() {
         tsEl.textContent = `Updated ${now.toLocaleString('id-ID')}`;
 
         const dFile = data.deepseek?.files?.metrics || '—';
-        const gFile = data.gemini?.files?.metrics || '—';
+        const oFile = data.openrouter?.files?.metrics || '—';
         document.getElementById('providerCompareFooterInfo').textContent =
-            `Mode: ${data.requested_eval_mode || evalMode} | MAD: ${(data.requested_mad_mode || madMode).toUpperCase()} | DeepSeek=${dFile} | Gemini=${gFile}`;
+            `Mode: ${data.requested_eval_mode || evalMode} | MAD: ${(data.requested_mad_mode || madMode).toUpperCase()} | DeepSeek=${dFile} | OpenRouter=${oFile}`;
     } catch (error) {
         console.error('Error loading provider comparison:', error);
         document.getElementById('providerCompareTimestamp').textContent = 'Error loading data';

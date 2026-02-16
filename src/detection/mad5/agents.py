@@ -20,6 +20,20 @@ OUTPUT_SCHEMA = (
 )
 
 
+def _is_fatal_llm_error(exc: Exception) -> bool:
+    """
+    Detect non-recoverable LLM errors (usually misconfiguration).
+
+    If these happen, silently defaulting to SUSPICIOUS will poison evaluations.
+    """
+    name = exc.__class__.__name__
+    msg = str(exc)
+    fatal_markers = ("NotFoundError", "AuthenticationError", "PermissionDeniedError")
+    if name in fatal_markers:
+        return True
+    return any(m in msg for m in fatal_markers)
+
+
 @dataclass
 class AgentResponse:
     """Response from a single MAD v5 agent."""
@@ -95,7 +109,9 @@ class BaseAgent(ABC):
             if updated.agent_type != self.agent_type:
                 updated.agent_type = self.agent_type
             return updated
-        except Exception:
+        except Exception as exc:
+            if _is_fatal_llm_error(exc):
+                raise
             return own_response
 
     def _query_llm(self, prompt: str) -> AgentResponse:
@@ -143,6 +159,8 @@ class BaseAgent(ABC):
                 processing_time_ms=response.get("processing_time_ms", 0),
             )
         except Exception as exc:
+            if _is_fatal_llm_error(exc):
+                raise
             return AgentResponse(
                 agent_type=self.agent_type,
                 stance="SUSPICIOUS",

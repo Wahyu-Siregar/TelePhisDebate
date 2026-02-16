@@ -38,6 +38,7 @@ Output dalam format JSON strict:
 }
 
 PENTING:
+- Output WAJIB hanya 1 objek JSON valid. Jangan tulis markdown, code fence, atau teks lain di luar JSON.
 - Berikan confidence tinggi (>0.85) hanya jika sangat yakin
 - Gunakan "SUSPICIOUS" jika ragu antara SAFE dan PHISHING
 - Jangan memberi label PHISHING hanya karena URL shortener jika evidence expand/trusted mendukung LEGITIMATE

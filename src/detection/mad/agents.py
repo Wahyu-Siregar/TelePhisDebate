@@ -8,6 +8,21 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from src.llm import deepseek
+from src.llm.json_utils import parse_json_object
+
+
+def _is_fatal_llm_error(exc: Exception) -> bool:
+    """
+    Detect non-recoverable LLM errors (usually misconfiguration).
+
+    If these happen, silently defaulting to SUSPICIOUS will poison evaluations.
+    """
+    name = exc.__class__.__name__
+    msg = str(exc)
+    fatal_markers = ("NotFoundError", "AuthenticationError", "PermissionDeniedError")
+    if name in fatal_markers:
+        return True
+    return any(m in msg for m in fatal_markers)
 
 
 @dataclass
@@ -91,13 +106,31 @@ class BaseAgent(ABC):
                 json_mode=True
             )
             
-            content = response["content"]
-            if isinstance(content, str):
-                content = json.loads(content)
+            content = parse_json_object(response.get("content"))
+
+            # If parsing yields nothing, capture a short raw excerpt for debugging/evaluation.
+            if not content:
+                raw = response.get("content")
+                if isinstance(raw, str) and raw.strip():
+                    content = {"evidence": {"raw_excerpt": raw.strip()[:240]}}
+            else:
+                # If the model returned a dict but omitted most fields, keep an excerpt anyway.
+                stance_missing = "stance" not in content
+                confidence_missing = "confidence" not in content
+                if stance_missing or confidence_missing:
+                    raw = response.get("raw_content") or response.get("content")
+                    if isinstance(raw, str) and raw.strip():
+                        content.setdefault("evidence", {})
+                        if isinstance(content["evidence"], dict) and "raw_excerpt" not in content["evidence"]:
+                            content["evidence"]["raw_excerpt"] = raw.strip()[:240]
             
             return AgentResponse(
                 agent_type=self.agent_type,
-                stance=content.get("stance", "SUSPICIOUS"),
+                stance=(
+                    "LEGITIMATE"
+                    if str(content.get("stance", "")).strip().upper() in {"SAFE", "AMAN"}
+                    else content.get("stance", "SUSPICIOUS")
+                ),
                 confidence=float(content.get("confidence", 0.5)),
                 key_arguments=content.get("key_arguments", []),
                 evidence=content.get("evidence", {}),
@@ -107,6 +140,8 @@ class BaseAgent(ABC):
             )
             
         except Exception as e:
+            if _is_fatal_llm_error(e):
+                raise
             return AgentResponse(
                 agent_type=self.agent_type,
                 stance="SUSPICIOUS",
@@ -149,13 +184,29 @@ class BaseAgent(ABC):
                 json_mode=True
             )
             
-            content = response["content"]
-            if isinstance(content, str):
-                content = json.loads(content)
+            content = parse_json_object(response.get("content"))
+
+            if not content:
+                raw = response.get("content")
+                if isinstance(raw, str) and raw.strip():
+                    content = {"evidence": {"raw_excerpt": raw.strip()[:240]}}
+            else:
+                stance_missing = "stance" not in content
+                confidence_missing = "confidence" not in content
+                if stance_missing or confidence_missing:
+                    raw = response.get("raw_content") or response.get("content")
+                    if isinstance(raw, str) and raw.strip():
+                        content.setdefault("evidence", {})
+                        if isinstance(content["evidence"], dict) and "raw_excerpt" not in content["evidence"]:
+                            content["evidence"]["raw_excerpt"] = raw.strip()[:240]
             
             return AgentResponse(
                 agent_type=self.agent_type,
-                stance=content.get("stance", own_response.stance),
+                stance=(
+                    "LEGITIMATE"
+                    if str(content.get("stance", "")).strip().upper() in {"SAFE", "AMAN"}
+                    else content.get("stance", own_response.stance)
+                ),
                 confidence=float(content.get("confidence", own_response.confidence)),
                 key_arguments=content.get("key_arguments", own_response.key_arguments),
                 evidence=content.get("evidence", own_response.evidence),
@@ -164,7 +215,9 @@ class BaseAgent(ABC):
                 processing_time_ms=response.get("processing_time_ms", 0)
             )
             
-        except Exception:
+        except Exception as e:
+            if _is_fatal_llm_error(e):
+                raise
             return own_response  # Keep original stance on error
     
     @abstractmethod
@@ -210,7 +263,7 @@ class BaseAgent(ABC):
         parts.append("Pertimbangkan argumen agent lain. Apakah ada blind spot dalam analisis Anda?")
         parts.append("Anda boleh mempertahankan atau mengubah stance jika ada bukti kuat.")
         parts.append("")
-        parts.append("Output JSON dengan format yang sama.")
+        parts.append("Output WAJIB hanya 1 objek JSON valid dengan format yang sama (tanpa markdown/teks lain).")
         
         return "\n".join(parts)
 
@@ -247,9 +300,15 @@ class ContentAnalyzer(BaseAgent):
                         "style_deviation": 0.0-1.0,
                         "urgency_score": 0.0-1.0,
                         "social_engineering_detected": true/false,
-                        "linguistic_anomalies": ["anomali1", ...]
+                    "linguistic_anomalies": ["anomali1", ...]
                     }
-                    }"""
+                    }
+
+                    PENTING:
+                    - Output WAJIB hanya 1 objek JSON valid sesuai schema di atas.
+                    - Jangan gunakan markdown/code fence. Jangan tambah teks di luar JSON.
+                    - Nilai stance harus salah satu: PHISHING, SUSPICIOUS, LEGITIMATE.
+                    - confidence harus angka 0.0-1.0."""
     
     def _construct_prompt(
         self,
@@ -334,7 +393,13 @@ class SecurityValidator(BaseAgent):
                     "tld_suspicious": true/false,
                     "security_checks": {"check1": "result", ...}
                 }
-                }"""
+                }
+
+                PENTING:
+                - Output WAJIB hanya 1 objek JSON valid sesuai schema di atas.
+                - Jangan gunakan markdown/code fence. Jangan tambah teks di luar JSON.
+                - Nilai stance harus salah satu: PHISHING, SUSPICIOUS, LEGITIMATE.
+                - confidence harus angka 0.0-1.0."""
     
     def _construct_prompt(
         self,
@@ -466,7 +531,13 @@ class SocialContextEvaluator(BaseAgent):
                     "timing_appropriate": true/false,
                     "academic_context_match": true/false
                 }
-                }"""
+                }
+
+                PENTING:
+                - Output WAJIB hanya 1 objek JSON valid sesuai schema di atas.
+                - Jangan gunakan markdown/code fence. Jangan tambah teks di luar JSON.
+                - Nilai stance harus salah satu: PHISHING, SUSPICIOUS, LEGITIMATE.
+                - confidence harus angka 0.0-1.0."""
     
     def _construct_prompt(
         self,

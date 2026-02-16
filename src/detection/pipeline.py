@@ -10,6 +10,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
 
+from src.config import config
 from .triage import RuleBasedTriage, TriageResult
 from .single_shot import SingleShotClassifier
 from .single_shot.classifier import ClassificationResult
@@ -284,7 +285,11 @@ class PhishingDetectionPipeline:
             triage_result=triage_result.to_dict(),
             single_shot_result=single_shot_result.to_dict(),
             url_checks=url_checks,
-            parallel=True
+            # OpenRouter free tier is sensitive to burst; default to sequential agent calls.
+            parallel=(
+                (config.LLM_PROVIDER or "deepseek").strip().lower() != "openrouter"
+                or bool(getattr(config, "OPENROUTER_PARALLEL", False))
+            )
         )
         
         total_tokens += mad_result.total_tokens

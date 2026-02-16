@@ -19,6 +19,20 @@ from .agents import (
 from .aggregator import VotingAggregator
 
 
+def _is_fatal_llm_error(exc: Exception) -> bool:
+    """
+    Detect non-recoverable LLM errors (usually misconfiguration).
+
+    If these happen, silently defaulting to SUSPICIOUS will poison evaluations.
+    """
+    name = exc.__class__.__name__
+    msg = str(exc)
+    fatal_markers = ("NotFoundError", "AuthenticationError", "PermissionDeniedError")
+    if name in fatal_markers:
+        return True
+    return any(m in msg for m in fatal_markers)
+
+
 @dataclass
 class DebateResult:
     """Result from MAD v5 debate."""
@@ -204,6 +218,8 @@ class MultiAgentDebate:
                     try:
                         responses.append(future.result())
                     except Exception as exc:
+                        if _is_fatal_llm_error(exc):
+                            raise
                         responses.append(
                             AgentResponse(
                                 agent_type=agent.agent_type,
@@ -256,6 +272,8 @@ class MultiAgentDebate:
                     try:
                         responses.append(future.result())
                     except Exception as exc:
+                        if _is_fatal_llm_error(exc):
+                            raise
                         responses.append(
                             AgentResponse(
                                 agent_type=agent.agent_type,

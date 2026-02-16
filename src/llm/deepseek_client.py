@@ -22,7 +22,7 @@ class DeepSeekClient:
             api_key=config.DEEPSEEK_API_KEY,
             base_url=config.DEEPSEEK_BASE_URL
         )
-        
+
         # Token usage tracking
         self.total_tokens_input = 0
         self.total_tokens_output = 0

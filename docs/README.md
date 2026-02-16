@@ -18,7 +18,7 @@
    - 4.2 [Stage 2: Single-Shot LLM](#42-stage-2-single-shot-llm)
    - 4.3 [Stage 3: Multi-Agent Debate (MAD)](#43-stage-3-multi-agent-debate-mad)
 5. [Komponen Pendukung](#5-komponen-pendukung)
-   - 5.1 [DeepSeek LLM Client](#51-deepseek-llm-client)
+   - 5.1 [LLM Client (DeepSeek + OpenRouter)](#51-llm-client-deepseek--openrouter)
    - 5.2 [URL Security Checker](#52-url-security-checker)
    - 5.3 [Database (Supabase)](#53-database-supabase)
 6. [Telegram Bot](#6-telegram-bot)
@@ -51,7 +51,7 @@
 | Tahap | Metode | Tujuan |
 |-------|--------|--------|
 | **Stage 1** | Rule-Based Triage | Filter cepat berbasis aturan untuk kasus jelas |
-| **Stage 2** | Single-Shot LLM (DeepSeek) | Klasifikasi AI untuk kasus non-trivial |
+| **Stage 2** | Single-Shot LLM (Configurable Provider) | Klasifikasi AI untuk kasus non-trivial |
 | **Stage 3** | Multi-Agent Debate (MAD) | 3 agen AI berdebat untuk kasus ambigu |
 
 **Keunggulan arsitektur ini:**
@@ -159,8 +159,12 @@ TelePhisDebate/
 │   │       ├── orchestrator.py
 │   │       └── aggregator.py
 │   │
-│   ├── llm/                   # LLM Client
-│   │   └── deepseek_client.py # DeepSeekClient — wrapper OpenAI API
+│   ├── llm/                   # LLM Client (provider: deepseek/openrouter)
+│   │   ├── __init__.py        # Public API (`llm()` / provider factory)
+│   │   ├── factory.py         # LLMFactory — pilih provider via env `LLM_PROVIDER`
+│   │   ├── deepseek_client.py # DeepSeekClient — DeepSeek (OpenAI-compatible)
+│   │   ├── openrouter_client.py # OpenRouterClient — OpenRouter (OpenAI-compatible)
+│   │   └── json_utils.py      # Helper parsing JSON toleran (untuk output structured)
 │   │
 │   ├── database/              # Database (Supabase)
 │   │   └── client.py          # Supabase client singleton
@@ -342,7 +346,11 @@ Input: https://bit.ly/PendaftaranSeminarTI
 **File:** `src/detection/single_shot/`
 **Class:** `SingleShotClassifier`
 
-Menggunakan DeepSeek LLM dengan satu kali panggilan API untuk mengklasifikasi pesan.
+Menggunakan **LLM provider yang terkonfigurasi** (`LLM_PROVIDER`) dengan satu kali panggilan API untuk mengklasifikasi pesan.
+
+Provider yang didukung saat ini:
+- `deepseek` (default) → model: `deepseek-chat`
+- `openrouter` → model: `OPENROUTER_MODEL` (mis. `google/gemini-2.5-flash-lite`)
 
 #### Prompt Engineering
 
@@ -360,12 +368,12 @@ Menggunakan DeepSeek LLM dengan satu kali panggilan API untuk mengklasifikasi pe
 
 #### Parameter LLM
 
-| Parameter | Nilai | Alasan |
-|-----------|-------|--------|
-| `model` | `deepseek-chat` | Model utama DeepSeek |
+| Parameter | Default | Catatan |
+|-----------|---------|--------|
+| `model` | `deepseek-chat` (provider `deepseek`) | Untuk provider `openrouter`, gunakan `OPENROUTER_MODEL` |
 | `temperature` | `0.3` | Rendah untuk konsistensi klasifikasi |
 | `max_tokens` | `500` | Cukup untuk reasoning + JSON |
-| `response_format` | `json_object` | Memaksa output JSON valid |
+| `response_format` | `json_object` | Untuk stabilitas parsing, gunakan model yang mendukung structured output/`response_format` (sangat direkomendasikan untuk OpenRouter) |
 
 #### Logika Eskalasi ke MAD
 
@@ -487,19 +495,25 @@ Hasil MAD menyertakan metadata untuk audit/debug:
 
 ## 5. Komponen Pendukung
 
-### 5.1 DeepSeek LLM Client
+### 5.1 LLM Client (DeepSeek + OpenRouter)
 
-**File:** `src/llm/deepseek_client.py`
-**Class:** `DeepSeekClient`
+Sistem mendukung 2 provider LLM yang dipilih lewat environment variable `LLM_PROVIDER`.
 
-Wrapper untuk DeepSeek API menggunakan library `openai` (API-compatible):
+#### A. DeepSeek
 
-| Fitur | Detail |
-|-------|--------|
-| **Retry Logic** | 3 attempts dengan exponential backoff (2s, 4s, 8s) via `tenacity` |
-| **Token Tracking** | Total input/output tokens per session |
-| **JSON Mode** | Mendukung `response_format: json_object` |
-| **Singleton** | Instance tunggal via `deepseek()` function |
+**File:** `src/llm/deepseek_client.py`  
+**Class:** `DeepSeekClient`  
+Model: `deepseek-chat` (OpenAI-compatible).
+
+#### B. OpenRouter
+
+**File:** `src/llm/openrouter_client.py`  
+**Class:** `OpenRouterClient`  
+Model: dikonfigurasi lewat `OPENROUTER_MODEL` (OpenAI-compatible via base URL OpenRouter).
+
+Catatan penting:
+- Untuk pipeline yang mengandalkan output JSON, **pilih model OpenRouter yang mendukung structured output/`response_format`** (contoh yang stabil pada evaluasi terbaru: `google/gemini-2.5-flash-lite`).
+- Untuk free-tier OpenRouter, throttle/parallel tuning tersedia di `OPENROUTER_MAX_RPM` dan `OPENROUTER_PARALLEL`.
 
 ### 5.2 URL Security Checker
 
@@ -879,7 +893,7 @@ Dashboard web berbasis Flask untuk memonitor aktivitas bot secara real-time.
 | **Debate History** | Kartu collapsible per debat MAD — klik untuk expand detail agen |
 | **Recent Messages** | Tabel scrollable semua pesan yang diproses |
 | **Inference Activity** | 3 kartu (Input Tokens, Output Tokens, API Requests) |
-| **Evaluation Suite** | Halaman `/evaluation`, `/evaluation/compare`, dan `/evaluation/modes` |
+| **Evaluation Suite** | Halaman `/evaluation`, `/evaluation/compare`, `/evaluation/modes`, `/evaluation/providers`, dan `/evaluation/runs` |
 
 **Fitur teknis:**
 - Auto-refresh setiap 30 detik
@@ -911,9 +925,17 @@ Semua konfigurasi dimuat dari environment variables (file `.env`):
 ```env
 # === Wajib ===
 TELEGRAM_BOT_TOKEN=         # Token dari @BotFather
-LLM_PROVIDER=deepseek       # Pilih provider LLM: deepseek (default) / gemini
+LLM_PROVIDER=deepseek       # Pilih provider LLM: deepseek (default) / openrouter
 DEEPSEEK_API_KEY=           # API key DeepSeek (wajib jika LLM_PROVIDER=deepseek)
-GEMINI_API_KEY=             # API key Gemini (wajib jika LLM_PROVIDER=gemini)
+DEEPSEEK_BASE_URL=          # Default: https://api.deepseek.com
+OPENROUTER_API_KEY=         # API key OpenRouter (wajib jika LLM_PROVIDER=openrouter)
+OPENROUTER_BASE_URL=        # Default: https://openrouter.ai/api/v1
+OPENROUTER_MODEL=           # Default: openai/gpt-oss-120b:free (disarankan pilih model yang support structured output untuk evaluasi)
+OPENROUTER_SITE_URL=        # Opsional (recommended) untuk attribution header
+OPENROUTER_APP_NAME=        # Opsional (recommended) untuk attribution header
+# OpenRouter throttling (membantu menghindari 429)
+OPENROUTER_MAX_RPM=12       # Default 12 request/menit (free tier friendly)
+OPENROUTER_PARALLEL=false   # Default false: jalankan debat lebih serial untuk mengurangi burst
 SUPABASE_URL=               # URL project Supabase
 SUPABASE_KEY=               # Service role key Supabase
 
@@ -968,7 +990,7 @@ Pesan masuk di grup Telegram
     │
     ├── Stage 2: SingleShotClassifier.classify()  [ROUTER, bukan hakim akhir]
     │   ├── Construct prompt (konteks pengirim + baseline + triage)
-    │   ├── DeepSeek API call (temperature=0.3, json_mode=True)
+    │   ├── LLM API call (provider dari `LLM_PROVIDER`, temperature=0.3, json_mode jika didukung)
     │   ├── Parse JSON response
     │   └── Evaluasi eskalasi
     │       │
@@ -1005,7 +1027,7 @@ Pesan masuk di grup Telegram
 
 | File | Cakupan | Deskripsi |
 |------|---------|-----------|
-| `test_connections.py` | Integrasi | Tes koneksi ke Telegram, DeepSeek, Supabase, VirusTotal |
+| `test_connections.py` | Integrasi | Tes koneksi ke Telegram, provider LLM (DeepSeek/OpenRouter), Supabase, VirusTotal |
 | `test_bot.py` | Integrasi | Tes inisialisasi bot + koneksi Telegram |
 | `test_triage.py` | Unit | Tes Stage 1 (whitelist, blacklist, behavioral) |
 | `test_single_shot.py` | Unit | Tes Stage 2 (klasifikasi LLM) |
@@ -1038,22 +1060,57 @@ Evaluasi dilakukan pada dua mode:
 Contoh command:
 
 ```bash
-# Pipeline mode - MAD3
-python evaluate.py --dataset data/dataset_mixed_safe_suspicious_phishing.csv --eval-mode pipeline --mad-mode mad3 --output results/mad3
+# Dataset akademik (format: delimiter ';', kolom: chat/tipe)
+DATASET=data/dataset_mixed_akademik.csv
+TEXTCOL=chat
+LABELCOL=tipe
+DELIM=";"
+LIMIT=200
 
-# Pipeline mode - MAD5
-python evaluate.py --dataset data/dataset_mixed_safe_suspicious_phishing.csv --eval-mode pipeline --mad-mode mad5 --output results/mad5
+# DeepSeek (pipeline)
+LLM_PROVIDER=deepseek python evaluate.py --dataset "$DATASET" --eval-mode pipeline --mad-mode mad3 --text-col "$TEXTCOL" --label-col "$LABELCOL" --delimiter "$DELIM" --limit "$LIMIT" --output results/deepseek/mad3
+LLM_PROVIDER=deepseek python evaluate.py --dataset "$DATASET" --eval-mode pipeline --mad-mode mad5 --text-col "$TEXTCOL" --label-col "$LABELCOL" --delimiter "$DELIM" --limit "$LIMIT" --output results/deepseek/mad5
 
-# MAD-only mode - MAD3
-python evaluate.py --dataset data/dataset_mixed_safe_suspicious_phishing.csv --eval-mode mad_only --mad-mode mad3 --output results/mad3_mad_only
+# OpenRouter (pipeline) - pastikan OPENROUTER_MODEL diset (mis. google/gemini-2.5-flash-lite)
+LLM_PROVIDER=openrouter python evaluate.py --dataset "$DATASET" --eval-mode pipeline --mad-mode mad3 --text-col "$TEXTCOL" --label-col "$LABELCOL" --delimiter "$DELIM" --limit "$LIMIT" --output results/openrouter/mad3
+LLM_PROVIDER=openrouter python evaluate.py --dataset "$DATASET" --eval-mode pipeline --mad-mode mad5 --text-col "$TEXTCOL" --label-col "$LABELCOL" --delimiter "$DELIM" --limit "$LIMIT" --output results/openrouter/mad5
 
-# MAD-only mode - MAD5
-python evaluate.py --dataset data/dataset_mixed_safe_suspicious_phishing.csv --eval-mode mad_only --mad-mode mad5 --output results/mad5_mad_only
+# DeepSeek (mad_only)
+LLM_PROVIDER=deepseek python evaluate.py --dataset "$DATASET" --eval-mode mad_only --mad-mode mad3 --text-col "$TEXTCOL" --label-col "$LABELCOL" --delimiter "$DELIM" --limit "$LIMIT" --output results/deepseek/mad3_mad_only
+LLM_PROVIDER=deepseek python evaluate.py --dataset "$DATASET" --eval-mode mad_only --mad-mode mad5 --text-col "$TEXTCOL" --label-col "$LABELCOL" --delimiter "$DELIM" --limit "$LIMIT" --output results/deepseek/mad5_mad_only
+
+# OpenRouter (mad_only)
+LLM_PROVIDER=openrouter python evaluate.py --dataset "$DATASET" --eval-mode mad_only --mad-mode mad3 --text-col "$TEXTCOL" --label-col "$LABELCOL" --delimiter "$DELIM" --limit "$LIMIT" --output results/openrouter/mad3_mad_only
+LLM_PROVIDER=openrouter python evaluate.py --dataset "$DATASET" --eval-mode mad_only --mad-mode mad5 --text-col "$TEXTCOL" --label-col "$LABELCOL" --delimiter "$DELIM" --limit "$LIMIT" --output results/openrouter/mad5_mad_only
 ```
 
 Hasil komparatif dapat dilihat di dashboard:
 - `/evaluation/compare` -> MAD3 vs MAD5 (mode yang sama)
 - `/evaluation/modes` -> Pipeline vs MAD-only (untuk varian MAD yang dipilih)
+- `/evaluation/providers` -> DeepSeek vs OpenRouter
+- `/evaluation/runs` -> Browse semua run evaluasi (historical)
+
+### Hasil Evaluasi Terbaru (Dataset Mixed Akademik, 200 pesan)
+
+Dataset: `data/dataset_mixed_akademik.csv` (limit 200)  
+Distribusi label: `SAFE=127`, `PHISHING=45`, `SUSPICIOUS=28`
+
+Ringkasan (binary metric: PHISHING vs non-PHISHING, detection_rate = PHISHING|SUSPICIOUS terdeteksi dari PHISHING expected):
+
+| Provider | Model | Mode | MAD | Acc | F1 | Precision | Recall | Avg time/msg |
+|---------|-------|------|-----|-----|----|-----------|--------|--------------|
+| DeepSeek | `deepseek-chat` | pipeline | mad3 | 90.5% | 87.5% | 82.4% | 93.3% | 4242ms |
+| DeepSeek | `deepseek-chat` | pipeline | mad5 | 86.0% | 80.4% | 67.2% | 100% | 6214ms |
+| OpenRouter | `google/gemini-2.5-flash-lite` | pipeline | mad3 | 92.5% | 90.1% | 89.1% | 91.1% | 7938ms |
+| OpenRouter | `google/gemini-2.5-flash-lite` | pipeline | mad5 | 91.5% | 88.4% | 84.0% | 93.3% | 14539ms |
+| DeepSeek | `deepseek-chat` | mad_only | mad3 | 90.5% | 87.2% | 83.7% | 91.1% | 5752ms |
+| DeepSeek | `deepseek-chat` | mad_only | mad5 | 85.5% | 82.2% | 71.0% | 97.8% | 7593ms |
+| OpenRouter | `google/gemini-2.5-flash-lite` | mad_only | mad3 | 95.0% | 93.2% | 95.4% | 91.1% | 5219ms |
+| OpenRouter | `google/gemini-2.5-flash-lite` | mad_only | mad5 | 89.0% | 90.1% | 89.1% | 91.1% | 6481ms |
+
+Sumber run (folder `results/`):
+- DeepSeek: `results/deepseek/*`
+- OpenRouter: `results/openrouter/*`
 
 ---
 
@@ -1062,7 +1119,7 @@ Hasil komparatif dapat dilihat di dashboard:
 | Package | Versi | Kegunaan |
 |---------|-------|----------|
 | `python-telegram-bot` | 21.10 | Framework bot Telegram (async) |
-| `openai` | 1.59.9 | Client DeepSeek (OpenAI-compatible API) |
+| `openai` | 1.59.9 | Client LLM (DeepSeek/OpenRouter, OpenAI-compatible API) |
 | `supabase` | 2.11.0 | Client database Supabase (PostgreSQL) |
 | `requests` | 2.32.3 | HTTP requests (sync) |
 | `httpx` | 0.28.1 | HTTP client async (parallel agent calls) |

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluation Runs — TelePhisDebate</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/iconoir-icons/iconoir@7.11.0/css/iconoir.css" />
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a href="/" class="nav-back" title="Back to Dashboard">
+                <i class="iconoir-arrow-left"></i>
+            </a>
+            <span class="nav-icon"><i class="iconoir-shield"></i></span>
+            <span class="nav-title">TelePhisDebate</span>
+            <span class="nav-separator">/</span>
+            <span class="nav-page-title">Evaluation Runs</span>
+        </div>
+        <div class="nav-right">
+            <a href="/evaluation" class="nav-link" title="Latest Evaluation">
+                <i class="iconoir-clipboard-check"></i>
+                <span>Evaluation</span>
+            </a>
+            <a href="/evaluation/compare" class="nav-link" title="MAD Comparison">
+                <i class="iconoir-stats-report"></i>
+                <span>MAD Compare</span>
+            </a>
+            <a href="/evaluation/modes" class="nav-link" title="Evaluation Mode Comparison">
+                <i class="iconoir-git-pull-request"></i>
+                <span>Mode Compare</span>
+            </a>
+            <a href="/evaluation/providers" class="nav-link" title="LLM Provider Comparison">
+                <i class="iconoir-brain"></i>
+                <span>LLM Compare</span>
+            </a>
+            <div class="nav-status">
+                <span class="status-dot"></span>
+                <span id="runCount">Loading...</span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="eval-header">
+            <h1><i class="iconoir-list-select"></i> RUN EXPLORER</h1>
+            <p class="section-desc">Browse semua hasil evaluasi yang tersimpan di folder <code>results/</code></p>
+        </section>
+
+        <section class="eval-performance">
+            <h2><i class="iconoir-filter-list"></i> FILTER</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Eval Mode</th>
+                            <th>MAD Mode</th>
+                            <th>Provider</th>
+                            <th>Query</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <select id="filterEvalMode">
+                                    <option value="">All</option>
+                                    <option value="pipeline">pipeline</option>
+                                    <option value="mad_only">mad_only</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select id="filterMadMode">
+                                    <option value="">All</option>
+                                    <option value="mad3">mad3</option>
+                                    <option value="mad5">mad5</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select id="filterProvider">
+                                    <option value="">All</option>
+                                    <option value="deepseek">deepseek</option>
+                                    <option value="openrouter">openrouter</option>
+                                </select>
+                            </td>
+                            <td>
+                                <input id="filterQuery" type="text" placeholder="model / run_dir / timestamp..." style="width: 100%;">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="eval-misclass">
+            <h2><i class="iconoir-folder"></i> RUNS</h2>
+            <p class="section-desc">Klik <b>Open</b> untuk membuka run tersebut di halaman Evaluation.</p>
+            <div class="table-container">
+                <table id="runsTable">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Eval</th>
+                            <th>MAD</th>
+                            <th>Provider</th>
+                            <th>Model</th>
+                            <th>Run Dir</th>
+                            <th>Open</th>
+                        </tr>
+                    </thead>
+                    <tbody id="runsTableBody">
+                        <tr><td colspan="7" class="loading">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script src="/static/js/evaluation_runs.js"></script>
+</body>
+</html>
+

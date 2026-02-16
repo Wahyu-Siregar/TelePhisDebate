@@ -15,7 +15,7 @@ class Config:
     """Application configuration from environment variables"""
 
     # LLM provider
-    # Supported: deepseek (default), gemini
+    # Supported: deepseek (default), openrouter
     LLM_PROVIDER: str = os.getenv("LLM_PROVIDER", "deepseek")
 
     # Telegram
@@ -26,10 +26,25 @@ class Config:
     DEEPSEEK_API_KEY: str = os.getenv("DEEPSEEK_API_KEY", "")
     DEEPSEEK_BASE_URL: str = os.getenv("DEEPSEEK_BASE_URL", "https://api.deepseek.com")
 
-    # Gemini API (Google Generative Language)
-    GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
-    GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "")
-    GEMINI_BASE_URL: str = os.getenv("GEMINI_BASE_URL", "")
+    # OpenRouter (for GPT-OSS free comparison)
+    OPENROUTER_API_KEY: str = os.getenv("OPENROUTER_API_KEY", "")
+    OPENROUTER_BASE_URL: str = os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1")
+    OPENROUTER_MODEL: str = os.getenv("OPENROUTER_MODEL", "openai/gpt-oss-120b:free")
+    # Optional attribution headers
+    OPENROUTER_SITE_URL: str = os.getenv("OPENROUTER_SITE_URL", "")
+    OPENROUTER_APP_NAME: str = os.getenv("OPENROUTER_APP_NAME", "")
+    # OpenRouter throttling / runtime tuning (helps avoid 429 for free tier)
+    try:
+        OPENROUTER_MAX_RPM: int = int(os.getenv("OPENROUTER_MAX_RPM", "12"))
+    except ValueError:
+        OPENROUTER_MAX_RPM = 12
+    OPENROUTER_PARALLEL: bool = os.getenv("OPENROUTER_PARALLEL", "false").strip().lower() in {
+        "1",
+        "true",
+        "yes",
+        "y",
+        "on",
+    }
 
     # Supabase
     SUPABASE_URL: str = os.getenv("SUPABASE_URL", "")
@@ -54,14 +69,13 @@ class Config:
 
         if not cls.TELEGRAM_BOT_TOKEN:
             missing.append("TELEGRAM_BOT_TOKEN")
-
         provider = (cls.LLM_PROVIDER or "deepseek").strip().lower()
         if provider == "deepseek":
             if not cls.DEEPSEEK_API_KEY:
                 missing.append("DEEPSEEK_API_KEY")
-        elif provider == "gemini":
-            if not cls.GEMINI_API_KEY:
-                missing.append("GEMINI_API_KEY")
+        elif provider == "openrouter":
+            if not cls.OPENROUTER_API_KEY:
+                missing.append("OPENROUTER_API_KEY")
         else:
             missing.append(f"LLM_PROVIDER (unsupported: {cls.LLM_PROVIDER})")
 

@@ -80,12 +80,10 @@ logger = logging.getLogger(__name__)
 
 
 def _llm_identity() -> tuple[str, str]:
-    provider = (app_config.LLM_PROVIDER or "deepseek").strip().lower()
-    if provider == "gemini":
-        model = (app_config.GEMINI_MODEL or "gemini-1.5-flash").strip()
-        return provider, model
-
-    # DeepSeek client currently hardcodes `deepseek-chat`.
+    provider = (getattr(app_config, "LLM_PROVIDER", "") or "deepseek").strip().lower()
+    if provider == "openrouter":
+        model = (getattr(app_config, "OPENROUTER_MODEL", "") or "openai/gpt-oss-120b:free").strip()
+        return "openrouter", model
     return "deepseek", "deepseek-chat"
 
 

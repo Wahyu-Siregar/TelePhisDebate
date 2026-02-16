@@ -10,6 +10,7 @@ from datetime import datetime
 from typing import Any
 
 from src.llm import deepseek
+from src.llm.json_utils import parse_json_object
 from src.detection.triage import RuleBasedTriage, TriageResult
 from .prompts import SYSTEM_PROMPT, construct_analysis_prompt
 
@@ -174,11 +175,43 @@ class SingleShotClassifier:
             )
             
             # Parse response
-            content = llm_response["content"]
-            if isinstance(content, str):
-                content = json.loads(content)
+            content = parse_json_object(llm_response.get("content"))
+            if not content or "classification" not in content:
+                # Some models respond with different keys; accept a few common variants.
+                if isinstance(content, dict):
+                    for alt in ("label", "result", "verdict"):
+                        if alt in content and isinstance(content.get(alt), str):
+                            content["classification"] = str(content[alt]).upper()
+                            break
+                # MAD-style stance can be mapped back to pipeline classification.
+                if "classification" not in content and isinstance(content.get("stance"), str):
+                    stance = str(content["stance"]).upper()
+                    if stance == "LEGITIMATE":
+                        content["classification"] = "SAFE"
+                    elif stance in {"PHISHING", "SUSPICIOUS", "SAFE"}:
+                        content["classification"] = stance
+
+            if not content or "classification" not in content:
+                raw = llm_response.get("raw_content") or llm_response.get("content")
+                raw_excerpt = ""
+                if isinstance(raw, str) and raw.strip():
+                    raw_excerpt = raw.strip()[:240]
+                if raw_excerpt:
+                    raise ValueError(
+                        "LLM JSON response missing required 'classification' field. "
+                        f"raw_excerpt={raw_excerpt}"
+                    )
+                raise ValueError("LLM JSON response missing required 'classification' field")
             
             classification = content.get("classification", "SUSPICIOUS")
+            if isinstance(classification, str):
+                c = classification.strip().upper()
+                if c in {"AMAN"}:
+                    classification = "SAFE"
+                elif c in {"MENCURIGAKAN"}:
+                    classification = "SUSPICIOUS"
+                elif c in {"PENIPUAN", "SCAM"}:
+                    classification = "PHISHING"
             confidence = float(content.get("confidence", 0.5))
             reasoning = content.get("reasoning", "")
             risk_factors = content.get("risk_factors", [])

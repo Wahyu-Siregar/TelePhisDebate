@@ -31,6 +31,10 @@
                 <i class="iconoir-git-pull-request"></i>
                 <span>Mode Compare</span>
             </a>
+            <a href="/evaluation/runs" class="nav-link" title="Evaluation Runs">
+                <i class="iconoir-folder"></i>
+                <span>Runs</span>
+            </a>
             <div class="nav-status">
                 <span class="status-dot"></span>
                 <span id="providerCompareTimestamp">Loading...</span>
@@ -40,10 +44,10 @@
 
     <main class="container">
         <section class="compare-header">
-            <h1><i class="iconoir-brain"></i> DEEPSEEK VS GEMINI</h1>
+            <h1><i class="iconoir-brain"></i> DEEPSEEK VS gemini-2.5-flash-lite (OPENROUTER)</h1>
             <p class="section-desc">
-                Perbandingan metrik evaluasi berdasarkan provider LLM. Pastikan kamu menyimpan hasil evaluasi
-                ke <code>results/deepseek/...</code> dan <code>results/gemini/...</code> (recommended).
+                Perbandingan metrik evaluasi berdasarkan provider LLM. Simpan hasil evaluasi ke
+                <code>results/deepseek/...</code> dan <code>results/openrouter/...</code> (recommended).
             </p>
             <div class="compare-controls">
                 <label for="providerEvalMode">Eval Mode</label>
@@ -68,11 +72,11 @@
                 <p>File: <span id="deepseekFile">—</span></p>
             </div>
             <div class="compare-run-card">
-                <h3><i class="iconoir-google"></i> GEMINI</h3>
-                <p>Status: <span id="geminiStatus" class="compare-status">—</span></p>
-                <p>Timestamp: <span id="geminiTimestamp">—</span></p>
-                <p>Model: <span id="geminiModel">—</span></p>
-                <p>File: <span id="geminiFile">—</span></p>
+                <h3><i class="iconoir-open-in-new-tab"></i> OPENROUTER</h3>
+                <p>Status: <span id="openrouterStatus" class="compare-status">—</span></p>
+                <p>Timestamp: <span id="openrouterTimestamp">—</span></p>
+                <p>Model: <span id="openrouterModel">—</span></p>
+                <p>File: <span id="openrouterFile">—</span></p>
             </div>
         </section>
 
@@ -84,8 +88,8 @@
                         <tr>
                             <th>Metric</th>
                             <th>DeepSeek</th>
-                            <th>Gemini</th>
-                            <th>Delta (Gemini - DeepSeek)</th>
+                            <th>OpenRouter</th>
+                            <th>Delta (OpenRouter - DeepSeek)</th>
                             <th>Winner</th>
                         </tr>
                     </thead>
@@ -110,4 +114,3 @@
     <script src="/static/js/provider_compare.js"></script>
 </body>
 </html>
-

@@ -47,7 +47,14 @@ const CHART_COLORS = {
 
 async function loadEvaluationData() {
     try {
-        const response = await fetch(`${API_BASE}/api/evaluation`);
+        const params = new URLSearchParams(window.location.search);
+        const runDir = params.get('run_dir');
+        const ts = params.get('timestamp');
+        const url = (runDir && ts)
+            ? `${API_BASE}/api/evaluation/run?run_dir=${encodeURIComponent(runDir)}&timestamp=${encodeURIComponent(ts)}`
+            : `${API_BASE}/api/evaluation`;
+
+        const response = await fetch(url);
         if (!response.ok) {
             if (response.status === 404) {
                 document.querySelector('.container').innerHTML =
