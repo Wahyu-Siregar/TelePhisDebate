@@ -12,8 +12,8 @@ def deepseek():
 
     Historically, the code imported `deepseek()` everywhere.
     It now routes to the configured provider via LLM_PROVIDER:
-    - deepseek (default)
-    - openrouter (GPT-OSS free)
+    - openrouter (default)
+    - deepseek
     """
     return llm()
 

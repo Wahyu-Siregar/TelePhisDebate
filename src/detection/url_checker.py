@@ -10,9 +10,10 @@ Provides external API integration for URL reputation checking:
 import asyncio
 import base64
 import csv
-import hashlib
 import logging
+import os
 from dataclasses import dataclass
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -431,6 +432,14 @@ class URLSecurityChecker:
         self.virustotal = VirusTotalChecker()
         self._cache: dict[str, URLCheckResult] = {}
         self._expand_session: aiohttp.ClientSession | None = None
+        self._db = None
+        self._db_checked = False
+        try:
+            self._db_cache_ttl_seconds = max(
+                0, int(os.getenv("URL_CACHE_TTL_SECONDS", "86400"))
+            )
+        except ValueError:
+            self._db_cache_ttl_seconds = 86400
     
     async def _get_expand_session(self) -> aiohttp.ClientSession:
         """Get or create session for URL expansion"""
@@ -534,6 +543,166 @@ class URLSecurityChecker:
     @property
     def is_configured(self) -> bool:
         return self.virustotal.is_configured
+
+    def _get_db_client(self):
+        """
+        Lazy-load Supabase client for persistent URL cache.
+        Falls back silently when DB client is not available/configured.
+        """
+        if self._db_checked:
+            return self._db
+
+        self._db_checked = True
+        try:
+            from src.database.client import get_supabase_client
+
+            self._db = get_supabase_client()
+        except Exception as e:
+            self._db = None
+            logger.debug("URL cache DB disabled: %s", e)
+
+        return self._db
+
+    @staticmethod
+    def _extract_domain_from_url(url: str) -> str:
+        parsed = urlparse(url if "://" in url else f"https://{url}")
+        return (parsed.netloc or parsed.path.split("/")[0]).lower()
+
+    def _is_db_cache_fresh(self, last_checked: str | None) -> bool:
+        if self._db_cache_ttl_seconds <= 0:
+            return True
+        if not last_checked:
+            return False
+
+        try:
+            parsed = datetime.fromisoformat(last_checked.replace("Z", "+00:00"))
+            if parsed.tzinfo is None:
+                parsed = parsed.replace(tzinfo=timezone.utc)
+            age = datetime.now(timezone.utc) - parsed
+            return age <= timedelta(seconds=self._db_cache_ttl_seconds)
+        except Exception:
+            return False
+
+    def _get_db_cached_result(self, url: str) -> URLCheckResult | None:
+        db = self._get_db_client()
+        if db is None:
+            return None
+
+        try:
+            response = (
+                db.table("url_cache")
+                .select(
+                    "url, domain, reputation_score, is_shortened, "
+                    "is_whitelisted, is_blacklisted, virustotal_result, last_checked"
+                )
+                .eq("url", url)
+                .limit(1)
+                .execute()
+            )
+        except Exception as e:
+            logger.debug("Failed reading URL DB cache for %s: %s", url, e)
+            return None
+
+        if not response.data:
+            return None
+
+        row = response.data[0]
+        if not self._is_db_cache_fresh(row.get("last_checked")):
+            return None
+
+        payload = row.get("virustotal_result")
+        if not isinstance(payload, dict):
+            payload = {}
+
+        source = payload.get("source") or "db_cache"
+        details = payload.get("details")
+        if not isinstance(details, dict):
+            details = {}
+        details["cache_layer"] = "supabase_url_cache"
+        details["cached"] = True
+
+        risk_score = float(row.get("reputation_score") or 0.0)
+        risk_score = max(0.0, min(1.0, risk_score))
+
+        return URLCheckResult(
+            url=url,
+            is_malicious=bool(row.get("is_blacklisted")),
+            risk_score=risk_score,
+            source=source,
+            details=details,
+            expanded_url=payload.get("expanded_url"),
+        )
+
+    def _save_db_cached_result(self, url: str, result: URLCheckResult) -> None:
+        db = self._get_db_client()
+        if db is None:
+            return
+
+        final_url = result.expanded_url or url
+        domain = self._extract_domain_from_url(final_url)
+        now_iso = datetime.now(timezone.utc).isoformat()
+        is_whitelisted = result.source == "whitelist" or bool(
+            (result.details or {}).get("trusted_domain")
+        )
+        is_shortened = bool(result.expanded_url and result.expanded_url != url) or (
+            self._extract_domain_from_url(url) in self.URL_SHORTENERS
+        )
+        payload = {
+            "source": result.source,
+            "details": result.details or {},
+            "expanded_url": result.expanded_url,
+            "cached_at": now_iso,
+        }
+
+        try:
+            existing = (
+                db.table("url_cache")
+                .select("id, check_count")
+                .eq("url", url)
+                .limit(1)
+                .execute()
+            )
+
+            if existing.data:
+                row = existing.data[0]
+                check_count = int(row.get("check_count") or 0) + 1
+                (
+                    db.table("url_cache")
+                    .update(
+                        {
+                            "domain": domain,
+                            "reputation_score": float(result.risk_score),
+                            "is_shortened": is_shortened,
+                            "is_whitelisted": is_whitelisted,
+                            "is_blacklisted": bool(result.is_malicious),
+                            "virustotal_result": payload,
+                            "last_checked": now_iso,
+                            "check_count": check_count,
+                        }
+                    )
+                    .eq("id", row["id"])
+                    .execute()
+                )
+            else:
+                (
+                    db.table("url_cache")
+                    .insert(
+                        {
+                            "url": url,
+                            "domain": domain,
+                            "reputation_score": float(result.risk_score),
+                            "is_shortened": is_shortened,
+                            "is_whitelisted": is_whitelisted,
+                            "is_blacklisted": bool(result.is_malicious),
+                            "virustotal_result": payload,
+                            "last_checked": now_iso,
+                            "check_count": 1,
+                        }
+                    )
+                    .execute()
+                )
+        except Exception as e:
+            logger.debug("Failed writing URL DB cache for %s: %s", url, e)
     
     async def check_url(self, url: str, use_cache: bool = True, expand_url: bool = True) -> URLCheckResult:
         """Check a single URL using VirusTotal + heuristics + URL expansion"""
@@ -541,6 +710,14 @@ class URLSecurityChecker:
         if use_cache and url in self._cache:
             logger.debug(f"Cache hit for URL: {url}")
             return self._cache[url]
+
+        # Check persistent DB cache
+        if use_cache:
+            db_cached = self._get_db_cached_result(url)
+            if db_cached is not None:
+                logger.debug(f"DB cache hit for URL: {url}")
+                self._cache[url] = db_cached
+                return db_cached
         
         # Expand shortened URLs first
         expanded_url = None
@@ -567,6 +744,7 @@ class URLSecurityChecker:
                 expanded_url=expanded_url if expanded_url != url else None
             )
             self._cache[url] = result
+            self._save_db_cached_result(url, result)
             return result
         
         # Start with heuristic analysis (on both original and expanded)
@@ -623,6 +801,7 @@ class URLSecurityChecker:
         
         # Cache result
         self._cache[url] = result
+        self._save_db_cached_result(url, result)
         return result
     
     async def check_urls(self, urls: list[str]) -> dict[str, URLCheckResult]:

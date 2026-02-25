@@ -1,0 +1,16 @@
+flowchart TD
+    A([Start]) --> B[/Input: Pesan Telegram/]
+    B --> C[Process: Ekstraksi Teks, URL, Metadata]
+    C --> D[Process: Rule-Based Triage]
+    D --> E{Decision: Perlu Eskalasi?}
+    E -->|Tidak| F[/Output: SAFE/]
+    E -->|Ya| G[Process: Single-Shot LLM]
+    G --> H{Decision: Ambigu / Risiko Tinggi?}
+    H -->|Tidak| I[/Output: Keputusan Stage 2/]
+    H -->|Ya| J[Process: Multi-Agent Debate]
+    J --> K[Process: Aggregasi + Konsensus]
+    K --> L[/Output: Keputusan Akhir/]
+    F --> M[Process: Logging ke Database]
+    I --> M
+    L --> M
+    M --> N([End])

@@ -95,8 +95,8 @@ Confidence: {confidence:.0%}""",
 🔗 <b>Link ke Pesan:</b> {message_link}"""
     }
     
-    # Auto-delete warning after this many seconds
-    WARNING_AUTO_DELETE_SECONDS = 120
+    # Auto-delete warning after this many seconds (10 minutes)
+    WARNING_AUTO_DELETE_SECONDS = 600
     
     def __init__(self, bot: Bot, admin_chat_id: int | str | None = None):
         """
@@ -131,7 +131,6 @@ Confidence: {confidence:.0%}""",
         action_result = {
             "action": action,
             "success": True,
-            "message_deleted": False,
             "warning_sent": False,
             "admin_notified": False,
             "error": None
@@ -165,7 +164,6 @@ Confidence: {confidence:.0%}""",
         action_result = {
             "action": "warn",
             "success": True,
-            "message_deleted": False,
             "warning_sent": False,
             "admin_notified": False,
             "error": None
@@ -227,7 +225,6 @@ Confidence: {confidence:.0%}""",
         action_result = {
             "action": "flag_review",
             "success": True,
-            "message_deleted": False,
             "warning_sent": False,
             "admin_notified": False,
             "error": None
@@ -259,9 +256,9 @@ Confidence: {confidence:.0%}""",
                 )
                 action_result["warning_sent"] = True
                 
-                # Schedule auto-delete of warning after 10 minutes
+                # Schedule auto-delete of warning after configured delay
                 asyncio.create_task(
-                    self._auto_delete_message(warning_msg, 600)
+                    self._auto_delete_message(warning_msg, self.WARNING_AUTO_DELETE_SECONDS)
                 )
                 
             except TelegramError as e:

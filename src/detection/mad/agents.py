@@ -2,7 +2,6 @@
 Base Agent class and individual agent implementations
 """
 
-import json
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from typing import Any
@@ -123,17 +122,25 @@ class BaseAgent(ABC):
                         content.setdefault("evidence", {})
                         if isinstance(content["evidence"], dict) and "raw_excerpt" not in content["evidence"]:
                             content["evidence"]["raw_excerpt"] = raw.strip()[:240]
+
+            key_arguments = self._normalize_arguments(content.get("key_arguments", []))
+            if not key_arguments:
+                evidence_obj = content.get("evidence", {})
+                raw_excerpt = evidence_obj.get("raw_excerpt") if isinstance(evidence_obj, dict) else None
+                if isinstance(raw_excerpt, str) and raw_excerpt.strip():
+                    key_arguments = [f"Raw model output tidak terstruktur: {raw_excerpt.strip()[:220]}..."]
+                else:
+                    key_arguments = ["Model tidak mengembalikan key_arguments terstruktur."]
             
             return AgentResponse(
                 agent_type=self.agent_type,
-                stance=(
-                    "LEGITIMATE"
-                    if str(content.get("stance", "")).strip().upper() in {"SAFE", "AMAN"}
-                    else content.get("stance", "SUSPICIOUS")
+                stance=self._normalize_stance(
+                    content.get("stance", content.get("classification")),
+                    default="SUSPICIOUS",
                 ),
-                confidence=float(content.get("confidence", 0.5)),
-                key_arguments=content.get("key_arguments", []),
-                evidence=content.get("evidence", {}),
+                confidence=self._normalize_confidence(content.get("confidence", 0.5), default=0.5),
+                key_arguments=key_arguments,
+                evidence=self._normalize_evidence(content.get("evidence", {})),
                 tokens_input=response.get("tokens_input", 0),
                 tokens_output=response.get("tokens_output", 0),
                 processing_time_ms=response.get("processing_time_ms", 0)
@@ -199,17 +206,31 @@ class BaseAgent(ABC):
                         content.setdefault("evidence", {})
                         if isinstance(content["evidence"], dict) and "raw_excerpt" not in content["evidence"]:
                             content["evidence"]["raw_excerpt"] = raw.strip()[:240]
+
+            fallback_args = own_response.key_arguments if own_response.key_arguments else []
+            key_arguments = self._normalize_arguments(content.get("key_arguments", fallback_args))
+            if not key_arguments:
+                evidence_obj = content.get("evidence", own_response.evidence)
+                raw_excerpt = evidence_obj.get("raw_excerpt") if isinstance(evidence_obj, dict) else None
+                if isinstance(raw_excerpt, str) and raw_excerpt.strip():
+                    key_arguments = [f"Raw model output tidak terstruktur: {raw_excerpt.strip()[:220]}..."]
+                else:
+                    key_arguments = ["Model tidak mengembalikan key_arguments terstruktur."]
             
             return AgentResponse(
                 agent_type=self.agent_type,
-                stance=(
-                    "LEGITIMATE"
-                    if str(content.get("stance", "")).strip().upper() in {"SAFE", "AMAN"}
-                    else content.get("stance", own_response.stance)
+                stance=self._normalize_stance(
+                    content.get("stance", content.get("classification")),
+                    default=own_response.stance,
                 ),
-                confidence=float(content.get("confidence", own_response.confidence)),
-                key_arguments=content.get("key_arguments", own_response.key_arguments),
-                evidence=content.get("evidence", own_response.evidence),
+                confidence=self._normalize_confidence(
+                    content.get("confidence", own_response.confidence),
+                    default=own_response.confidence,
+                ),
+                key_arguments=key_arguments,
+                evidence=self._normalize_evidence(
+                    content.get("evidence", own_response.evidence)
+                ),
                 tokens_input=response.get("tokens_input", 0),
                 tokens_output=response.get("tokens_output", 0),
                 processing_time_ms=response.get("processing_time_ms", 0)
@@ -258,6 +279,32 @@ class BaseAgent(ABC):
             parts.append(f"- Stance: {resp.stance}")
             parts.append(f"- Confidence: {resp.confidence:.0%}")
             parts.append(f"- Argumen: {resp.key_arguments}")
+
+        # Re-attach objective evidence in round 2 to avoid pure argument-only drift.
+        triage = message_data.get("triage", {}) if isinstance(message_data, dict) else {}
+        if triage:
+            parts.append("")
+            parts.append("Evidence Triage:")
+            parts.append(f"- Risk score: {triage.get('risk_score', 0)}")
+            parts.append(f"- Triggered flags: {triage.get('triggered_flags', [])}")
+
+        url_checks = context.get("url_checks", {}) if context else {}
+        if isinstance(url_checks, dict) and url_checks:
+            parts.append("")
+            parts.append("Evidence URL Checker:")
+            for url, result in url_checks.items():
+                if isinstance(result, dict):
+                    parts.append(
+                        f"- {url}: malicious={result.get('is_malicious', False)}, "
+                        f"risk={result.get('risk_score', 0)}, source={result.get('source', 'unknown')}"
+                    )
+
+        single_shot = context.get("single_shot", {}) if context else {}
+        if isinstance(single_shot, dict) and single_shot:
+            parts.append("")
+            parts.append("Hasil Single-Shot:")
+            parts.append(f"- Classification: {single_shot.get('classification', 'N/A')}")
+            parts.append(f"- Confidence: {single_shot.get('confidence', 0):.0%}")
         
         parts.append("")
         parts.append("Pertimbangkan argumen agent lain. Apakah ada blind spot dalam analisis Anda?")
@@ -266,6 +313,45 @@ class BaseAgent(ABC):
         parts.append("Output WAJIB hanya 1 objek JSON valid dengan format yang sama (tanpa markdown/teks lain).")
         
         return "\n".join(parts)
+
+    def _normalize_stance(self, stance: Any, default: str = "SUSPICIOUS") -> str:
+        val = str(stance or default).strip().upper()
+        aliases = {
+            "SAFE": "LEGITIMATE",
+            "AMAN": "LEGITIMATE",
+            "LEGIT": "LEGITIMATE",
+            "MENCURIGAKAN": "SUSPICIOUS",
+            "PENIPUAN": "PHISHING",
+            "SCAM": "PHISHING",
+            "MALICIOUS": "PHISHING",
+        }
+        val = aliases.get(val, val)
+        if val not in {"PHISHING", "SUSPICIOUS", "LEGITIMATE"}:
+            return default if default in {"PHISHING", "SUSPICIOUS", "LEGITIMATE"} else "SUSPICIOUS"
+        return val
+
+    def _normalize_confidence(self, confidence: Any, default: float = 0.5) -> float:
+        try:
+            value = float(confidence)
+        except (TypeError, ValueError):
+            value = float(default)
+        if value > 1.0 and value <= 100.0:
+            value = value / 100.0
+        return max(0.0, min(1.0, value))
+
+    def _normalize_arguments(self, args: Any) -> list[str]:
+        if isinstance(args, list):
+            return [str(a) for a in args]
+        if args is None:
+            return []
+        return [str(args)]
+
+    def _normalize_evidence(self, evidence: Any) -> dict:
+        if isinstance(evidence, dict):
+            return evidence
+        if evidence is None:
+            return {}
+        return {"raw": str(evidence)}
 
 
 class ContentAnalyzer(BaseAgent):

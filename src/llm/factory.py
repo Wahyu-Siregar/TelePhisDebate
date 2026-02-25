@@ -3,7 +3,7 @@ LLM client factory/router.
 
 Supported providers:
 - deepseek: uses DeepSeekClient (OpenAI-compatible)
-- openrouter: uses OpenRouterClient (OpenAI-compatible), default model is GPT-OSS free
+- openrouter: uses OpenRouterClient (OpenAI-compatible), default model is Gemini Flash Lite
 """
 
 from __future__ import annotations
@@ -33,7 +33,7 @@ _provider: str | None = None
 def llm() -> LLMClient:
     global _client, _provider
 
-    provider = (config.LLM_PROVIDER or "deepseek").strip().lower()
+    provider = (config.LLM_PROVIDER or "openrouter").strip().lower()
     if _client is not None and _provider == provider:
         return _client
 
@@ -50,4 +50,3 @@ def llm() -> LLMClient:
 
     _provider = provider
     return _client
-

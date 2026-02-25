@@ -15,8 +15,11 @@ class Config:
     """Application configuration from environment variables"""
 
     # LLM provider
-    # Supported: deepseek (default), openrouter
-    LLM_PROVIDER: str = os.getenv("LLM_PROVIDER", "deepseek")
+    # Supported: deepseek, openrouter (default)
+    LLM_PROVIDER: str = os.getenv("LLM_PROVIDER", "openrouter")
+    # MAD variant used by bot pipeline
+    # Supported: mad3 (default), mad5
+    MAD_MODE: str = os.getenv("MAD_MODE", "mad3").strip().lower()
 
     # Telegram
     TELEGRAM_BOT_TOKEN: str = os.getenv("TELEGRAM_BOT_TOKEN", "")
@@ -26,10 +29,10 @@ class Config:
     DEEPSEEK_API_KEY: str = os.getenv("DEEPSEEK_API_KEY", "")
     DEEPSEEK_BASE_URL: str = os.getenv("DEEPSEEK_BASE_URL", "https://api.deepseek.com")
 
-    # OpenRouter (for GPT-OSS free comparison)
+    # OpenRouter (default provider)
     OPENROUTER_API_KEY: str = os.getenv("OPENROUTER_API_KEY", "")
     OPENROUTER_BASE_URL: str = os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1")
-    OPENROUTER_MODEL: str = os.getenv("OPENROUTER_MODEL", "openai/gpt-oss-120b:free")
+    OPENROUTER_MODEL: str = os.getenv("OPENROUTER_MODEL", "google/gemini-2.5-flash-lite")
     # Optional attribution headers
     OPENROUTER_SITE_URL: str = os.getenv("OPENROUTER_SITE_URL", "")
     OPENROUTER_APP_NAME: str = os.getenv("OPENROUTER_APP_NAME", "")
@@ -69,7 +72,7 @@ class Config:
 
         if not cls.TELEGRAM_BOT_TOKEN:
             missing.append("TELEGRAM_BOT_TOKEN")
-        provider = (cls.LLM_PROVIDER or "deepseek").strip().lower()
+        provider = (cls.LLM_PROVIDER or "openrouter").strip().lower()
         if provider == "deepseek":
             if not cls.DEEPSEEK_API_KEY:
                 missing.append("DEEPSEEK_API_KEY")
@@ -78,6 +81,9 @@ class Config:
                 missing.append("OPENROUTER_API_KEY")
         else:
             missing.append(f"LLM_PROVIDER (unsupported: {cls.LLM_PROVIDER})")
+
+        if cls.MAD_MODE not in {"mad3", "mad5"}:
+            missing.append(f"MAD_MODE (unsupported: {cls.MAD_MODE})")
 
         if not cls.SUPABASE_URL:
             missing.append("SUPABASE_URL")

@@ -1,0 +1,11 @@
+flowchart TD
+    A([Start]) --> B[/Input: Kumpulan Penelitian Terdahulu/]
+    B --> C[Process: Klasifikasi Pendekatan<br/>Rule-based / ML-DL / LLM]
+    C --> D[Process: Analisis State of the Art]
+    D --> E[Process: Identifikasi Gap Penelitian]
+    E --> F{Decision: Gap Relevan?}
+    F -->|Ya| G[Process: Tetapkan Posisi Penelitian]
+    F -->|Tidak| H[Process: Revisi Fokus Tinjauan]
+    H --> C
+    G --> I[/Output: Kontribusi<br/>Pipeline + MAD + Komparasi/]
+    I --> J([End])

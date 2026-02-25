@@ -1,0 +1,65 @@
+erDiagram
+    TRIAGE_CLASSIFICATION {
+        string safe_rule "risk_score = 0 AND (all_whitelisted OR no_url)"
+        int low_risk_threshold "LOW_RISK if risk_score < 30"
+        int high_risk_threshold "HIGH_RISK if risk_score >= 30"
+        bool skip_llm "true only for SAFE rule above"
+    }
+
+    TRIAGE_WEIGHTS_CORE {
+        int blacklisted_domain "50"
+        int phishing_keywords "20"
+        int authority_impersonation "20"
+        int suspicious_tld "15"
+        int urgency_keywords "15"
+        int shortened_url "10"
+        int shortened_url_expand_failed "15"
+        int caps_lock_abuse "10"
+        int excessive_punctuation "5"
+        int shortener_whitelist_bonus "-10"
+    }
+
+    TRIAGE_WEIGHTS_BEHAVIORAL {
+        int time_anomaly "10"
+        int length_anomaly "10"
+        int first_time_url "10"
+        int emoji_anomaly "5"
+        string formula "risk += int(weight * deviation_score)"
+    }
+
+    SINGLE_SHOT_THRESHOLDS {
+        float safe_finalize_confidence "SAFE finalized if confidence >= 0.90"
+        float low_confidence_escalate "SAFE escalates if confidence < 0.70"
+        int triage_risk_escalate "escalate if triage_risk >= 50"
+        float triage_risk_confidence_gate "and confidence < 0.80"
+        string mandatory_escalation "PHISHING/SUSPICIOUS always escalate to MAD"
+    }
+
+    MAD3_SCORING {
+        float w_content_analyzer "1.0"
+        float w_security_validator "1.5"
+        float w_social_context "1.0"
+        float phishing_threshold "decision PHISHING if phishing_prob >= 0.65"
+        float legitimate_threshold "decision LEGITIMATE if phishing_prob <= 0.35"
+        string consensus "unanimous OR >=2/3 with avg_confidence >= 0.75"
+    }
+
+    PIPELINE_ACTION_MAPPING {
+        string safe_action "SAFE -> none"
+        string suspicious_high_conf "SUSPICIOUS + confidence >= 0.60 -> warn"
+        string suspicious_low_conf "SUSPICIOUS + confidence < 0.60 -> flag_review"
+        string phishing_action "PHISHING -> flag_review"
+    }
+
+    MAD_RUNTIME_CONTROL {
+        int mad_max_rounds_default "MAD_MAX_ROUNDS default 2"
+        bool mad_early_termination_default "MAD_EARLY_TERMINATION default true"
+        string mad_max_total_time_ms "optional timeout gate"
+    }
+
+    TRIAGE_CLASSIFICATION ||--|| TRIAGE_WEIGHTS_CORE : uses
+    TRIAGE_CLASSIFICATION ||--|| TRIAGE_WEIGHTS_BEHAVIORAL : uses
+    SINGLE_SHOT_THRESHOLDS ||--|| TRIAGE_CLASSIFICATION : consumes
+    MAD3_SCORING ||--|| SINGLE_SHOT_THRESHOLDS : follows_escalation
+    PIPELINE_ACTION_MAPPING ||--|| MAD3_SCORING : maps_output
+    MAD_RUNTIME_CONTROL ||--|| MAD3_SCORING : config

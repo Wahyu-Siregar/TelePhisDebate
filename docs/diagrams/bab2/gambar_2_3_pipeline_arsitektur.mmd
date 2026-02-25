@@ -1,0 +1,14 @@
+flowchart TD
+    A([Start]) --> B[/Input: Pesan Telegram/]
+    B --> C[Process: Stage 1 Rule-Based Triage]
+    C --> D{Decision: Kasus Jelas?}
+    D -->|Ya| E[/Output: SAFE/]
+    D -->|Tidak| F[Process: Stage 2 Single-Shot LLM]
+    F --> G{Decision: Confidence Tinggi?}
+    G -->|Ya| H[/Output: Keputusan Stage 2/]
+    G -->|Tidak / Ambigu| I[Process: Stage 3 Multi-Agent Debate]
+    I --> J[/Output: Keputusan Akhir<br/>SAFE/SUSPICIOUS/PHISHING/]
+    E --> K[Process: Logging & Monitoring]
+    H --> K
+    J --> K
+    K --> L([End])

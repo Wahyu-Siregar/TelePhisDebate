@@ -7,11 +7,10 @@ import os
 import glob
 import json
 import csv
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from flask import Flask, render_template, jsonify, request
 from flask_cors import CORS
 
-from src.config import config
 from src.database.client import get_supabase_client
 
 
@@ -106,6 +105,44 @@ def create_app():
             "wrong": metrics.get("wrong", 0),
             "stage_distribution": metrics.get("stage_distribution", {}),
         }
+
+    def _parse_utc_timestamp(value: str | None) -> datetime | None:
+        """Parse ISO timestamp into timezone-aware UTC datetime."""
+        if not value:
+            return None
+        try:
+            ts = datetime.fromisoformat(value.replace("Z", "+00:00"))
+        except Exception:
+            return None
+        if ts.tzinfo is None:
+            ts = ts.replace(tzinfo=timezone.utc)
+        return ts.astimezone(timezone.utc)
+
+    def _extract_agent_arguments(agent_payload: dict) -> list[str]:
+        """
+        Extract agent arguments with robust fallback.
+        If key_arguments is empty but evidence.raw_excerpt exists, expose it so
+        dashboard users can still inspect why parsing failed.
+        """
+        if not isinstance(agent_payload, dict):
+            return ["Model response unavailable."]
+
+        raw_args = agent_payload.get("key_arguments", [])
+        if isinstance(raw_args, list):
+            args = [str(a).strip() for a in raw_args if str(a).strip()]
+            if args:
+                return args
+        elif isinstance(raw_args, str) and raw_args.strip():
+            return [raw_args.strip()]
+
+        evidence = agent_payload.get("evidence", {})
+        if isinstance(evidence, dict):
+            raw_excerpt = evidence.get("raw_excerpt")
+            if isinstance(raw_excerpt, str) and raw_excerpt.strip():
+                excerpt = raw_excerpt.strip().replace("\n", " ")
+                return [f"Raw model output (unstructured): {excerpt[:220]}..."]
+
+        return ["Model tidak mengembalikan key_arguments terstruktur."]
 
     def _load_evaluation_by_timestamp(
         base_dir: str,
@@ -608,25 +645,17 @@ def create_app():
     def get_stats():
         """Get overall statistics"""
         try:
-            # Get message counts by classification
-            messages = db.table("messages").select("classification").execute()
-            
+            total = db.table("messages").select("id", count="exact").execute().count or 0
+            safe = db.table("messages").select("id", count="exact").eq("classification", "SAFE").execute().count or 0
+            suspicious = db.table("messages").select("id", count="exact").eq("classification", "SUSPICIOUS").execute().count or 0
+            phishing = db.table("messages").select("id", count="exact").eq("classification", "PHISHING").execute().count or 0
+
             stats = {
-                "total": len(messages.data) if messages.data else 0,
-                "safe": 0,
-                "suspicious": 0,
-                "phishing": 0
+                "total": total,
+                "safe": safe,
+                "suspicious": suspicious,
+                "phishing": phishing
             }
-            
-            if messages.data:
-                for msg in messages.data:
-                    classification = msg.get("classification", "").upper()
-                    if classification == "SAFE":
-                        stats["safe"] += 1
-                    elif classification == "SUSPICIOUS":
-                        stats["suspicious"] += 1
-                    elif classification == "PHISHING":
-                        stats["phishing"] += 1
             
             # Calculate detection rate
             if stats["total"] > 0:
@@ -645,7 +674,7 @@ def create_app():
     def get_today_stats():
         """Get today's statistics"""
         try:
-            today = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+            today = datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
             
             messages = db.table("messages").select(
                 "classification, timestamp"
@@ -686,12 +715,27 @@ def create_app():
             if logs.data:
                 for log in logs.data:
                     stage_result = log.get("stage_result", {}) or {}
+                    stage = (log.get("stage") or "").strip().lower()
+                    stage_payload: dict = {}
+                    if isinstance(stage_result, dict):
+                        if stage == "triage":
+                            stage_payload = stage_result.get("triage", {}) or {}
+                        elif stage == "single_shot":
+                            stage_payload = stage_result.get("single_shot", {}) or {}
+                        elif stage == "mad":
+                            stage_payload = stage_result.get("mad", {}) or {}
+
+                    classification = stage_payload.get("classification")
+                    confidence = stage_payload.get("confidence")
+                    if stage == "mad":
+                        classification = stage_payload.get("decision", classification)
+
                     detections.append({
                         "id": log.get("id"),
                         "message_id": log.get("message_id"),
-                        "stage": log.get("stage"),
-                        "classification": stage_result.get("classification"),
-                        "confidence": stage_result.get("confidence"),
+                        "stage": stage or "unknown",
+                        "classification": classification,
+                        "confidence": confidence,
                         "processing_time": log.get("processing_time_ms"),
                         "tokens": (log.get("tokens_input", 0) or 0) + (log.get("tokens_output", 0) or 0),
                         "timestamp": log.get("created_at")
@@ -707,21 +751,53 @@ def create_app():
         """Get phishing detections only - filter from messages table"""
         try:
             messages = db.table("messages").select(
-                "id, classification, confidence, decided_by, created_at"
+                "id, classification, confidence, decided_by, created_at, timestamp"
             ).eq("classification", "PHISHING").order(
                 "created_at", desc=True
-            ).limit(20).execute()
+            ).limit(200).execute()
             
             detections = []
             if messages.data:
+                message_ids = [msg.get("id") for msg in messages.data if msg.get("id") is not None]
+                message_id_set = set(message_ids)
+
+                # One query for recent logs, then map latest log per message_id.
+                logs_resp = db.table("detection_logs").select(
+                    "message_id, stage_result, created_at"
+                ).order("created_at", desc=True).limit(3000).execute()
+
+                latest_log_by_message: dict = {}
+                if logs_resp.data:
+                    for row in logs_resp.data:
+                        mid = row.get("message_id")
+                        if mid not in message_id_set:
+                            continue
+                        if mid not in latest_log_by_message:
+                            latest_log_by_message[mid] = row
+
                 for msg in messages.data:
+                    triage_flags: list[str] = []
+                    try:
+                        log_row = latest_log_by_message.get(msg.get("id"))
+                        if log_row:
+                            stage_result = (log_row or {}).get("stage_result", {}) or {}
+                            triage = stage_result.get("triage", {}) if isinstance(stage_result, dict) else {}
+                            raw_flags = triage.get("triggered_flags", []) if isinstance(triage, dict) else []
+                            if isinstance(raw_flags, list):
+                                triage_flags = [str(f) for f in raw_flags if f]
+                            elif isinstance(raw_flags, str) and raw_flags.strip():
+                                triage_flags = [raw_flags.strip()]
+                    except Exception:
+                        # Keep dashboard resilient even when one row cannot load log detail
+                        triage_flags = []
+
                     detections.append({
                         "id": msg.get("id"),
                         "message_id": msg.get("id"),
                         "stage": msg.get("decided_by", "unknown"),
                         "confidence": msg.get("confidence"),
-                        "triage_flags": [],
-                        "timestamp": msg.get("created_at")
+                        "triage_flags": triage_flags,
+                        "timestamp": msg.get("created_at") or msg.get("timestamp")
                     })
             
             return jsonify(detections)
@@ -739,7 +815,7 @@ def create_app():
         from flask import request as req
         try:
             time_range = req.args.get('range', '24h')
-            now = datetime.utcnow()
+            now = datetime.now(timezone.utc)
             
             if time_range == '30d':
                 since = now - timedelta(days=30)
@@ -765,13 +841,15 @@ def create_app():
                 if messages.data:
                     for msg in messages.data:
                         try:
-                            ts = datetime.fromisoformat(msg["timestamp"].replace("Z", "+00:00")).replace(tzinfo=None)
+                            ts = _parse_utc_timestamp(msg.get("timestamp"))
+                            if ts is None:
+                                continue
                             key = ts.strftime("%H:00")
                             if key in buckets:
                                 cls = msg.get("classification", "").upper()
                                 if cls in ("SAFE", "SUSPICIOUS", "PHISHING"):
                                     buckets[key][cls.lower()] += 1
-                        except:
+                        except Exception:
                             pass
                 
                 result = [{"label": k, **v} for k, v in buckets.items()]
@@ -789,13 +867,15 @@ def create_app():
                 if messages.data:
                     for msg in messages.data:
                         try:
-                            ts = datetime.fromisoformat(msg["timestamp"].replace("Z", "+00:00")).replace(tzinfo=None)
+                            ts = _parse_utc_timestamp(msg.get("timestamp"))
+                            if ts is None:
+                                continue
                             key = ts.strftime("%Y-%m-%d")
                             if key in buckets:
                                 cls = msg.get("classification", "").upper()
                                 if cls in ("SAFE", "SUSPICIOUS", "PHISHING"):
                                     buckets[key][cls.lower()] += 1
-                        except:
+                        except Exception:
                             pass
                 
                 result = [{"label": v["label"], "safe": v["safe"], "suspicious": v["suspicious"], "phishing": v["phishing"]} for v in buckets.values()]
@@ -812,13 +892,15 @@ def create_app():
                 if messages.data:
                     for msg in messages.data:
                         try:
-                            ts = datetime.fromisoformat(msg["timestamp"].replace("Z", "+00:00")).replace(tzinfo=None)
+                            ts = _parse_utc_timestamp(msg.get("timestamp"))
+                            if ts is None:
+                                continue
                             key = ts.strftime("%Y-%m-%d")
                             if key in buckets:
                                 cls = msg.get("classification", "").upper()
                                 if cls in ("SAFE", "SUSPICIOUS", "PHISHING"):
                                     buckets[key][cls.lower()] += 1
-                        except:
+                        except Exception:
                             pass
                 
                 result = [{"label": v["label"], "safe": v["safe"], "suspicious": v["suspicious"], "phishing": v["phishing"]} for v in buckets.values()]
@@ -830,49 +912,57 @@ def create_app():
     
     @app.route('/api/stats/stages')
     def get_stage_stats():
-        """Get statistics by detection stage from messages table"""
+        """Get statistics by detection stage without full table scans."""
         try:
-            messages = db.table("messages").select(
-                "decided_by, processing_time_ms"
-            ).execute()
-            
             stages = {
                 "triage": {"count": 0, "tokens": 0, "time": 0},
                 "single_shot": {"count": 0, "tokens": 0, "time": 0},
                 "mad": {"count": 0, "tokens": 0, "time": 0}
             }
-            
-            if messages.data:
-                for msg in messages.data:
-                    stage = msg.get("decided_by", "")
-                    if stage in stages:
-                        stages[stage]["count"] += 1
-                        stages[stage]["time"] += msg.get("processing_time_ms", 0) or 0
-            
-            # Get token usage from detection_logs
-            logs = db.table("detection_logs").select(
-                "stage, tokens_input, tokens_output"
-            ).execute()
-            
-            if logs.data:
-                for log in logs.data:
-                    stage = log.get("stage", "")
-                    if stage in stages:
-                        tokens = (log.get("tokens_input", 0) or 0) + (log.get("tokens_output", 0) or 0)
-                        stages[stage]["tokens"] += tokens
-            
-            # Calculate averages
+
+            # Use exact count (server-side) per stage.
             for stage in stages:
+                count_resp = db.table("detection_logs").select(
+                    "id", count="exact"
+                ).eq("stage", stage).execute()
+                stages[stage]["count"] = count_resp.count or 0
+
+            # Load token totals from api_usage aggregate table.
+            usage = db.table("api_usage").select(
+                "triage_requests, single_shot_requests, single_shot_tokens, mad_requests, mad_tokens"
+            ).order("date", desc=True).limit(365).execute()
+            if usage.data:
+                triage_reqs = sum((r.get("triage_requests", 0) or 0) for r in usage.data)
+                single_reqs = sum((r.get("single_shot_requests", 0) or 0) for r in usage.data)
+                single_tokens = sum((r.get("single_shot_tokens", 0) or 0) for r in usage.data)
+                mad_reqs = sum((r.get("mad_requests", 0) or 0) for r in usage.data)
+                mad_tokens = sum((r.get("mad_tokens", 0) or 0) for r in usage.data)
+
+                stages["triage"]["tokens"] = 0
+                stages["single_shot"]["tokens"] = single_tokens
+                stages["mad"]["tokens"] = mad_tokens
+
+                # Keep count aligned with api_usage if available.
+                stages["triage"]["count"] = max(stages["triage"]["count"], triage_reqs)
+                stages["single_shot"]["count"] = max(stages["single_shot"]["count"], single_reqs)
+                stages["mad"]["count"] = max(stages["mad"]["count"], mad_reqs)
+
+            # Estimate avg time from recent samples per stage (bounded query).
+            for stage in stages:
+                samples = db.table("detection_logs").select(
+                    "processing_time_ms"
+                ).eq("stage", stage).order("created_at", desc=True).limit(1000).execute()
+                sample_rows = samples.data or []
+                if sample_rows:
+                    total_time = sum((r.get("processing_time_ms", 0) or 0) for r in sample_rows)
+                    stages[stage]["avg_time"] = round(total_time / len(sample_rows))
+                else:
+                    stages[stage]["avg_time"] = 0
+
                 if stages[stage]["count"] > 0:
-                    stages[stage]["avg_tokens"] = round(
-                        stages[stage]["tokens"] / stages[stage]["count"]
-                    )
-                    stages[stage]["avg_time"] = round(
-                        stages[stage]["time"] / stages[stage]["count"]
-                    )
+                    stages[stage]["avg_tokens"] = round(stages[stage]["tokens"] / stages[stage]["count"])
                 else:
                     stages[stage]["avg_tokens"] = 0
-                    stages[stage]["avg_time"] = 0
             
             return jsonify(stages)
             
@@ -998,7 +1088,7 @@ def create_app():
                                 "agent": agent.get("agent_type", "unknown"),
                                 "stance": agent.get("stance", "UNKNOWN"),
                                 "confidence": agent.get("confidence", 0),
-                                "arguments": agent.get("key_arguments", [])
+                                "arguments": _extract_agent_arguments(agent)
                             })
                     
                     # Extract round 2 summaries if exists
@@ -1009,7 +1099,7 @@ def create_app():
                                 "agent": agent.get("agent_type", "unknown"),
                                 "stance": agent.get("stance", "UNKNOWN"),
                                 "confidence": agent.get("confidence", 0),
-                                "arguments": agent.get("key_arguments", [])
+                                "arguments": _extract_agent_arguments(agent)
                             })
                     
                     debates.append(debate_data)

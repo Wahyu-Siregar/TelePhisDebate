@@ -3,7 +3,6 @@ Prompt templates for Single-Shot LLM classification
 """
 
 from datetime import datetime
-from typing import Any
 
 
 # System prompt for phishing detection

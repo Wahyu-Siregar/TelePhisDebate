@@ -73,6 +73,7 @@ class TelePhisBot:
         
         # Initialize detection pipeline
         self.pipeline = PhishingDetectionPipeline(
+            mad_mode=config.MAD_MODE,
             custom_whitelist=custom_whitelist,
             custom_blacklist=custom_blacklist
         )
@@ -83,7 +84,11 @@ class TelePhisBot:
         # Initialize handlers
         self._setup_handlers()
         
-        logger.info("TelePhisBot initialized successfully")
+        logger.info(
+            "TelePhisBot initialized successfully (mad_mode=%s, llm_provider=%s)",
+            config.MAD_MODE,
+            config.LLM_PROVIDER,
+        )
     
     def _setup_handlers(self):
         """Setup all bot handlers"""
@@ -155,8 +160,7 @@ Selamat datang! Saya adalah bot deteksi phishing berbasis Multi-Agent Debate.
 **Fitur:**
 • Deteksi real-time pesan phishing
 • Analisis multi-tahap (Triage → LLM → MAD)
-• Hapus otomatis pesan berbahaya
-• Notifikasi admin untuk review
+• Peringatan grup + notifikasi admin untuk review
 
 **Commands:**
 /help - Bantuan lengkap
@@ -181,7 +185,7 @@ Bot ini aktif memantau semua pesan di grup ini.
 **Aksi Otomatis:**
 • ✅ SAFE - Tidak ada aksi
 • ⚠️ SUSPICIOUS - Peringatan
-• 🚨 PHISHING - Hapus & notifikasi
+• 🚨 PHISHING - Flag review & notifikasi admin
 
 **Commands:**
 • `/status` - Cek status bot
@@ -190,11 +194,10 @@ Bot ini aktif memantau semua pesan di grup ini.
 
 **Untuk Admin:**
 Bot memerlukan izin berikut di grup:
-• Hapus pesan
 • Kirim pesan
 
 **Laporan False Positive:**
-Hubungi admin grup jika pesan anda salah dihapus.
+Hubungi admin grup jika pesan valid anda salah ditandai.
 """
         await update.message.reply_text(help_text, parse_mode="Markdown")
     
@@ -263,7 +266,6 @@ Hubungi admin grup jika pesan anda salah dihapus.
 • Safe: {session_stats['safe_count']}
 • Suspicious: {session_stats['suspicious_count']}
 • Phishing: {session_stats['phishing_count']}
-• Dihapus: {session_stats['deleted_count']}
 {db_section}
 {usage_section}
 
@@ -361,6 +363,7 @@ PHISHING:   {phishing:>4} ({phishing_pct:>5.1f}%)
         # Fallback to session stats if no DB data
         if not db_stats_text:
             total = session_stats['total_processed']
+            avg_tokens = (session_stats['total_tokens'] / total) if total > 0 else 0
             if total > 0:
                 safe_pct = session_stats['safe_count'] / total * 100
                 suspicious_pct = session_stats['suspicious_count'] / total * 100
@@ -381,12 +384,12 @@ PHISHING:   {session_stats['phishing_count']:>4} ({phishing_pct:>5.1f}%)
 ```
 
 **Aksi:**
-• Pesan dihapus: {session_stats['deleted_count']}
+• Perlu review manual: {session_stats['suspicious_count'] + session_stats['phishing_count']}
 • Detection rate: {session_stats['detection_rate']:.1f}%
 
 **Token:**
 • Total tokens: {session_stats['total_tokens']}
-• Avg tokens/msg: {session_stats['total_tokens'] / total:.1f if total > 0 else 0}
+• Avg tokens/msg: {avg_tokens:.1f}
 """
         
         await update.message.reply_text(db_stats_text, parse_mode="Markdown")

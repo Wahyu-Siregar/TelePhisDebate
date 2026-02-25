@@ -3,7 +3,6 @@ Single-Shot LLM Classifier
 Main classifier that uses DeepSeek for phishing detection
 """
 
-import json
 import time
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -79,7 +78,6 @@ class SingleShotClassifier:
     
     # Thresholds for decision making
     HIGH_CONFIDENCE_SAFE = 0.90
-    HIGH_CONFIDENCE_PHISHING = 0.85
     LOW_CONFIDENCE_THRESHOLD = 0.70
     MODERATE_CONFIDENCE_THRESHOLD = 0.80
     
@@ -204,17 +202,12 @@ class SingleShotClassifier:
                 raise ValueError("LLM JSON response missing required 'classification' field")
             
             classification = content.get("classification", "SUSPICIOUS")
-            if isinstance(classification, str):
-                c = classification.strip().upper()
-                if c in {"AMAN"}:
-                    classification = "SAFE"
-                elif c in {"MENCURIGAKAN"}:
-                    classification = "SUSPICIOUS"
-                elif c in {"PENIPUAN", "SCAM"}:
-                    classification = "PHISHING"
-            confidence = float(content.get("confidence", 0.5))
+            classification = self._normalize_classification(classification)
+            confidence = self._normalize_confidence(content.get("confidence", 0.5))
             reasoning = content.get("reasoning", "")
             risk_factors = content.get("risk_factors", [])
+            if not isinstance(risk_factors, list):
+                risk_factors = [str(risk_factors)] if risk_factors is not None else []
             
         except Exception as e:
             # Fallback to heuristic-based decision
@@ -262,6 +255,8 @@ class SingleShotClassifier:
         Mengembalikan:
             Tuple dari (should_escalate, reason)
         """
+        classification = self._normalize_classification(classification)
+
         # PHISHING always escalates — single-shot must not be final judge
         if classification == "PHISHING":
             return True, f"PHISHING classification always requires MAD verification (confidence: {confidence:.0%})"
@@ -283,6 +278,31 @@ class SingleShotClassifier:
             return True, f"High triage risk ({triage_risk_score}) with moderate confidence ({confidence:.0%})"
         
         return False, ""
+
+    def _normalize_classification(self, classification: Any) -> str:
+        c = str(classification or "SUSPICIOUS").strip().upper()
+        aliases = {
+            "AMAN": "SAFE",
+            "LEGITIMATE": "SAFE",
+            "LEGIT": "SAFE",
+            "MENCURIGAKAN": "SUSPICIOUS",
+            "PENIPUAN": "PHISHING",
+            "SCAM": "PHISHING",
+            "MALICIOUS": "PHISHING",
+        }
+        c = aliases.get(c, c)
+        if c not in {"SAFE", "SUSPICIOUS", "PHISHING"}:
+            return "SUSPICIOUS"
+        return c
+
+    def _normalize_confidence(self, confidence: Any) -> float:
+        try:
+            value = float(confidence)
+        except (TypeError, ValueError):
+            value = 0.5
+        if value > 1.0 and value <= 100.0:
+            value = value / 100.0
+        return max(0.0, min(1.0, value))
     
     def _fallback_classification(
         self,

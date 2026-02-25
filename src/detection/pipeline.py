@@ -6,14 +6,12 @@ Unified pipeline that orchestrates all detection stages
 import logging
 import os
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
-from typing import Any
 
 from src.config import config
-from .triage import RuleBasedTriage, TriageResult
+from .triage import RuleBasedTriage
 from .single_shot import SingleShotClassifier
-from .single_shot.classifier import ClassificationResult
 from .mad import MultiAgentDebate as MultiAgentDebateV3
 from .mad5 import MultiAgentDebate as MultiAgentDebateV5
 from .url_checker import get_url_checker
@@ -102,7 +100,6 @@ class PhishingDetectionPipeline:
     """
     
     # Action thresholds
-    DELETE_CONFIDENCE_THRESHOLD = 0.80
     WARN_CONFIDENCE_THRESHOLD = 0.60
     
     def __init__(
@@ -287,7 +284,7 @@ class PhishingDetectionPipeline:
             url_checks=url_checks,
             # OpenRouter free tier is sensitive to burst; default to sequential agent calls.
             parallel=(
-                (config.LLM_PROVIDER or "deepseek").strip().lower() != "openrouter"
+                (config.LLM_PROVIDER or "openrouter").strip().lower() != "openrouter"
                 or bool(getattr(config, "OPENROUTER_PARALLEL", False))
             )
         )

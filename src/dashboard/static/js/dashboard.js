@@ -225,10 +225,27 @@ async function updatePhishingTable() {
         <tr>
             <td>${formatTimestamp(d.timestamp)}</td>
             <td><span class="badge ${d.stage}">${d.stage}</span></td>
-            <td>${(d.confidence * 100).toFixed(0)}%</td>
-            <td>${d.triage_flags ? d.triage_flags.join(', ') : '-'}</td>
+            <td>${formatConfidencePercent(d.confidence)}</td>
+            <td>${formatFlagsCell(d.triage_flags)}</td>
         </tr>
     `).join('');
+}
+
+function formatFlagsCell(flags) {
+    if (Array.isArray(flags)) {
+        return flags.length > 0 ? escapeHtml(flags.join(', ')) : '-';
+    }
+    if (typeof flags === 'string') {
+        const trimmed = flags.trim();
+        return trimmed ? escapeHtml(trimmed) : '-';
+    }
+    return '-';
+}
+
+function formatConfidencePercent(value) {
+    const num = Number(value);
+    if (!Number.isFinite(num)) return '-';
+    return `${(num * 100).toFixed(0)}%`;
 }
 
 async function updateMessagesTable() {
@@ -245,7 +262,7 @@ async function updateMessagesTable() {
             <td>${formatTimestamp(m.timestamp)}</td>
             <td>${escapeHtml(m.content)}</td>
             <td><span class="badge ${m.classification.toLowerCase()}">${m.classification}</span></td>
-            <td>${(m.confidence * 100).toFixed(0)}%</td>
+            <td>${formatConfidencePercent(m.confidence)}</td>
         </tr>
     `).join('');
 }

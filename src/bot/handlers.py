@@ -3,13 +3,11 @@ Message Handler Module
 Processes incoming Telegram messages through the detection pipeline
 """
 
-import asyncio
 import logging
 from datetime import datetime, date
 from telegram import Update, Message
 from telegram.ext import ContextTypes
 
-from src.config import config
 from src.detection import PhishingDetectionPipeline, DetectionResult
 from src.detection.url_checker import check_urls_external_async
 from src.database.client import get_supabase_client
@@ -55,7 +53,6 @@ class MessageHandler:
             "safe_count": 0,
             "suspicious_count": 0,
             "phishing_count": 0,
-            "deleted_count": 0,
             "total_tokens": 0
         }
     
@@ -147,9 +144,13 @@ class MessageHandler:
         # Get user baseline from database (if available)
         baseline_metrics = await self._get_user_baseline(message.from_user.id)
         
-        # Ensure user is registered in the database
+        # Ensure user is registered in the database and get internal users.id
+        db_user_id = None
         if self.enable_logging:
-            await self._ensure_user_registered(message.from_user, message.chat_id)
+            db_user_id = await self._ensure_user_registered(
+                message.from_user,
+                message.date
+            )
         
         # Extract URLs and check them asynchronously with VirusTotal
         url_checks = await self._check_urls_async(text_content)
@@ -177,11 +178,7 @@ class MessageHandler:
         
         # Log to database
         if self.enable_logging:
-            await self._log_detection(message, result, action_result)
-        
-        # Update deleted count
-        if action_result.get("message_deleted"):
-            self.stats["deleted_count"] += 1
+            await self._log_detection(message, result, action_result, db_user_id)
     
     def _extract_sender_info(self, message: Message) -> dict:
         """Extract sender information from message"""
@@ -214,49 +211,77 @@ class MessageHandler:
         
         return None
     
-    async def _ensure_user_registered(self, user, chat_id: int):
+    async def _ensure_user_registered(
+        self,
+        user,
+        observed_at: datetime | None = None
+    ) -> int | None:
         """
-        Register or update user in the users table.
-        Tracks basic info and updates last_seen timestamp.
+        Register or update user in users table.
+        Returns internal users.id so messages.user_id can be linked.
         """
         if not self.db:
-            return
+            return None
         
         try:
-            user_id = user.id
+            telegram_user_id = user.id
             username = user.username or ""
             first_name = user.first_name or ""
             last_name = user.last_name or ""
             
             # Check if user exists
-            existing = self.db.table("users").select("id").eq(
-                "telegram_user_id", user_id
+            existing = self.db.table("users").select("id, joined_group_at").eq(
+                "telegram_user_id", telegram_user_id
             ).execute()
             
-            now = datetime.now().isoformat()
+            now_iso = (observed_at or datetime.now()).isoformat()
             
             if existing.data and len(existing.data) > 0:
-                # Update last_seen
-                self.db.table("users").update({
+                # Update profile fields
+                user_row = existing.data[0]
+                update_payload = {
                     "username": username,
                     "first_name": first_name,
                     "last_name": last_name,
-                    "last_seen": now
-                }).eq("telegram_user_id", user_id).execute()
+                    "updated_at": now_iso
+                }
+                if not user_row.get("joined_group_at"):
+                    update_payload["joined_group_at"] = now_iso
+                
+                self.db.table("users").update(update_payload).eq(
+                    "telegram_user_id", telegram_user_id
+                ).execute()
+                
+                return int(user_row["id"]) if user_row.get("id") is not None else None
             else:
                 # Insert new user
-                self.db.table("users").insert({
-                    "telegram_user_id": user_id,
-                    "telegram_chat_id": chat_id,
+                created = self.db.table("users").insert({
+                    "telegram_user_id": telegram_user_id,
                     "username": username,
                     "first_name": first_name,
                     "last_name": last_name,
-                    "last_seen": now,
-                    "baseline_metrics": {}
+                    "joined_group_at": now_iso,
+                    "baseline_metrics": {},
+                    "baseline_updated_at": now_iso,
+                    "updated_at": now_iso
                 }).execute()
-                logger.info(f"New user registered: @{username} ({user_id})")
+                logger.info(f"New user registered: @{username} ({telegram_user_id})")
+                
+                if created.data and len(created.data) > 0:
+                    created_id = created.data[0].get("id")
+                    return int(created_id) if created_id is not None else None
+                
+                # Fallback fetch for clients that don't return inserted rows
+                fallback = self.db.table("users").select("id").eq(
+                    "telegram_user_id", telegram_user_id
+                ).execute()
+                if fallback.data and len(fallback.data) > 0:
+                    return int(fallback.data[0]["id"])
+                
+                return None
         except Exception as e:
-            logger.debug(f"User registration skipped: {e}")
+            logger.warning(f"User registration skipped: {e}")
+            return None
     
     async def _check_urls_async(self, text_content: str) -> dict | None:
         """
@@ -305,7 +330,8 @@ class MessageHandler:
         self,
         message: Message,
         result: DetectionResult,
-        action_result: dict
+        action_result: dict,
+        db_user_id: int | None = None
     ):
         """Log detection result to database"""
         if not self.db:
@@ -319,6 +345,7 @@ class MessageHandler:
             message_data = {
                 "telegram_message_id": message.message_id,
                 "telegram_chat_id": message.chat_id,
+                "user_id": db_user_id,
                 "content": text_content[:1000] if text_content else "",
                 "content_length": len(text_content) if text_content else 0,
                 "timestamp": message.date.isoformat() if message.date else datetime.now().isoformat(),
@@ -451,6 +478,5 @@ class MessageHandler:
             "safe_count": 0,
             "suspicious_count": 0,
             "phishing_count": 0,
-            "deleted_count": 0,
             "total_tokens": 0
         }

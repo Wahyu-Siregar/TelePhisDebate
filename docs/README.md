@@ -349,8 +349,8 @@ Input: https://bit.ly/PendaftaranSeminarTI
 Menggunakan **LLM provider yang terkonfigurasi** (`LLM_PROVIDER`) dengan satu kali panggilan API untuk mengklasifikasi pesan.
 
 Provider yang didukung saat ini:
-- `deepseek` (default) → model: `deepseek-chat`
-- `openrouter` → model: `OPENROUTER_MODEL` (mis. `google/gemini-2.5-flash-lite`)
+- `openrouter` (default) → model: `OPENROUTER_MODEL` (default: `google/gemini-2.5-flash-lite`)
+- `deepseek` → model: `deepseek-chat`
 
 #### Prompt Engineering
 
@@ -925,12 +925,13 @@ Semua konfigurasi dimuat dari environment variables (file `.env`):
 ```env
 # === Wajib ===
 TELEGRAM_BOT_TOKEN=         # Token dari @BotFather
-LLM_PROVIDER=deepseek       # Pilih provider LLM: deepseek (default) / openrouter
+LLM_PROVIDER=openrouter     # Pilih provider LLM: openrouter (default) / deepseek
+MAD_MODE=mad3               # Mode MAD untuk runtime bot: mad3 (default) / mad5
 DEEPSEEK_API_KEY=           # API key DeepSeek (wajib jika LLM_PROVIDER=deepseek)
 DEEPSEEK_BASE_URL=          # Default: https://api.deepseek.com
 OPENROUTER_API_KEY=         # API key OpenRouter (wajib jika LLM_PROVIDER=openrouter)
 OPENROUTER_BASE_URL=        # Default: https://openrouter.ai/api/v1
-OPENROUTER_MODEL=           # Default: openai/gpt-oss-120b:free (disarankan pilih model yang support structured output untuk evaluasi)
+OPENROUTER_MODEL=           # Default: google/gemini-2.5-flash-lite (support structured output)
 OPENROUTER_SITE_URL=        # Opsional (recommended) untuk attribution header
 OPENROUTER_APP_NAME=        # Opsional (recommended) untuk attribution header
 # OpenRouter throttling (membantu menghindari 429)
@@ -1161,6 +1162,9 @@ pip install -r requirements.txt
 ### Menjalankan Bot
 
 ```bash
+# Pilih mode MAD runtime bot di .env:
+# MAD_MODE=mad3  atau  MAD_MODE=mad5
+
 # Normal mode
 python main.py
 

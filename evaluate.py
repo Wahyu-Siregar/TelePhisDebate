@@ -80,9 +80,9 @@ logger = logging.getLogger(__name__)
 
 
 def _llm_identity() -> tuple[str, str]:
-    provider = (getattr(app_config, "LLM_PROVIDER", "") or "deepseek").strip().lower()
+    provider = (getattr(app_config, "LLM_PROVIDER", "") or "openrouter").strip().lower()
     if provider == "openrouter":
-        model = (getattr(app_config, "OPENROUTER_MODEL", "") or "openai/gpt-oss-120b:free").strip()
+        model = (getattr(app_config, "OPENROUTER_MODEL", "") or "google/gemini-2.5-flash-lite").strip()
         return "openrouter", model
     return "deepseek", "deepseek-chat"
 

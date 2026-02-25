@@ -1,0 +1,33 @@
+flowchart TD
+    A([Start]) --> B[/Input: Pesan Telegram/]
+    B --> C[ Ekstraksi teks, URL, metadata]
+    C --> D[ Stage 1 Rule-Based Triage]
+    D --> E{Decision: Skip LLM true}
+
+    E -->|Ya| F[/Output: SAFE dari Triage/]
+    E -->|Tidak| G[ Stage 2 Single-Shot LLM]
+    G --> H{Decision: Perlu eskalasi ke MAD}
+
+    H -->|Tidak| I[/Output: Keputusan Single-Shot/]
+    H -->|Ya| J[ Stage 3 MAD3 - Round 1]
+
+    J --> K1[ Content Analyzer]
+    J --> K2[ Security Validator]
+    J --> K3[ Social Context]
+    K1 --> L[ Kumpulkan respons Round 1]
+    K2 --> L
+    K3 --> L
+
+    L --> M{Decision: Konsensus Round 1 tercapai?}
+    M -->|Ya| N[ Aggregasi voting berbobot]
+    M -->|Tidak| O[ MAD3 - Round 2 deliberasi]
+    O --> P[ Aggregasi voting berbobot]
+
+    N --> Q[ Normalisasi label LEGITIMATE ke SAFE]
+    P --> Q
+
+    Q --> R[/Output: Klasifikasi akhir SAFE/SUSPICIOUS/PHISHING/]
+    F --> S[ Mapping Action + Logging DB]
+    I --> S
+    R --> S
+    S --> T([End])

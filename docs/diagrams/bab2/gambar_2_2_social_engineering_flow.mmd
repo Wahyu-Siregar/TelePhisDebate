@@ -1,0 +1,12 @@
+flowchart TD
+    A([Start]) --> B[/Input: Konteks Target Akademik/]
+    B --> C[Process: Pelaku Menyusun Pesan]
+    C --> D[Process: Impersonasi Otoritas<br/>Admin / Dosen / Instansi]
+    D --> E[Process: Tambah Urgency Trigger<br/>Deadline / Ancaman Blokir]
+    E --> F[Process: Menyisipkan Link/Instruksi Aksi]
+    F --> G[/Output: Pesan Tampak Resmi/]
+    G --> H{Decision: Korban Klik / Merespons?}
+    H -->|Ya| I[/Output: Data Sensitif Bocor / Kerugian/]
+    H -->|Tidak| J[/Output: Serangan Gagal/]
+    I --> K([End])
+    J --> K

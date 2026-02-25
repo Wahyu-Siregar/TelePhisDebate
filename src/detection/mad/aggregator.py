@@ -4,7 +4,6 @@ Combines agent responses into final decision
 """
 
 from dataclasses import dataclass, field
-from typing import Any
 
 from .agents import AgentResponse
 
@@ -95,7 +94,7 @@ class VotingAggregator:
         Returns:
             Tuple of (consensus_reached, decision, confidence)
         """
-        stances = [r.stance for r in responses]
+        stances = [self._normalize_stance(r.stance) for r in responses]
         
         # Unanimous agreement
         if len(set(stances)) == 1:
@@ -105,10 +104,11 @@ class VotingAggregator:
         # Check for strong majority (2 out of 3 with high confidence)
         stance_counts = {}
         for r in responses:
-            if r.stance not in stance_counts:
-                stance_counts[r.stance] = {"count": 0, "total_conf": 0}
-            stance_counts[r.stance]["count"] += 1
-            stance_counts[r.stance]["total_conf"] += r.confidence
+            stance = self._normalize_stance(r.stance)
+            if stance not in stance_counts:
+                stance_counts[stance] = {"count": 0, "total_conf": 0}
+            stance_counts[stance]["count"] += 1
+            stance_counts[stance]["total_conf"] += r.confidence
         
         for stance, data in stance_counts.items():
             if data["count"] >= 2:
@@ -162,24 +162,21 @@ class VotingAggregator:
         # Calculate weighted scores
         phishing_score = 0.0
         legitimate_score = 0.0
-        total_weight = 0.0
-        
         agent_votes = {}
         
         for response in final_responses:
             agent_type = response.agent_type
             weight = self.weights.get(agent_type, 1.0) * response.confidence
+            stance = self._normalize_stance(response.stance)
             
-            agent_votes[agent_type] = response.stance
+            agent_votes[agent_type] = stance
             
-            if response.stance == "PHISHING":
+            if stance == "PHISHING":
                 phishing_score += weight
-            elif response.stance == "LEGITIMATE":
+            elif stance == "LEGITIMATE":
                 legitimate_score += weight
             # SUSPICIOUS is neutral, doesn't contribute to either score
             
-            total_weight += weight
-        
         # Calculate weighted probability
         total_decisive = phishing_score + legitimate_score
         if total_decisive > 0:
@@ -201,7 +198,7 @@ class VotingAggregator:
         # Check consensus type
         consensus_reached, _, _ = self.check_consensus(final_responses)
         
-        stances = [r.stance for r in final_responses]
+        stances = [self._normalize_stance(r.stance) for r in final_responses]
         if len(set(stances)) == 1:
             consensus_type = "unanimous"
         elif stances.count(decision) >= 2:
@@ -231,3 +228,19 @@ class VotingAggregator:
             total_tokens=total_tokens,
             total_processing_time_ms=total_time
         )
+
+    def _normalize_stance(self, stance: str) -> str:
+        val = str(stance or "SUSPICIOUS").strip().upper()
+        aliases = {
+            "SAFE": "LEGITIMATE",
+            "AMAN": "LEGITIMATE",
+            "LEGIT": "LEGITIMATE",
+            "MENCURIGAKAN": "SUSPICIOUS",
+            "PENIPUAN": "PHISHING",
+            "SCAM": "PHISHING",
+            "MALICIOUS": "PHISHING",
+        }
+        val = aliases.get(val, val)
+        if val not in {"PHISHING", "SUSPICIOUS", "LEGITIMATE"}:
+            return "SUSPICIOUS"
+        return val

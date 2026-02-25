@@ -60,11 +60,18 @@ apiKey.txt
 .DS_Store
 Thumbs.db
 
-Project specific
-data/raw/
-data/exports/
-*.csv
-!data/sample/*.csv
+# Project specific
+# data/raw/
+# data/exports/
+# *.csv
+# !data/sample/*.csv
 
-Documentation (internal only)
-docs
+# Evaluation & plotting artifacts (generated)
+results/
+plots/
+
+# Generated document exports
+docs/*.pdf
+
+# Documentation (internal only)
+# docs

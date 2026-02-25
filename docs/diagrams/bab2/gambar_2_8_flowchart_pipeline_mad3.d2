@@ -1,0 +1,144 @@
+direction: down
+
+start: {
+  label: "Start"
+  shape: oval
+}
+
+input_msg: {
+  label: "Input: Pesan Telegram"
+  shape: parallelogram
+}
+
+extract: {
+  label: "Ekstraksi teks, URL, metadata"
+  shape: rectangle
+}
+
+triage: {
+  label: "Stage 1 Rule-Based Triage"
+  shape: rectangle
+}
+
+dec_skip_llm: {
+  label: "Skip LLM true"
+  shape: diamond
+}
+
+out_triage_safe: {
+  label: "SAFE dari Triage"
+  shape: parallelogram
+}
+
+single_shot: {
+  label: "Stage 2 Single-Shot LLM"
+  shape: rectangle
+}
+
+dec_escalate: {
+  label: "Perlu eskalasi ke MAD"
+  shape: diamond
+}
+
+out_single_shot: {
+  label: "SAFE dari Single-Shot"
+  shape: parallelogram
+}
+
+mad_r1: {
+  label: "Stage 3 MAD3 Round 1"
+  shape: rectangle
+}
+
+agent_content: {
+  label: "Content Analyzer"
+  shape: rectangle
+}
+
+agent_security: {
+  label: "Security Validator"
+  shape: rectangle
+}
+
+agent_social: {
+  label: "Social Context"
+  shape: rectangle
+}
+
+collect_r1: {
+  label: "Kumpulkan respons Round 1"
+  shape: rectangle
+}
+
+dec_consensus: {
+  label: "Konsensus Round 1 tercapai"
+  shape: diamond
+}
+
+agg_r1: {
+  label: "Aggregasi voting berbobot"
+  shape: rectangle
+}
+
+mad_r2: {
+  label: "MAD3 Round 2 deliberasi"
+  shape: rectangle
+}
+
+agg_r2: {
+  label: "Aggregasi voting berbobot"
+  shape: rectangle
+}
+
+normalize: {
+  label: "Normalisasi LEGITIMATE ke SAFE"
+  shape: rectangle
+}
+
+out_final: {
+  label: "Klasifikasi akhir SAFE/SUSPICIOUS/PHISHING"
+  shape: parallelogram
+}
+
+action_log: {
+  label: "Mapping action + Logging DB"
+  shape: rectangle
+}
+
+end: {
+  label: "End"
+  shape: oval
+}
+
+start -> input_msg
+input_msg -> extract
+extract -> triage
+triage -> dec_skip_llm
+
+dec_skip_llm -> out_triage_safe: "Ya"
+dec_skip_llm -> single_shot: "Tidak"
+
+single_shot -> dec_escalate
+dec_escalate -> out_single_shot: "Tidak"
+dec_escalate -> mad_r1: "Ya"
+
+mad_r1 -> agent_content
+mad_r1 -> agent_security
+mad_r1 -> agent_social
+agent_content -> collect_r1
+agent_security -> collect_r1
+agent_social -> collect_r1
+
+collect_r1 -> dec_consensus
+dec_consensus -> agg_r1: "Ya"
+dec_consensus -> mad_r2: "Tidak"
+mad_r2 -> agg_r2
+
+agg_r1 -> normalize
+agg_r2 -> normalize
+normalize -> out_final
+
+out_triage_safe -> action_log
+out_single_shot -> action_log
+out_final -> action_log
+action_log -> end

@@ -1,0 +1,15 @@
+flowchart TD
+    A([Start]) --> B[/Input: URL dari Pesan/]
+    B --> C{Decision: URL Shortener?}
+    C -->|Ya| D[Process: URL Expansion]
+    C -->|Tidak| E[Process: Gunakan URL Asli]
+    D --> F[Process: Heuristic Risk Check<br/>TLD / HTTPS / Path]
+    E --> F
+    F --> G{Decision: Trusted Domain?}
+    G -->|Ya| H[Process: Tetapkan Risiko Rendah]
+    G -->|Tidak| I[Process: Cek Reputasi Eksternal<br/>VirusTotal]
+    I --> J[Process: Gabung Skor Risiko]
+    H --> K[/Output: Hasil URL Check/]
+    J --> K
+    K --> L[/Output: Bukti untuk Triage/MAD/]
+    L --> M([End])

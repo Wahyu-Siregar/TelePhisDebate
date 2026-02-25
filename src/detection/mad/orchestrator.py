@@ -7,10 +7,9 @@ import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any
 
 from .agents import ContentAnalyzer, SecurityValidator, SocialContextEvaluator, AgentResponse
-from .aggregator import VotingAggregator, AggregatedDecision
+from .aggregator import VotingAggregator
 
 
 def _is_fatal_llm_error(exc: Exception) -> bool:
@@ -154,6 +153,7 @@ class MultiAgentDebate:
         context = {
             "baseline": baseline_metrics or {},
             "url_checks": url_checks or {},
+            "single_shot": single_shot_result or {},
             "recent_topics": []  # Could be populated from group history
         }
         
@@ -310,8 +310,8 @@ class MultiAgentDebate:
                             raise
                         agent_name = futures[future]
                         # Keep original response on error
-                        responses.append(response_map.get(agent_type, AgentResponse(
-                            agent_type=agent_type,
+                        responses.append(response_map.get(agent_name, AgentResponse(
+                            agent_type=agent_name,
                             stance="SUSPICIOUS",
                             confidence=0.5,
                             key_arguments=[f"Deliberation error: {str(e)}"]

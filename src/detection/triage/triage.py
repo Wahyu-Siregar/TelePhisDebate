@@ -5,14 +5,13 @@ Combines all rule-based checks into a unified triage system
 
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any
 from urllib.parse import urlparse
 
 from .whitelist import WhitelistChecker
 from .blacklist import BlacklistChecker, RedFlag
 from .url_analyzer import URLAnalyzer
 from .behavioral import BehavioralAnomalyDetector, AnomalyResult
-from .url_expander import get_url_expander, ExpandResult
+from .url_expander import get_url_expander
 
 
 @dataclass
@@ -175,9 +174,12 @@ class RuleBasedTriage:
                 # URL is trusted if: source=whitelist OR (not malicious AND risk_score=0)
                 source = check_result.get('source', '')
                 is_malicious = check_result.get('is_malicious', False)
-                risk = check_result.get('risk_score', 1.0)
+                try:
+                    risk = float(check_result.get('risk_score', 1.0))
+                except (TypeError, ValueError):
+                    risk = 1.0
                 
-                if source == 'whitelist' or (not is_malicious and risk == 0.0):
+                if source == 'whitelist' or (not is_malicious and risk <= 0.10):
                     trusted_urls_from_checker.add(url)
                 
                 # Preserve expansion evidence from external checker for downstream LLM prompts
@@ -223,13 +225,6 @@ class RuleBasedTriage:
                 expanded_destinations[url] = expand_result.final_domain
         
         # Step 3: Check whitelist
-        # Include expanded destinations when checking whitelist
-        urls_to_check = list(urls)  # Start with original URLs
-        for url, final_domain in expanded_destinations.items():
-            if final_domain:
-                # Add the expanded URL for whitelist checking
-                urls_to_check.append(f"https://{final_domain}")
-        
         whitelist_result = self.whitelist_checker.check_urls(urls)
         whitelisted_urls = whitelist_result["whitelisted"]
         non_whitelisted_urls = whitelist_result["not_whitelisted"]

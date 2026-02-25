@@ -1,0 +1,13 @@
+flowchart TD
+    A([Start]) --> B[Process: Mulai Round 1 MAD]
+    B --> C[Process: Agen Menghasilkan Stance + Confidence]
+    C --> D{Decision: Konsensus Tercapai?}
+    D -->|Ya| E[Process: Early Termination]
+    E --> F[Process: Aggregasi Voting]
+    D -->|Tidak| G{Decision: Round < Max Rounds?}
+    G -->|Ya| H[Process: Deliberasi Round Berikutnya]
+    H --> C
+    G -->|Tidak| I[Process: Stop karena Max Rounds]
+    I --> F
+    F --> J[/Output: Keputusan Akhir/]
+    J --> K([End])

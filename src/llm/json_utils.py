@@ -39,6 +39,27 @@ def _normalize_label(label: str) -> str:
     return t
 
 
+def _label_payload(label: str) -> dict[str, Any]:
+    """
+    Build a minimal payload for bare-label model outputs.
+    Returns both classification and stance when possible.
+    """
+    raw = str(label).strip().upper()
+    norm = _normalize_label(label)
+    out: dict[str, Any] = {}
+
+    if raw == "LEGITIMATE":
+        out["stance"] = "LEGITIMATE"
+        out["classification"] = "SAFE"
+        return out
+
+    if norm in {"SAFE", "SUSPICIOUS", "PHISHING"}:
+        out["classification"] = norm
+        out["stance"] = "LEGITIMATE" if norm == "SAFE" else norm
+
+    return out
+
+
 def parse_json_object(value: Any) -> dict:
     """
     Best-effort parse a JSON object from an LLM response.
@@ -61,23 +82,14 @@ def parse_json_object(value: Any) -> dict:
     # Keep this conservative by only accepting when the first non-empty line begins with a known label.
     first_line = text.splitlines()[0].strip()
     m = re.match(
-        r"^(SAFE|SUSPICIOUS|PHISHING|AMAN|MENCURIGAKAN|PENIPUAN)\b(?:\s*[\-:,(].*)?$",
-        first_line,
-        flags=re.IGNORECASE,
-    )
-    if m:
-        return {"classification": _normalize_label(m.group(1))}
-    m = re.match(
         r"^(PHISHING|SUSPICIOUS|LEGITIMATE|SAFE|AMAN|MENCURIGAKAN|PENIPUAN)\b(?:\s*[\-:,(].*)?$",
         first_line,
         flags=re.IGNORECASE,
     )
     if m:
-        stance = _normalize_label(m.group(1))
-        # MAD stance uses LEGITIMATE instead of SAFE.
-        if stance == "SAFE":
-            stance = "LEGITIMATE"
-        return {"stance": stance}
+        payload = _label_payload(m.group(1))
+        if payload:
+            return payload
 
     candidates: list[str] = [text]
     first_curly = text.find("{")
@@ -131,10 +143,11 @@ def parse_json_object(value: Any) -> dict:
         flags=re.IGNORECASE,
     )
     if m:
-        stance = _normalize_label(m.group(2))
-        if stance == "SAFE":
-            stance = "LEGITIMATE"
-        out["stance"] = stance
+        payload = _label_payload(m.group(2))
+        if payload.get("stance"):
+            out["stance"] = payload["stance"]
+        if payload.get("classification"):
+            out.setdefault("classification", payload["classification"])
 
     m = re.search(
         r"\b(confidence|keyakinan)\b\s*[:=]?\s*\"?\s*([0-9]+(?:\.[0-9]+)?)\s*%?",
