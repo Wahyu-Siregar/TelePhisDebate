@@ -71,6 +71,8 @@ class RuleBasedTriage:
     - Style deviation: +15
     - CAPS LOCK abuse: +10
     - Authority impersonation: +20
+    - Redirect ke private chat: +25
+    - Suspected username impersonation: +35
     
     Kebijakan URL Shortener:
     - Shortener BUKAN indikator kuat phishing (dosen sering pakai).
@@ -98,6 +100,11 @@ class RuleBasedTriage:
         "caps_lock_abuse": 10,
         "excessive_punctuation": 5,
         "authority_impersonation": 20,
+        # Social engineering tanpa URL
+        "redirect_to_private": 25,      # Minta balas via chat pribadi — sangat mencurigakan
+        "suspected_impersonation": 35,  # Username dipakai user_id berbeda dari yang terdaftar
+        "first_time_solicitation": 30,  # Anggota lama tiba-tiba minta uang/pulsa — sinyal account takeover
+        "recent_suspicious_context": 20,  # Pesan lanjutan dalam 15 menit setelah deteksi suspicious/phishing
         "time_anomaly": 10,
         "length_anomaly": 10,
         "first_time_url": 10,
@@ -134,7 +141,8 @@ class RuleBasedTriage:
         message_text: str,
         message_timestamp: datetime | None = None,
         user_baseline: dict | None = None,
-        url_checks: dict | None = None
+        url_checks: dict | None = None,
+        sender_info: dict | None = None
     ) -> TriageResult:
         """
         Perform complete triage analysis on a message.
@@ -145,6 +153,7 @@ class RuleBasedTriage:
             user_baseline: User's baseline metrics from database
             url_checks: Pre-computed URL check results from URLSecurityChecker
                         (contains expanded_url, is_malicious, source=whitelist, etc.)
+            sender_info: Sender metadata including suspected_impersonation flag
             
         Returns:
             TriageResult with classification and details
@@ -304,7 +313,8 @@ class RuleBasedTriage:
             message_text,
             message_timestamp,
             has_urls,
-            user_baseline
+            user_baseline,
+            sender_info=sender_info
         )
         
         # Step 7: Calculate risk score
@@ -315,8 +325,9 @@ class RuleBasedTriage:
         
         for anomaly in behavioral_anomalies:
             weight = self.SCORE_WEIGHTS.get(anomaly.anomaly_type, 10)
-            # Scale by deviation score
-            risk_score += int(weight * anomaly.deviation_score)
+            # Scale by deviation score; use round() so mild anomalies (e.g. 10*0.05=0.5)
+            # still contribute 1 point instead of being silently truncated to 0.
+            risk_score += round(weight * anomaly.deviation_score)
             triggered_flags.append(anomaly.anomaly_type)
         
         # Apply bonus: if shortened URL resolved to whitelisted domain,
@@ -353,7 +364,7 @@ class RuleBasedTriage:
             expanded_urls=expanded_urls,
             red_flags=red_flags,
             behavioral_anomalies=behavioral_anomalies,
-            triggered_flags=list(set(triggered_flags))
+            triggered_flags=list(dict.fromkeys(triggered_flags))
         )
     
     def quick_check(self, message_text: str) -> str:

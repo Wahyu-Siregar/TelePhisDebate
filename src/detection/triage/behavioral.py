@@ -29,7 +29,21 @@ class BehavioralAnomalyDetector:
     TIME_ANOMALY_THRESHOLD = 2  # Hours outside typical range
     LENGTH_DEVIATION_THRESHOLD = 2.0  # Standard deviations
     STYLE_DEVIATION_THRESHOLD = 0.3  # 30% deviation
-    
+
+    # Minimum message history before first_time_solicitation check fires
+    SOLICITATION_HISTORY_THRESHOLD = 15
+
+    # Regex patterns that indicate money/favor solicitation
+    # Grabs both overt (pulsa, transfer) and subtle (nomor saya, dm aja)
+    SOLICITATION_PATTERNS = [
+        r'(?:transfer|kirim|isi(?:kan)?|bantu|titip|top[\s-]?up)\s+(?:pulsa|gopay|ovo|dana|shopeepay|linkaja|saldo)',
+        r'(?:nomor|no\.?|nomer)\s+(?:saya|aku|hp|wa|whatsapp)',
+        r'(?:chat|dm|wa|whatsapp|hubungi)\s+(?:saja|aja|langsung|saya|aku|ku)',
+        r'minta\s+(?:tolong|bantuan|pulsa|transferan|kiriman)',
+        r'pinjam(?:in|kan)?\s+(?:dulu|sedikit|pulsa|uang|duit)',
+        r'(?:bayar(?:in)?|lunasi|cicil(?:an)?)\s+(?:dulu|utang|tagihan)',
+    ]
+
     def __init__(self):
         pass
     
@@ -188,12 +202,150 @@ class BehavioralAnomalyDetector:
         
         return None
     
+    def check_recent_suspicious_context(
+        self,
+        sender_info: dict
+    ) -> AnomalyResult | None:
+        """
+        Deteksi eskalasi multi-turn: pesan baru datang setelah pesan sebelumnya
+        dari user yang sama telah diflag suspicious/phishing dalam 15 menit terakhir.
+
+        Teknik serangan ini umum dalam social engineering:
+        pesan pertama tampak innocuous ("halo pak, kenapa pak?"),
+        lalu dilanjutkan dengan permintaan nyata ("tolong isikan pulsa...").
+        Tanpa konteks percakapan, pesan lanjutan sering lolos deteksi.
+
+        Flag ini di-set oleh handlers.py berdasarkan `last_suspicious_message_at`
+        yang disimpan di baseline setelah setiap deteksi suspicious/phishing.
+
+        Args:
+            sender_info: Dict dari handlers, mungkin berisi
+                         `recent_suspicious_context: True` dan
+                         `recent_suspicious_flags: [...]`
+
+        Returns:
+            AnomalyResult jika konteks mencurigakan aktif, None sebaliknya
+        """
+        if not sender_info or not sender_info.get("recent_suspicious_context"):
+            return None
+
+        prev_flags = sender_info.get("recent_suspicious_flags", [])
+        prev_classification = sender_info.get("last_suspicious_classification", "SUSPICIOUS")
+        desc = (
+            f"Pesan sebelumnya dari pengguna ini baru saja diflag "
+            f"{prev_classification} (dalam 15 menit terakhir)"
+        )
+        if prev_flags:
+            desc += f" dengan flags: {prev_flags}"
+        desc += ". Pesan lanjutan perlu diperiksa lebih ketat."
+
+        return AnomalyResult(
+            is_anomaly=True,
+            anomaly_type="recent_suspicious_context",
+            description=desc,
+            deviation_score=0.65,
+            baseline_value="no_recent_suspicious",
+            current_value="within_15min_window"
+        )
+
+    def check_first_time_solicitation(
+        self,
+        message_text: str,
+        baseline_metrics: dict
+    ) -> AnomalyResult | None:
+        """
+        Deteksi ketika anggota lama tiba-tiba mengirim permintaan uang/pulsa
+        atau meminta chat pribadi — sinyal kuat account takeover.
+
+        Berbeda dari check_username_impersonation, pemeriksaan ini berlaku saat
+        user_id SAMA (akun asli diambil alih), sehingga cek impersonasi tidak
+        akan terdeteksi. Yang berubah adalah PERILAKU: anggota aktif yang
+        selama ini hanya membahas akademik tiba-tiba meminta transfer/pulsa.
+
+        Logic:
+        - Hanya berlaku jika histori cukup (>= SOLICITATION_HISTORY_THRESHOLD)
+        - ``money_request_count`` di baseline default 0 jika belum diisi;
+          ketika sudah diisi (baseline diperbarui), pemeriksaan ini adaptif.
+        - Minimal salah satu SOLICITATION_PATTERNS cocok dengan teks pesan.
+
+        Args:
+            message_text: Isi pesan saat ini
+            baseline_metrics: Metrik baseline dari database
+
+        Returns:
+            AnomalyResult jika pola solicitation pertama terdeteksi, None sebaliknya
+        """
+        import re
+
+        total_messages = baseline_metrics.get("total_messages", 0)
+        if total_messages < self.SOLICITATION_HISTORY_THRESHOLD:
+            return None  # Tidak cukup histori untuk membuat penilaian
+
+        # Jika baseline sudah melacak money_request_count dan > 0, bukan pertama kali
+        money_request_count = baseline_metrics.get("money_request_count", 0)
+        if money_request_count > 0:
+            return None
+
+        text_lower = message_text.lower()
+        for pattern in self.SOLICITATION_PATTERNS:
+            if re.search(pattern, text_lower, re.IGNORECASE):
+                return AnomalyResult(
+                    is_anomaly=True,
+                    anomaly_type="first_time_solicitation",
+                    description=(
+                        f"Anggota lama ({total_messages} pesan histori) mengirim "
+                        "permintaan uang/pulsa/bantuan untuk pertama kali — "
+                        "kemungkinan akun diambil alih (account takeover)"
+                    ),
+                    deviation_score=0.85,
+                    baseline_value=money_request_count,
+                    current_value="solicitation_detected"
+                )
+
+        return None
+
+    def check_username_impersonation(
+        self,
+        sender_info: dict
+    ) -> AnomalyResult | None:
+        """
+        Cek apakah username pengirim pernah dilihat dengan user_id berbeda.
+
+        Flag `suspected_impersonation` di-set oleh handlers.py setelah
+        query database menemukan username yang sama dengan user_id berbeda.
+        Ini mendeteksi teknik impersonasi dosen di Telegram:
+        penyerang membuat akun dengan username & foto profil dosen asli.
+
+        Args:
+            sender_info: Dict dari handlers yang mungkin berisi
+                         `suspected_impersonation: True`
+
+        Returns:
+            AnomalyResult jika impersonasi terdeteksi, None sebaliknya
+        """
+        if not sender_info or not sender_info.get("suspected_impersonation"):
+            return None
+
+        return AnomalyResult(
+            is_anomaly=True,
+            anomaly_type="suspected_impersonation",
+            description=(
+                f"Username @{sender_info.get('username', '?')} digunakan oleh "
+                "user_id berbeda dari yang sebelumnya terdaftar di grup "
+                "(kemungkinan impersonasi)"
+            ),
+            deviation_score=1.0,
+            baseline_value="registered_user_id",
+            current_value=sender_info.get("user_id")
+        )
+
     def analyze_all(
         self,
         message_text: str,
         message_timestamp: datetime,
         has_url: bool,
-        baseline_metrics: dict
+        baseline_metrics: dict,
+        sender_info: dict | None = None
     ) -> list[AnomalyResult]:
         """
         Jalankan semua pengecekan anomali terhadap baseline user.
@@ -203,14 +355,32 @@ class BehavioralAnomalyDetector:
             message_timestamp: Waktu pesan dikirim
             has_url: Apakah pesan mengandung URLs
             baseline_metrics: Metrik baseline user dari database
+            sender_info: Metadata pengirim (termasuk flag suspected_impersonation)
             
         Returns:
             Daftar anomali yang terdeteksi
         """
         anomalies = []
-        
+
+        # Username impersonation check — tidak memerlukan baseline
+        impersonation = self.check_username_impersonation(sender_info or {})
+        if impersonation:
+            anomalies.append(impersonation)
+
+        # Multi-turn context check — tidak memerlukan baseline
+        recent_ctx = self.check_recent_suspicious_context(sender_info or {})
+        if recent_ctx:
+            anomalies.append(recent_ctx)
+
         if not baseline_metrics:
             return anomalies
+
+        # Account takeover check — anggota lama tiba-tiba meminta uang/pulsa
+        solicitation_result = self.check_first_time_solicitation(
+            message_text, baseline_metrics
+        )
+        if solicitation_result:
+            anomalies.append(solicitation_result)
         
         # Time anomaly
         time_result = self.check_time_anomaly(

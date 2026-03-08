@@ -7,7 +7,8 @@ import logging
 import os
 import time
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from src.config import config
 from .triage import RuleBasedTriage
@@ -17,6 +18,18 @@ from .mad5 import MultiAgentDebate as MultiAgentDebateV5
 from .url_checker import get_url_checker
 
 logger = logging.getLogger(__name__)
+
+
+def _resolve_wib_timezone():
+    """Resolve Asia/Jakarta timezone with safe fallback when tzdata is unavailable."""
+    try:
+        return ZoneInfo("Asia/Jakarta")
+    except ZoneInfoNotFoundError:
+        # Windows/Python env without tzdata package.
+        return timezone(timedelta(hours=7))
+
+
+WIB_TZ = _resolve_wib_timezone()
 
 
 @dataclass
@@ -95,8 +108,8 @@ class PhishingDetectionPipeline:
     - SAFE: tidak ada action
     - SUSPICIOUS (confidence rendah): tandai untuk review
     - SUSPICIOUS (confidence tinggi): peringatkan users
-    - PHISHING (confidence < 80%): peringatkan + tandai
-    - PHISHING (confidence ≥ 80%): hapus pesan
+    - PHISHING (confidence apapun): tandai untuk review admin (flag_review)
+      NOTE: Bot TIDAK auto-delete. Admin memutuskan secara manual.
     """
     
     # Action thresholds
@@ -186,6 +199,9 @@ class PhishingDetectionPipeline:
         
         if message_timestamp is None:
             message_timestamp = datetime.now()
+
+        # Normalize analysis time to WIB for prompt consistency (Telegram message.date is UTC).
+        analysis_timestamp = self._to_wib(message_timestamp)
         
         total_tokens = 0
         total_tokens_in = 0
@@ -196,9 +212,10 @@ class PhishingDetectionPipeline:
         # ============================================================
         triage_result = self.triage.analyze(
             message_text,
-            message_timestamp,
+            analysis_timestamp,
             baseline_metrics,
-            url_checks=url_checks  # Pass URL check results from URLSecurityChecker
+            url_checks=url_checks,
+            sender_info=sender_info
         )
         
         # If triage says SAFE (only whitelisted URLs), we're done
@@ -219,7 +236,7 @@ class PhishingDetectionPipeline:
         # ============================================================
         single_shot_result = self.single_shot.classify(
             message_text=message_text,
-            message_timestamp=message_timestamp,
+            message_timestamp=analysis_timestamp,
             sender_info=sender_info,
             baseline_metrics=baseline_metrics,
             skip_triage=True,  # Already have triage result
@@ -276,7 +293,7 @@ class PhishingDetectionPipeline:
         
         mad_result = self.mad.run_debate(
             message_text=message_text,
-            message_timestamp=message_timestamp,
+            message_timestamp=analysis_timestamp,
             sender_info=sender_info,
             baseline_metrics=baseline_metrics,
             triage_result=triage_result.to_dict(),
@@ -291,13 +308,21 @@ class PhishingDetectionPipeline:
         
         total_tokens += mad_result.total_tokens
         
-        # Sum MAD agent tokens (each agent response has tokens_input/tokens_output)
-        for r in (mad_result.round_1_summary or []):
-            total_tokens_in += r.get("tokens_input", 0)
-            total_tokens_out += r.get("tokens_output", 0)
-        for r in (mad_result.round_2_summary or []):
-            total_tokens_in += r.get("tokens_input", 0)
-            total_tokens_out += r.get("tokens_output", 0)
+        # Sum MAD agent tokens across all executed rounds when available.
+        mad_rounds = getattr(mad_result, "round_summaries", None) or []
+        if mad_rounds:
+            for round_summary in mad_rounds:
+                for r in (round_summary or []):
+                    total_tokens_in += r.get("tokens_input", 0)
+                    total_tokens_out += r.get("tokens_output", 0)
+        else:
+            # Backward compatibility with legacy two-round payloads.
+            for r in (mad_result.round_1_summary or []):
+                total_tokens_in += r.get("tokens_input", 0)
+                total_tokens_out += r.get("tokens_output", 0)
+            for r in (mad_result.round_2_summary or []):
+                total_tokens_in += r.get("tokens_input", 0)
+                total_tokens_out += r.get("tokens_output", 0)
         
         mad_payload = mad_result.to_dict()
         mad_payload.setdefault("variant", self.mad_mode)
@@ -385,6 +410,19 @@ class PhishingDetectionPipeline:
             message_id=message_id,
             timestamp=timestamp.isoformat() if timestamp else ""
         )
+
+    @staticmethod
+    def _to_wib(ts: datetime) -> datetime:
+        """
+        Convert timezone-aware timestamp to Asia/Jakarta.
+        Naive timestamp is kept as-is to avoid incorrect assumptions.
+        """
+        if ts.tzinfo is None:
+            return ts
+        try:
+            return ts.astimezone(WIB_TZ)
+        except Exception:
+            return ts
     
     def quick_check(self, message_text: str) -> tuple[str, str]:
         """

@@ -54,8 +54,9 @@ Jika ini kesalahan, hubungi admin grup.""",
 Pesan dari @{username} ditandai sebagai mencurigakan.
 
 🔍 <b>Perhatian:</b>
-- Jangan klik link sebelum dikonfirmasi aman
-- Jangan menghubungi nomor yang tertera pada chat phishing tersebut
+- Jangan klik link apapun sebelum dikonfirmasi aman
+- Jangan transfer uang, pulsa, atau saldo kepada siapapun via grup
+- Jangan menghubungi nomor yang tertera pada pesan tersebut
 - Admin telah diberitahu untuk review
 
 Confidence: {confidence:.0%}""",
@@ -305,6 +306,7 @@ Confidence: {confidence:.0%}""",
                 if not action_result["error"]:
                     action_result["error"] = f"Could not notify admin: {e}"
         else:
+            action_result["success"] = False
             if not action_result["error"]:
                 action_result["error"] = "No admin chat ID configured"
         
@@ -316,11 +318,22 @@ Confidence: {confidence:.0%}""",
             has_url = bool(result.triage_result.get("urls_found", []))
         if not has_url and re.search(r"https?://|www\.", message_text, re.IGNORECASE):
             has_url = True
-        
+
         has_phone = bool(
             re.search(r"(?<!\d)(?:\+?62|0)\d(?:[\s-]?\d){8,13}(?!\d)", message_text)
         )
-        
+
+        # Account takeover / solicitation: no URL but asking for money/pulsa
+        triage_flags = []
+        if result.triage_result:
+            triage_flags = result.triage_result.get("triggered_flags", [])
+        has_solicitation = "first_time_solicitation" in triage_flags
+
+        if not has_url and has_solicitation:
+            return (
+                "JANGAN TRANSFER UANG, PULSA, ATAU SALDO APAPUN kepada siapapun "
+                "yang memintanya melalui grup ini! Kemungkinan akun telah diambil alih."
+            )
         if has_url and has_phone:
             return "JANGAN KLIK LINK ATAU MENGHUBUNGI NOMOR APAPUN pada pesan tersebut!"
         if has_url:

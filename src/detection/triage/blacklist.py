@@ -45,8 +45,12 @@ class BlacklistChecker:
         "limited", "terbatas", "akan berakhir", "expired",
         "hanya hari ini", "promo", "gratis", "hadiah",
         "verifikasi", "diblokir", "ditangguhkan",
+        # Emotional urgency — sering dipakai sebagai alasan palsu (teknik melayat)
+        "melayat", "melayad", "sedang melayat", "musibah", "innalillahi",
+        "duka cita", "berduka", "wafat", "meninggal",
+        "kecelakaan", "sakit keras", "darurat",
     ]
-    
+
     # Phishing indicator keywords
     PHISHING_KEYWORDS_ID: list[str] = [
         "verifikasi akun", "konfirmasi data", "update data",
@@ -60,14 +64,33 @@ class BlacklistChecker:
         "beasiswa penuh", "lowongan kerja", "gaji tinggi",
         "investasi", "keuntungan besar", "cuan", "pinjaman", "modal", "utang",
         "amanah", "dana", "keuangan", "cair",
+        # Teknik pulsa scam — minta isi pulsa/saldo ke nomor/akun tertentu
+        "jual pulsa", "isi pulsa", "isikan pulsa", "beli pulsa",
+        "bantu pulsa", "titip pulsa", "top up pulsa", "top-up",
+        "isi saldo", "transfer saldo", "kirim pulsa",
+        "gopay", "ovo", "dana", "shopeepay", "linkaja",
+        "nomor saya", "nomor hp saya", "nomor tujuan",
     ]
-    
+
     # Authority impersonation patterns
     AUTHORITY_PATTERNS: list[str] = [
         r"dari\s+(pihak\s+)?(kampus|universitas|uir|rektorat|dekanat)",
         r"(admin|operator)\s+(resmi|official)",
         r"pengumuman\s+(penting|resmi)",
         r"surat\s+edaran",
+    ]
+
+    # Patterns that ask to move conversation away from the group (very suspicious)
+    # Legitimate announcements never ask members to reply via private chat.
+    REDIRECT_PRIVATE_PATTERNS: list[str] = [
+        r"chat\s*(pribadi|private|personal|langsung)",
+        r"(dm|wa|whatsapp|hubungi|kontak)\s*(saja|sj|aja|langsung)",
+        r"jangan\s+(dibalas|balas)\s*(di\s*)?(grup|group)",
+        r"tdk?\.?\s+usah\s+(dibalas?|balas)\s*(di\s*)?(grup|group)",
+        r"tidak\s+usah\s+(dibalas?|balas)\s*(di\s*)?(grup|group)",
+        r"balas\s+(via|lewat|ke)\s*(wa|whatsapp|dm|chat)",
+        r"(hubungi|contact)\s+(saya|aku|sy)\s+(langsung|pribadi|dl|dulu)",
+        r"tdk\s+perlu\s+(balas|dibalas)\s*(di\s*)?(grup|group)",
     ]
     
     def __init__(self, custom_blacklist: Set[str] | None = None):
@@ -157,6 +180,20 @@ class BlacklistChecker:
             if re.search(pattern, text_lower):
                 matched.append(pattern)
         return matched
+
+    def check_redirect_to_private(self, text: str) -> bool:
+        """
+        Deteksi apakah pesan meminta penerima untuk pindah ke chat pribadi.
+
+        Ini adalah indikator kuat social engineering — pengirim legitimate
+        di grup akademik tidak akan meminta anggota untuk tidak membalas di grup.
+        Teknik ini umum dipakai pada penipuan pulsa yang mengimpersonasi dosen.
+        """
+        text_lower = text.lower()
+        for pattern in self.REDIRECT_PRIVATE_PATTERNS:
+            if re.search(pattern, text_lower):
+                return True
+        return False
     
     def analyze_url(self, url: str) -> list[RedFlag]:
         """
@@ -250,7 +287,16 @@ class BlacklistChecker:
                 severity=7,
                 matched_value=str(authority_matches[0])
             ))
-        
+
+        # Check redirect to private — strong social engineering signal
+        if self.check_redirect_to_private(text):
+            flags.append(RedFlag(
+                flag_type="redirect_to_private",
+                description="Message asks recipient to reply via private chat instead of group",
+                severity=8,
+                matched_value="redirect_pattern_matched"
+            ))
+
         return flags
     
     def add_to_blacklist(self, domain: str):

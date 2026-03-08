@@ -57,9 +57,9 @@ class VotingAggregator:
     - Social Context: 1.0 (contextual analysis)
     
     Decision thresholds:
-    - PHISHING: weighted_score >= 0.75
-    - LEGITIMATE: weighted_score <= 0.25
-    - SUSPICIOUS: 0.25 < weighted_score < 0.75
+    - PHISHING: weighted_score >= 0.70
+    - LEGITIMATE: weighted_score <= 0.35
+    - SUSPICIOUS: 0.35 < weighted_score < 0.70
     """
     
     # Agent weights (higher = more influence)
@@ -70,7 +70,7 @@ class VotingAggregator:
     }
     
     # Decision thresholds
-    PHISHING_THRESHOLD = 0.65
+    PHISHING_THRESHOLD = 0.70
     LEGITIMATE_THRESHOLD = 0.35
     
     def __init__(self, custom_weights: dict | None = None):
@@ -191,7 +191,7 @@ class VotingAggregator:
             decision = "LEGITIMATE"
         else:
             decision = "SUSPICIOUS"
-        
+
         # Calculate confidence
         confidence = max(phishing_prob, 1 - phishing_prob)
         

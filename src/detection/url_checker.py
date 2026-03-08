@@ -475,12 +475,18 @@ class URLSecurityChecker:
             session = await self._get_expand_session()
             
             for _ in range(max_redirects):
+                parsed_current = urlparse(current_url)
+                current_domain = parsed_current.netloc.lower()
+                # Only skip SSL verification for the initial known shortener hop;
+                # subsequent hops follow the destination server's certificate.
+                skip_ssl = current_domain in self.URL_SHORTENERS
+
                 try:
                     # Use HEAD request first (faster), fallback to GET
                     async with session.head(
                         current_url, 
                         allow_redirects=False,
-                        ssl=False  # Some shorteners have SSL issues
+                        ssl=not skip_ssl
                     ) as resp:
                         if resp.status in (301, 302, 303, 307, 308):
                             location = resp.headers.get('Location')
@@ -501,7 +507,7 @@ class URLSecurityChecker:
                     async with session.get(
                         current_url,
                         allow_redirects=False,
-                        ssl=False
+                        ssl=not skip_ssl
                     ) as resp:
                         if resp.status in (301, 302, 303, 307, 308):
                             location = resp.headers.get('Location')

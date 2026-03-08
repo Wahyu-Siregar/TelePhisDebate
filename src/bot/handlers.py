@@ -81,8 +81,12 @@ class MessageHandler:
         if not text_content:
             return
         
+        # Skip messages without a sender (e.g. anonymous channel posts)
+        if not message.from_user:
+            return
+
         # Skip bot messages
-        if message.from_user and message.from_user.is_bot:
+        if message.from_user.is_bot:
             return
         
         # Skip commands
@@ -140,9 +144,45 @@ class MessageHandler:
                     sender_info["original_sender"] = message.forward_origin.sender_user_name
             except Exception:
                 pass
+
+        # Check for username impersonation: username dipakai user_id berbeda dari yang terdaftar
+        if self.enable_logging and message.from_user.username:
+            if await self._check_username_impersonation(message.from_user):
+                sender_info["suspected_impersonation"] = True
+                logger.warning(
+                    "Suspected impersonation: @%s (user_id=%s) menggunakan username "
+                    "yang sebelumnya terdaftar dengan user_id berbeda",
+                    message.from_user.username,
+                    message.from_user.id,
+                )
         
         # Get user baseline from database (if available)
         baseline_metrics = await self._get_user_baseline(message.from_user.id)
+
+        # Cek konteks percakapan mencurigakan sebelumnya (dalam 15 menit terakhir).
+        # Jika user baru saja mengirim pesan yang diflag suspicious/phishing,
+        # pesan berikutnya dari user yang sama dinaikkan risk score-nya.
+        if baseline_metrics:
+            last_sus_at_str = baseline_metrics.get("last_suspicious_message_at")
+            if last_sus_at_str:
+                try:
+                    from datetime import timezone as _tz
+                    last_sus_dt = datetime.fromisoformat(last_sus_at_str)
+                    if last_sus_dt.tzinfo is None:
+                        last_sus_dt = last_sus_dt.replace(tzinfo=_tz.utc)
+                    msg_dt = message.date if message.date.tzinfo else message.date.replace(tzinfo=_tz.utc)
+                    age_seconds = (msg_dt - last_sus_dt).total_seconds()
+                    if 0 < age_seconds <= 900:  # 15 menit
+                        sender_info["recent_suspicious_context"] = True
+                        sender_info["recent_suspicious_flags"] = baseline_metrics.get(
+                            "last_suspicious_flags", []
+                        )
+                        logger.info(
+                            "Recent suspicious context detected for user_id=%s (%.0fs ago)",
+                            message.from_user.id, age_seconds
+                        )
+                except Exception:
+                    pass
         
         # Ensure user is registered in the database and get internal users.id
         db_user_id = None
@@ -179,6 +219,25 @@ class MessageHandler:
         # Log to database
         if self.enable_logging:
             await self._log_detection(message, result, action_result, db_user_id)
+
+        # Jika hasil suspicious/phishing, simpan timestamp & flags ke baseline untuk
+        # mendeteksi eskalasi multi-turn (percakapan berlanjut ke pesan berikutnya).
+        if (
+            self.enable_logging
+            and result.classification in ("SUSPICIOUS", "PHISHING")
+        ):
+            await self._update_suspicious_context(message.from_user.id, result)
+
+        # Jika pipeline menilai SAFE tapi sebelumnya memicu first_time_solicitation,
+        # update baseline agar anggota sah ini tidak terus-menerus diflag.
+        # (false-positive dari anggota yang memang biasa berbagi kontak akademis)
+        if (
+            self.enable_logging
+            and result.classification == "SAFE"
+            and result.triage_result
+            and "first_time_solicitation" in result.triage_result.get("triggered_flags", [])
+        ):
+            await self._update_money_request_count(message.from_user.id)
     
     def _extract_sender_info(self, message: Message) -> dict:
         """Extract sender information from message"""
@@ -210,6 +269,98 @@ class MessageHandler:
             pass
         
         return None
+
+    async def _update_suspicious_context(self, user_id: int, result) -> None:
+        """
+        Simpan timestamp dan triage flags dari deteksi SUSPICIOUS/PHISHING ke baseline.
+
+        Digunakan oleh _process_message() berikutnya untuk mendeteksi multi-turn scam:
+        jika pesan berikutnya dari user yang sama datang dalam 15 menit, risk score
+        akan dinaikkan melalui behavioral.check_recent_suspicious_context().
+        """
+        if not self.db:
+            return
+        try:
+            row = self.db.table("users").select("baseline_metrics").eq(
+                "telegram_user_id", user_id
+            ).execute()
+            if not (row.data and len(row.data) > 0):
+                return
+            baseline = dict(row.data[0].get("baseline_metrics") or {})
+            triggered_flags = []
+            if result.triage_result:
+                triggered_flags = result.triage_result.get("triggered_flags", [])
+            baseline["last_suspicious_message_at"] = datetime.now().isoformat()
+            baseline["last_suspicious_flags"] = triggered_flags
+            baseline["last_suspicious_classification"] = result.classification
+            self.db.table("users").update({
+                "baseline_metrics": baseline,
+                "baseline_updated_at": datetime.now().isoformat()
+            }).eq("telegram_user_id", user_id).execute()
+            logger.debug(
+                "Suspicious context saved for user_id=%s: classification=%s flags=%s",
+                user_id, result.classification, triggered_flags
+            )
+        except Exception as e:
+            logger.debug("Gagal update suspicious context: %s", e)
+
+    async def _update_money_request_count(self, user_id: int) -> None:
+        """
+        Increment money_request_count di baseline setelah pesan solicitation
+        dinyatakan SAFE oleh pipeline.
+
+        Ini mencegah false-positive berulang untuk anggota yang sah dan memang
+        pernah berbagi nomor kontak atau info serupa untuk keperluan akademis.
+        Dipanggil HANYA jika classification == SAFE.
+        """
+        if not self.db:
+            return
+        try:
+            row = self.db.table("users").select("baseline_metrics").eq(
+                "telegram_user_id", user_id
+            ).execute()
+            if not (row.data and len(row.data) > 0):
+                return
+            baseline = dict(row.data[0].get("baseline_metrics") or {})
+            baseline["money_request_count"] = baseline.get("money_request_count", 0) + 1
+            self.db.table("users").update({
+                "baseline_metrics": baseline,
+                "baseline_updated_at": datetime.now().isoformat()
+            }).eq("telegram_user_id", user_id).execute()
+            logger.info(
+                "Baseline updated: money_request_count=%s untuk user_id=%s",
+                baseline["money_request_count"], user_id
+            )
+        except Exception as e:
+            logger.debug("Gagal update money_request_count: %s", e)
+
+    async def _check_username_impersonation(self, user) -> bool:
+        """
+        Cek apakah username ini pernah digunakan user_id berbeda di database.
+
+        Query DB untuk user dengan username yang sama tetapi telegram_user_id
+        berbeda. Jika ditemukan, kemungkinan besar ini akun impersonasi.
+
+        Args:
+            user: Telegram User object dari message.from_user
+
+        Returns:
+            True jika terdeteksi potensi impersonasi, False sebaliknya
+        """
+        if not self.db:
+            return False
+        try:
+            result = self.db.table("users").select(
+                "telegram_user_id"
+            ).eq(
+                "username", user.username
+            ).neq(
+                "telegram_user_id", user.id
+            ).limit(1).execute()
+            return bool(result.data and len(result.data) > 0)
+        except Exception as e:
+            logger.debug("Username impersonation check failed: %s", e)
+            return False
     
     async def _ensure_user_registered(
         self,

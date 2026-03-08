@@ -74,14 +74,16 @@ Total referensi inti pada Tabel 2.1 (a-d): **16 paper**. Komposisi ini dipilih a
 
 ### 2.2.1 Phishing dan Rekayasa Sosial
 
-Phishing merupakan serangan yang memanfaatkan manipulasi psikologis agar korban menyerahkan informasi sensitif atau melakukan aksi berisiko. Pada media chat, serangan sering disamarkan sebagai pesan resmi agar menurunkan kewaspadaan.
+Phishing merupakan serangan yang memanfaatkan manipulasi psikologis (*social engineering*) agar korban menyerahkan informasi sensitif atau melakukan aksi berisiko. Pada media pesan/chat, pelaku umumnya menyamarkan identitas sebagai pihak tepercaya lalu menyisipkan tautan atau instruksi tindakan tertentu [@heiding2024llmphishing; @halim2025enhancing].
 
 Elemen rekayasa sosial yang umum:
 1. **Urgency/pressure**: memaksa korban bertindak cepat.
 2. **Authority impersonation**: mengatasnamakan admin, dosen, atau institusi.
 3. **Reward/fear trigger**: iming-iming hadiah atau ancaman pemblokiran akun.
 
-Dalam grup akademik, elemen tersebut sering dibungkus dengan konteks perkuliahan sehingga perlu analisis yang memperhatikan isi pesan sekaligus konteks.
+Kombinasi elemen tersebut membuat pesan berbahaya tampak kredibel dan meningkatkan kemungkinan korban merespons tanpa verifikasi [@heiding2024llmphishing; @sameen2020phishhaven].
+
+Dalam konteks percakapan akademik, narasi phishing sering menyerupai pengumuman kelas atau administrasi kampus, sehingga analisis tidak cukup mengandalkan *keyword matching*; sistem perlu memahami semantik pesan, pola percakapan, dan konteks sosial [@salman2025spallmguard; @xue2025multiphishguard; @uddin2024explainable].
 
 ### 2.2.2 Pemrosesan Teks untuk Deteksi Ancaman
 
@@ -90,7 +92,7 @@ Pemrosesan teks pada sistem deteksi pesan berbahaya umumnya mencakup:
 2. *Normalization* (lowercase, penyeragaman pola kata informal).
 3. Ekstraksi indikator linguistik (kata kunci risiko, pola ajakan tindakan, penyalahgunaan huruf kapital).
 
-Prinsip teoritisnya adalah mengubah teks mentah menjadi representasi yang lebih stabil agar keputusan model lebih konsisten.
+Prinsip teoritisnya adalah mengubah teks mentah menjadi representasi yang lebih stabil agar keputusan model lebih konsisten. Pada pendekatan klasik, stabilitas representasi diperoleh melalui *feature engineering* dan reduksi dimensi; pada pendekatan modern, transformasi semantik diperoleh melalui encoder berbasis transformer [@gualberto2020feature; @ibrahim2026bertroberta]. Studi model hibrida juga menunjukkan bahwa kombinasi fitur lokal (n-gram/konvolusi) dan konteks urutan (RNN/GRU) efektif untuk teks pesan singkat yang tidak terstruktur [@ulfath2022hybrid].
 
 ### 2.2.3 Analisis URL dan Reputasi Domain
 
@@ -101,7 +103,7 @@ Komponen teoretis analisis URL:
 2. **Heuristic URL risk**: menilai TLD, pola domain, HTTPS, path/query berisiko.
 3. **External reputation**: memanfaatkan sumber eksternal (mis. VirusTotal) sebagai bukti objektif.
 
-Pendekatan gabungan ini mengurangi ketergantungan pada isi teks semata.
+Pendekatan gabungan ini mengurangi ketergantungan pada isi teks semata. Literatur URL phishing menunjukkan bahwa sinyal leksikal domain dan struktur URL berkontribusi kuat untuk deteksi dini, khususnya saat serangan menyamarkan konten teks [@joshi2019lexical; @sameen2020phishhaven]. Penelitian terbaru juga memperlihatkan bahwa integrasi metadata URL dengan model bahasa dapat meningkatkan robustnes terhadap pola ancaman baru [@chen2026metadataurl].
 
 > **Placeholder Gambar 2.2**  
 > Ilustrasi alur social engineering phishing pada media chat.
@@ -121,6 +123,8 @@ Secara umum, *triage* menghasilkan:
 2. Daftar *triggered flags*.
 3. Skor risiko agregat untuk memandu eskalasi tahap berikutnya.
 
+Secara teoretis, *triage* berfungsi sebagai *front-line filter* berbiaya rendah untuk menyeimbangkan biaya komputasi dan sensitivitas deteksi. Pendekatan berbasis fitur masih efektif untuk keputusan cepat, tetapi perlu dikombinasikan dengan analisis semantik agar tetap adaptif pada variasi pesan [@gualberto2020feature; @halim2025enhancing].
+
 ### 2.2.5 Single-Shot LLM
 
 Single-shot LLM berfungsi sebagai pengambil keputusan menengah untuk kasus non-trivial. Secara teori, LLM unggul dalam:
@@ -128,7 +132,9 @@ Single-shot LLM berfungsi sebagai pengambil keputusan menengah untuk kasus non-t
 2. Menangkap pola bahasa manipulatif yang tidak eksplisit.
 3. Menghasilkan alasan keputusan.
 
-Namun, agar reliabel di sistem produksi, output LLM harus dipaksa terstruktur (JSON schema) dan diparsing secara robust.
+Literatur menunjukkan bahwa performa LLM untuk phishing dipengaruhi strategi inferensi (misalnya *prompt engineering*, *few-shot*, atau *fine-tuning*), sehingga tahap *single-shot* perlu dirancang dengan kebijakan eskalasi yang jelas untuk kasus ambigu [@salman2025spallmguard; @trad2024promptfine; @uddin2024explainable].
+
+Pada implementasi sistem ini, keluaran model dipaksa ke format terstruktur (JSON schema) dan diparsing secara robust sebagai kontrol rekayasa agar keputusan antartahap tetap konsisten.
 
 ### 2.2.6 Multi-Agent Debate (MAD)
 
@@ -142,6 +148,8 @@ Konsep dasarnya:
 Pada penelitian ini:
 1. **MAD3**: lebih ringan dan efisien.
 2. **MAD5**: lebih kaya peran (detector, critic, defender, fact-checker, judge) dan diharapkan lebih stabil pada kasus ambigu.
+
+Dasar teorinya adalah *collective reasoning*: kualitas keputusan dapat meningkat ketika argumen dari peran yang berbeda digabungkan melalui mekanisme konsensus. Pendekatan ini didukung studi MAD umum maupun studi multi-agen spesialis untuk deteksi phishing [@tian2024mad; @chen2024reconcile; @xue2025multiphishguard].
 
 ### 2.2.7 Konsensus, Voting, dan Early Termination
 
@@ -158,7 +166,7 @@ dengan:
 2. \(c_i\): confidence agen ke-\(i\),
 3. \(v_i\): nilai sikap agen ke-\(i\) (mis. pemetaan stance ke skala keputusan).
 
-Jika kondisi konsensus terpenuhi, proses dihentikan (*early termination*). Jika tidak, proses berlanjut hingga maksimum ronde.
+Jika kondisi konsensus terpenuhi, proses dihentikan (*early termination*). Jika tidak, proses berlanjut hingga maksimum ronde. Dalam literatur, *confidence-weighted voting* dilaporkan meningkatkan kualitas keputusan tim agen, sementara strategi *consensus-free* dan seleksi informasi dapat menurunkan biaya token tanpa penurunan performa yang signifikan [@chen2024reconcile; @cui2025freemad; @zeng2025s2mad]. Kajian terbaru juga menunjukkan bahwa desain debat harus dievaluasi hati-hati karena peningkatan performa dapat berasal dari mekanisme voting itu sendiri, bukan hanya dari proses debat [@choi2025debatevote; @pitre2025consensagent].
 
 > **Placeholder Gambar 2.4**  
 > Diagram mekanisme deliberasi multi-round dan early termination.
@@ -200,6 +208,8 @@ Selain metrik klasifikasi, dipakai pula metrik operasional:
 2. Konsumsi token per pesan.
 3. Distribusi kontribusi tiap stage.
 
+Pemilihan metrik tersebut sesuai dengan kebutuhan sistem keamanan praktis: tidak hanya menilai ketepatan klasifikasi, tetapi juga menilai efisiensi operasional untuk skenario pemantauan pesan real-time [@sameen2020phishhaven; @halim2025enhancing].
+
 > **Placeholder Gambar 2.5**  
 > Contoh confusion matrix dan grafik perbandingan metrik.
 
@@ -233,27 +243,6 @@ Tabel berikut menjelaskan notasi flowchart yang digunakan pada diagram sistem pe
 > **Placeholder Gambar 2.7**  
 > Flowchart detail alur sistem TelePhisDebate.
 
-## 2.4 Hipotesis (Jika Ada)
-
-Hipotesis disusun dari kerangka pemikiran untuk diuji secara empiris.
-
-Hipotesis penelitian (H1):
-1. **H1-1**: Pipeline berlapis meningkatkan kualitas deteksi dibanding pendekatan single-stage.
-2. **H1-2**: Penggunaan MAD pada kasus ambigu meningkatkan keseimbangan precision-recall.
-3. **H1-3**: Terdapat perbedaan kinerja antara MAD3 dan MAD5 pada akurasi, waktu, dan konsumsi token.
-
-Hipotesis nol (H0):
-1. **H0-1**: Tidak ada perbedaan signifikan kualitas deteksi antara pipeline berlapis dan single-stage.
-2. **H0-2**: Penggunaan MAD tidak meningkatkan kualitas keputusan secara signifikan.
-3. **H0-3**: Tidak ada perbedaan signifikan antara MAD3 dan MAD5 pada metrik evaluasi.
-
-Variabel yang dapat diuji:
-1. Variabel bebas: mode evaluasi, varian MAD, provider/model LLM.
-2. Variabel terikat: accuracy, precision, recall, F1-score, detection rate, waktu proses, token.
-
-> **Placeholder Tabel 2.2**  
-> Tabel operasional hipotesis (H1/H0, variabel, indikator, metode uji).
-
-## 2.5 Ringkasan Bab
+## 2.4 Ringkasan Bab
 
 Bab ini menegaskan bahwa deteksi phishing pada komunikasi akademik membutuhkan pendekatan multi-komponen: analisis teks, analisis URL, klasifikasi bertahap, dan mekanisme debat multi-agen. Kerangka teori tersebut menjadi dasar perancangan metode pada bab berikutnya.

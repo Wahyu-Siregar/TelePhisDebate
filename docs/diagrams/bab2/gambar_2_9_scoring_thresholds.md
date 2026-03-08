@@ -1,4 +1,4 @@
-# Scoring System TelePhisDebate
+# Scoring System
 
 ## 1) Triage Classification
 
@@ -74,11 +74,11 @@ Single-shot berfungsi sebagai router, bukan hakim final untuk kasus berisiko. PH
 
 | Kondisi `phishing_prob` | Keputusan |
 |---|---|
-| `>= 0.65` | `PHISHING` |
+| `>= 0.70` | `PHISHING` |
 | `<= 0.35` | `LEGITIMATE` (dinormalisasi jadi `SAFE`) |
 | di antara keduanya | `SUSPICIOUS` |
 
-Zona tengah (`0.35 < phishing_prob < 0.65`) sengaja dipetakan ke `SUSPICIOUS` untuk menahan keputusan ekstrem ketika bukti belum cukup kuat.
+Zona tengah (`0.35 < phishing_prob < 0.70`) sengaja dipetakan ke `SUSPICIOUS` untuk menahan keputusan ekstrem ketika bukti belum cukup kuat.
 
 ### 5.3 Rule Consensus
 
@@ -153,9 +153,9 @@ Keterangan simbol:
 | Triage | `R_t >= 30` | `HIGH_RISK` |
 | Single-Shot | `PHISHING` atau `SUSPICIOUS` | Wajib ke MAD3 |
 | Single-Shot | `SAFE` dan `confidence >= 0.90` | Finalize `SAFE` |
-| MAD3 | `p_{\phi} >= 0.65` | `PHISHING` |
+| MAD3 | `p_{\phi} >= 0.70` | `PHISHING` |
 | MAD3 | `p_{\phi} <= 0.35` | `LEGITIMATE -> SAFE` |
-| MAD3 | `0.35 < p_{\phi} < 0.65` | `SUSPICIOUS` |
+| MAD3 | `0.35 < p_{\phi} < 0.70` | `SUSPICIOUS` |
 | Action | `SUSPICIOUS` dan `conf >= 0.60` | `warn` |
 | Action | `PHISHING` (berapa pun confidence) | `flag_review` |
 
@@ -201,7 +201,7 @@ p_{\phi} = \frac{2.15}{2.15 + 0} = 1.00
 $$
 
 Keputusan akhir:
-- `PHISHING` (karena `p_{\phi} \ge 0.65`)  
+- `PHISHING` (karena `p_{\phi} \ge 0.70`)  
 - Action = `flag_review`
 
 ### 10.2 Contoh Kasus SUSPICIOUS
@@ -242,7 +242,7 @@ p_{\phi} = \frac{0.93}{0.93 + 0.60} \approx 0.608
 $$
 
 Keputusan akhir:
-- `SUSPICIOUS` (karena `0.35 < p_{\phi} < 0.65`)  
+- `SUSPICIOUS` (karena `0.35 < p_{\phi} < 0.70`)  
 - Confidence MAD3 = `max(0.608, 0.392) = 0.608`  
 - Action = `warn` (karena confidence `>= 0.60`)
 

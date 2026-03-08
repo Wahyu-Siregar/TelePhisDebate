@@ -331,16 +331,30 @@ def evaluate_dataset_mad_only(
             classification = _normalize_mad_classification(mad_result.decision)
             confidence = mad_result.confidence
 
-            tokens_in = sum(
-                r.get("tokens_input", 0) for r in (mad_result.round_1_summary or [])
-            ) + sum(
-                r.get("tokens_input", 0) for r in (mad_result.round_2_summary or [])
-            )
-            tokens_out = sum(
-                r.get("tokens_output", 0) for r in (mad_result.round_1_summary or [])
-            ) + sum(
-                r.get("tokens_output", 0) for r in (mad_result.round_2_summary or [])
-            )
+            round_summaries = getattr(mad_result, "round_summaries", None) or []
+            if round_summaries:
+                tokens_in = sum(
+                    r.get("tokens_input", 0)
+                    for round_summary in round_summaries
+                    for r in (round_summary or [])
+                )
+                tokens_out = sum(
+                    r.get("tokens_output", 0)
+                    for round_summary in round_summaries
+                    for r in (round_summary or [])
+                )
+            else:
+                # Backward compatibility for legacy two-round payloads.
+                tokens_in = sum(
+                    r.get("tokens_input", 0) for r in (mad_result.round_1_summary or [])
+                ) + sum(
+                    r.get("tokens_input", 0) for r in (mad_result.round_2_summary or [])
+                )
+                tokens_out = sum(
+                    r.get("tokens_output", 0) for r in (mad_result.round_1_summary or [])
+                ) + sum(
+                    r.get("tokens_output", 0) for r in (mad_result.round_2_summary or [])
+                )
 
             # Fallback for legacy summaries that may not carry token in/out fields.
             if tokens_in == 0 and tokens_out == 0 and mad_result.total_tokens > 0:

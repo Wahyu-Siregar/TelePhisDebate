@@ -77,7 +77,11 @@ async function updateActivityChart(range) {
     const phishingData = items.map(h => h.phishing);
     
     // Update title
-    const titles = { '24h': 'Activity (Last 24 Hours)', '7d': 'Activity (Last 1 Week)', '30d': 'Activity (Last 1 Month)' };
+    const titles = {
+        '24h': 'Activity (Last 24 Hours, WIB)',
+        '7d': 'Activity (Last 1 Week, WIB)',
+        '30d': 'Activity (Last 1 Month, WIB)'
+    };
     document.getElementById('activityTitle').textContent = titles[activityRange] || titles['24h'];
     
     // Update active button
@@ -253,7 +257,7 @@ async function updateMessagesTable() {
     const tbody = document.getElementById('messagesTableBody');
     
     if (!messages || messages.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" class="loading">No messages processed yet</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" class="loading">No messages processed yet</td></tr>';
         return;
     }
     
@@ -261,8 +265,9 @@ async function updateMessagesTable() {
         <tr>
             <td>${formatTimestamp(m.timestamp)}</td>
             <td>${escapeHtml(m.content)}</td>
-            <td><span class="badge ${m.classification.toLowerCase()}">${m.classification}</span></td>
+            <td><span class="badge ${(m.classification || 'unknown').toLowerCase()}">${m.classification || 'UNKNOWN'}</span></td>
             <td>${formatConfidencePercent(m.confidence)}</td>
+            <td><span class="badge ${(m.stage || 'unknown').toLowerCase()}">${m.stage || 'unknown'}</span></td>
         </tr>
     `).join('');
 }
@@ -315,7 +320,12 @@ async function updateDebates() {
 
 function renderDebateCard(debate) {
     const decisionClass = debate.decision.toLowerCase();
-    const hasRound2 = debate.round_2 && debate.round_2.length > 0;
+    const rounds = (Array.isArray(debate.rounds) && debate.rounds.length > 0)
+        ? debate.rounds
+        : [
+            { round_number: 1, agents: debate.round_1 || [] },
+            { round_number: 2, agents: debate.round_2 || [] }
+        ].filter(r => Array.isArray(r.agents) && r.agents.length > 0);
     const confidenceText = (debate.confidence * 100).toFixed(0) + '%';
     const consensusText = debate.consensus_reached ? 'KONSENSUS' : 'VOTING';
     
@@ -337,8 +347,7 @@ function renderDebateCard(debate) {
             </button>
             <div class="debate-body">
                 <div class="debate-rounds">
-                    ${renderDebateRound(1, debate.round_1)}
-                    ${hasRound2 ? renderDebateRound(2, debate.round_2) : ''}
+                    ${rounds.map(r => renderDebateRound(r.round_number, r.agents)).join('')}
                 </div>
             </div>
         </div>
@@ -352,7 +361,9 @@ function toggleDebate(card) {
 function renderDebateRound(roundNumber, agents) {
     if (!agents || agents.length === 0) return '';
     
-    const roundLabel = roundNumber === 1 ? 'ROUND 1 — INDEPENDENT ANALYSIS' : 'ROUND 2 — DELIBERATION';
+    const roundLabel = roundNumber === 1
+        ? 'ROUND 1 — INDEPENDENT ANALYSIS'
+        : `ROUND ${roundNumber} — DELIBERATION`;
     
     return `
         <div class="debate-round">
@@ -413,13 +424,40 @@ function getAgentInfo(agentType) {
 function formatTimestamp(ts) {
     if (!ts) return '-';
     try {
-        const date = new Date(ts);
-        return date.toLocaleString('id-ID', {
+        let normalized = String(ts).trim();
+        // Supabase often returns "YYYY-MM-DD HH:MM:SS+00"
+        if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/.test(normalized)) {
+            normalized = normalized.replace(' ', 'T');
+        }
+        // Convert "+00" -> "+00:00" for strict ISO parsing.
+        if (/[+-]\d{2}$/.test(normalized)) {
+            normalized = `${normalized}:00`;
+        }
+        // If timezone missing, assume UTC.
+        if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/.test(normalized)) {
+            normalized = `${normalized}Z`;
+        }
+
+        const date = new Date(normalized);
+        if (Number.isNaN(date.getTime())) {
+            return ts;
+        }
+        const parts = new Intl.DateTimeFormat('id-ID', {
             day: '2-digit',
             month: 'short',
+            year: 'numeric',
             hour: '2-digit',
-            minute: '2-digit'
-        });
+            minute: '2-digit',
+            hour12: false,
+            timeZone: 'Asia/Jakarta'
+        }).formatToParts(date);
+        const byType = Object.fromEntries(parts.map((p) => [p.type, p.value]));
+        const day = byType.day || '--';
+        const month = byType.month || '---';
+        const year = byType.year || '----';
+        const hour = byType.hour || '--';
+        const minute = byType.minute || '--';
+        return `${day} ${month} ${year} ${hour}:${minute} WIB`;
     } catch {
         return ts;
     }

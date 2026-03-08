@@ -36,6 +36,7 @@ def create_app():
     
     # Initialize database
     db = get_supabase_client()
+    WIB_TZ = timezone(timedelta(hours=7), "WIB")
 
     def _format_eval_timestamp(timestamp_str: str) -> str:
         """Convert evaluation filename timestamp into display format."""
@@ -815,28 +816,34 @@ def create_app():
         from flask import request as req
         try:
             time_range = req.args.get('range', '24h')
-            now = datetime.now(timezone.utc)
+            now_utc = datetime.now(timezone.utc)
+            now_wib = now_utc.astimezone(WIB_TZ)
             
             if time_range == '30d':
-                since = now - timedelta(days=30)
+                since_utc = now_utc - timedelta(days=30)
             elif time_range == '7d':
-                since = now - timedelta(days=7)
+                since_utc = now_utc - timedelta(days=7)
             else:
-                since = now - timedelta(hours=24)
+                since_utc = now_utc - timedelta(hours=24)
                 time_range = '24h'
             
             messages = db.table("messages").select(
                 "timestamp, classification"
-            ).gte("timestamp", since.isoformat()).execute()
+            ).gte("timestamp", since_utc.isoformat()).execute()
             
             # Build buckets based on range
             if time_range == '24h':
                 # 24 hourly buckets with real timestamps
                 buckets = {}
                 for i in range(24):
-                    t = now - timedelta(hours=23 - i)
-                    key = t.strftime("%H:00")
-                    buckets[key] = {"safe": 0, "suspicious": 0, "phishing": 0}
+                    t = now_wib - timedelta(hours=23 - i)
+                    key = t.strftime("%Y-%m-%d %H:00")
+                    buckets[key] = {
+                        "label": f"{t.strftime('%d/%m %H:00')} WIB",
+                        "safe": 0,
+                        "suspicious": 0,
+                        "phishing": 0,
+                    }
                 
                 if messages.data:
                     for msg in messages.data:
@@ -844,7 +851,8 @@ def create_app():
                             ts = _parse_utc_timestamp(msg.get("timestamp"))
                             if ts is None:
                                 continue
-                            key = ts.strftime("%H:00")
+                            ts_wib = ts.astimezone(WIB_TZ)
+                            key = ts_wib.strftime("%Y-%m-%d %H:00")
                             if key in buckets:
                                 cls = msg.get("classification", "").upper()
                                 if cls in ("SAFE", "SUSPICIOUS", "PHISHING"):
@@ -852,14 +860,22 @@ def create_app():
                         except Exception:
                             pass
                 
-                result = [{"label": k, **v} for k, v in buckets.items()]
+                result = [
+                    {
+                        "label": v["label"],
+                        "safe": v["safe"],
+                        "suspicious": v["suspicious"],
+                        "phishing": v["phishing"],
+                    }
+                    for v in buckets.values()
+                ]
             
             elif time_range == '7d':
                 # 7 daily buckets
                 buckets = {}
                 day_names = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min']
                 for i in range(7):
-                    t = now - timedelta(days=6 - i)
+                    t = now_wib - timedelta(days=6 - i)
                     key = t.strftime("%Y-%m-%d")
                     label = f"{day_names[t.weekday()]} {t.strftime('%d/%m')}"
                     buckets[key] = {"label": label, "safe": 0, "suspicious": 0, "phishing": 0}
@@ -870,7 +886,8 @@ def create_app():
                             ts = _parse_utc_timestamp(msg.get("timestamp"))
                             if ts is None:
                                 continue
-                            key = ts.strftime("%Y-%m-%d")
+                            ts_wib = ts.astimezone(WIB_TZ)
+                            key = ts_wib.strftime("%Y-%m-%d")
                             if key in buckets:
                                 cls = msg.get("classification", "").upper()
                                 if cls in ("SAFE", "SUSPICIOUS", "PHISHING"):
@@ -884,7 +901,7 @@ def create_app():
                 # 30 daily buckets
                 buckets = {}
                 for i in range(30):
-                    t = now - timedelta(days=29 - i)
+                    t = now_wib - timedelta(days=29 - i)
                     key = t.strftime("%Y-%m-%d")
                     label = t.strftime("%d/%m")
                     buckets[key] = {"label": label, "safe": 0, "suspicious": 0, "phishing": 0}
@@ -895,7 +912,8 @@ def create_app():
                             ts = _parse_utc_timestamp(msg.get("timestamp"))
                             if ts is None:
                                 continue
-                            key = ts.strftime("%Y-%m-%d")
+                            ts_wib = ts.astimezone(WIB_TZ)
+                            key = ts_wib.strftime("%Y-%m-%d")
                             if key in buckets:
                                 cls = msg.get("classification", "").upper()
                                 if cls in ("SAFE", "SUSPICIOUS", "PHISHING"):
@@ -1076,31 +1094,57 @@ def create_app():
                         "consensus_reached": mad_result.get("consensus_reached", False),
                         "consensus_type": mad_result.get("consensus_type", ""),
                         "agent_votes": mad_result.get("agent_votes", {}),
+                        "rounds": [],
                         "round_1": [],
                         "round_2": []
                     }
-                    
-                    # Extract round 1 summaries
-                    round_1 = mad_result.get("round_1_summary", [])
-                    if round_1:
-                        for agent in round_1:
-                            debate_data["round_1"].append({
-                                "agent": agent.get("agent_type", "unknown"),
-                                "stance": agent.get("stance", "UNKNOWN"),
-                                "confidence": agent.get("confidence", 0),
-                                "arguments": _extract_agent_arguments(agent)
+
+                    # Prefer dynamic round_summaries (supports >2 rounds).
+                    round_summaries = mad_result.get("round_summaries", [])
+                    if isinstance(round_summaries, list) and round_summaries:
+                        for idx, round_agents in enumerate(round_summaries, start=1):
+                            agents_payload = []
+                            if isinstance(round_agents, list):
+                                for agent in round_agents:
+                                    agents_payload.append({
+                                        "agent": agent.get("agent_type", "unknown"),
+                                        "stance": agent.get("stance", "UNKNOWN"),
+                                        "confidence": agent.get("confidence", 0),
+                                        "arguments": _extract_agent_arguments(agent)
+                                    })
+                            debate_data["rounds"].append({
+                                "round_number": idx,
+                                "agents": agents_payload
                             })
-                    
-                    # Extract round 2 summaries if exists
-                    round_2 = mad_result.get("round_2_summary", [])
-                    if round_2:
-                        for agent in round_2:
-                            debate_data["round_2"].append({
-                                "agent": agent.get("agent_type", "unknown"),
-                                "stance": agent.get("stance", "UNKNOWN"),
-                                "confidence": agent.get("confidence", 0),
-                                "arguments": _extract_agent_arguments(agent)
+                    else:
+                        # Backward compatibility for legacy two-round payloads.
+                        round_1 = mad_result.get("round_1_summary", [])
+                        round_2 = mad_result.get("round_2_summary", [])
+                        legacy_rounds = [round_1, round_2]
+                        for idx, round_agents in enumerate(legacy_rounds, start=1):
+                            if not round_agents:
+                                continue
+                            agents_payload = []
+                            for agent in round_agents:
+                                agents_payload.append({
+                                    "agent": agent.get("agent_type", "unknown"),
+                                    "stance": agent.get("stance", "UNKNOWN"),
+                                    "confidence": agent.get("confidence", 0),
+                                    "arguments": _extract_agent_arguments(agent)
+                                })
+                            debate_data["rounds"].append({
+                                "round_number": idx,
+                                "agents": agents_payload
                             })
+
+                    # Keep old fields for compatibility with existing UI code paths.
+                    if debate_data["rounds"]:
+                        debate_data["round_1"] = debate_data["rounds"][0]["agents"]
+                        debate_data["round_2"] = (
+                            debate_data["rounds"][1]["agents"]
+                            if len(debate_data["rounds"]) > 1
+                            else []
+                        )
                     
                     debates.append(debate_data)
             
@@ -1151,18 +1195,20 @@ def create_app():
         """Get recent processed messages"""
         try:
             messages = db.table("messages").select(
-                "telegram_message_id, content, classification, confidence, timestamp"
+                "telegram_message_id, content, classification, confidence, decided_by, timestamp"
             ).order("timestamp", desc=True).limit(20).execute()
             
             result = []
             if messages.data:
                 for msg in messages.data:
                     content = msg.get("content", "") or ""
+                    stage = (msg.get("decided_by") or "unknown").strip().lower()
                     result.append({
                         "message_id": msg.get("telegram_message_id"),
                         "content": content[:100] + "..." if len(content) > 100 else content,
                         "classification": msg.get("classification"),
                         "confidence": msg.get("confidence"),
+                        "stage": stage,
                         "timestamp": msg.get("timestamp")
                     })
             

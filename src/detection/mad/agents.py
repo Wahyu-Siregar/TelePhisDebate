@@ -366,16 +366,26 @@ class ContentAnalyzer(BaseAgent):
     
     @property
     def system_prompt(self) -> str:
-        return """Kamu adalah Content Analyzer agent dalam sistem deteksi phishing.
+        return """Kamu adalah Content Analyzer agent dalam sistem deteksi phishing untuk grup Telegram akademik Indonesia.
 
-                    Peran: Menganalisis konten pesan, pola linguistik, dan deviasi perilaku.
+                    Peran: Menganalisis konten pesan, pola linguistik, dan deviasi perilaku pengirim.
 
                     Fokus analisis:
                     1. Konsistensi gaya bahasa dengan baseline pengguna
-                    2. Taktik social engineering (urgensi, otoritas palsu, ketakutan)
+                    2. Taktik social engineering (urgensi, otoritas palsu, ketakutan, simpati)
                     3. Relevansi konteks dengan aktivitas akademik grup
                     4. Anomali struktur dan format pesan
                     5. Penggunaan bahasa Indonesia yang tidak wajar
+                    6. Permintaan uang/pulsa/transfer/top-up — sinyal kuat account takeover
+                       (penyerang ambil alih akun asli lalu meminta bantuan finansial ke anggota grup)
+                    7. Permintaan redirect ke chat pribadi/DM untuk menghindari perhatian grup
+                    8. Indikasi impersonasi: username sama tapi akun berbeda,
+                       pesan tidak konsisten dengan karakter historis pemilik asli
+
+                    Model ancaman yang harus dikenali:
+                    - Akun dikompromikan mengirim link phishing
+                    - Account takeover: akun asli diambil alih, penyerang minta pulsa/transfer
+                    - Impersonasi: akun baru dibuat menyerupai dosen/mahasiswa asli
 
                     Output JSON:
                     {
@@ -386,7 +396,7 @@ class ContentAnalyzer(BaseAgent):
                         "style_deviation": 0.0-1.0,
                         "urgency_score": 0.0-1.0,
                         "social_engineering_detected": true/false,
-                    "linguistic_anomalies": ["anomali1", ...]
+                        "linguistic_anomalies": ["anomali1", ...]
                     }
                     }
 
@@ -394,7 +404,8 @@ class ContentAnalyzer(BaseAgent):
                     - Output WAJIB hanya 1 objek JSON valid sesuai schema di atas.
                     - Jangan gunakan markdown/code fence. Jangan tambah teks di luar JSON.
                     - Nilai stance harus salah satu: PHISHING, SUSPICIOUS, LEGITIMATE.
-                    - confidence harus angka 0.0-1.0."""
+                    - confidence harus angka 0.0-1.0.
+                    - Pesan tanpa URL tetap bisa phishing (pulsa scam, account takeover)."""
     
     def _construct_prompt(
         self,
@@ -431,15 +442,33 @@ class ContentAnalyzer(BaseAgent):
             parts.append(f"- Confidence: {previous_result.get('confidence', 0):.0%}")
             parts.append(f"- Risk factors: {previous_result.get('risk_factors', [])}")
         
-        # Triage flags
+        # Triage flags — highlight new social-engineering flags explicitly
         triage = message_data.get('triage', {})
         if triage:
+            triggered = triage.get('triggered_flags', [])
             parts.append("\nTriage Flags:")
             parts.append(f"- Risk score: {triage.get('risk_score', 0)}")
-            parts.append(f"- Triggered: {triage.get('triggered_flags', [])}")
-        
+            parts.append(f"- Triggered: {triggered}")
+
+            # Highlight flags paling relevan untuk content analysis
+            HIGH_SIGNAL_FLAGS = {
+                "redirect_to_private": "Pesan meminta penerima balas via DM/chat pribadi — taktik menghindari perhatian grup.",
+                "suspected_impersonation": "Username dipakai user_id berbeda — kemungkinan akun klonan/impersonasi.",
+                "first_time_solicitation": "Anggota lama tiba-tiba minta uang/pulsa/transfer untuk pertama kali — sinyal account takeover.",
+                "urgency_keywords": "Terdapat kata-kata yang menciptakan tekanan atau rasa urgensi.",
+                "phishing_keywords": "Terdapat kata/frasa indikator phishing.",
+                "authority_impersonation": "Pesan mengklaim dari otoritas resmi.",
+            }
+            active_signals = []
+            for flag in (triggered if isinstance(triggered, list) else []):
+                if flag in HIGH_SIGNAL_FLAGS:
+                    active_signals.append(f"  ⚠️ [{flag}] {HIGH_SIGNAL_FLAGS[flag]}")
+            if active_signals:
+                parts.append("Sinyal social engineering aktif:")
+                parts.extend(active_signals)
+
         parts.append("\nAnalisis konten pesan ini dan berikan stance Anda.")
-        
+
         return "\n".join(parts)
 
 
@@ -452,20 +481,33 @@ class SecurityValidator(BaseAgent):
     @property
     def agent_type(self) -> str:
         return "security_validator"
+
+    URL_RELEVANT_FLAGS = {
+        "blacklisted_domain",
+        "shortened_url",
+        "shortened_url_expand_failed",
+        "suspicious_tld",
+        "first_time_url",
+    }
     
     @property
     def system_prompt(self) -> str:
-        return """Kamu adalah Security Validator agent dalam sistem deteksi phishing.
+        return """Kamu adalah Security Validator agent dalam sistem deteksi phishing untuk grup Telegram akademik Indonesia.
 
-                Peran: Memverifikasi URL, reputasi domain, dan bukti keamanan eksternal.
+                Peran: Memverifikasi bukti keamanan teknis — URL, domain, dan pola solicitation.
 
                 Fokus analisis:
                 1. Struktur URL (obfuscation, patterns mencurigakan)
                 2. Reputasi domain berdasarkan data yang tersedia
-                3. Verifikasi tujuan link
+                3. Verifikasi tujuan link (expanded URL, redirect chain)
                 4. Kecocokan dengan database phishing historis
                 5. HTTPS vs HTTP, TLD analysis
                 6. URL shortener bukan bukti phishing jika expanded URL menunjuk domain tepercaya
+                7. PERHATIAN KHUSUS — Jika TIDAK ADA URL:
+                   - Analisa apakah ada pola solicitation (minta pulsa, transfer, nomor HP,
+                     atau redirect ke DM) yang merupakan indikator account takeover/social scam
+                   - Pesan tanpa URL bisa tetap berbahaya dan harus diberi confidence tinggi
+                     jika triage flags menunjukkan `first_time_solicitation` atau `redirect_to_private`
 
                 Output JSON:
                 {
@@ -485,7 +527,8 @@ class SecurityValidator(BaseAgent):
                 - Output WAJIB hanya 1 objek JSON valid sesuai schema di atas.
                 - Jangan gunakan markdown/code fence. Jangan tambah teks di luar JSON.
                 - Nilai stance harus salah satu: PHISHING, SUSPICIOUS, LEGITIMATE.
-                - confidence harus angka 0.0-1.0."""
+                - confidence harus angka 0.0-1.0.
+                - Absennya URL bukan justifikasi untuk LEGITIMATE jika ada sinyal solicitation."""
     
     def _construct_prompt(
         self,
@@ -530,7 +573,25 @@ class SecurityValidator(BaseAgent):
                         )
             
             triggered = triage.get('triggered_flags', [])
-            url_flags = [f for f in triggered if 'url' in f or 'tld' in f or 'domain' in f]
+            url_flags: list[str] = []
+            if isinstance(triggered, list):
+                for flag in triggered:
+                    flag_str = str(flag).strip()
+                    if not flag_str:
+                        continue
+                    if flag_str in self.URL_RELEVANT_FLAGS:
+                        url_flags.append(flag_str)
+
+                # Backward compatibility for unknown future flag names.
+                if not url_flags:
+                    url_flags = [
+                        str(f).strip()
+                        for f in triggered
+                        if any(k in str(f) for k in ("url", "tld", "domain"))
+                    ]
+
+                # Keep deterministic order, drop duplicates.
+                url_flags = list(dict.fromkeys(url_flags))
             if url_flags:
                 parts.append(f"- URL-related flags: {url_flags}")
         
@@ -578,8 +639,25 @@ class SecurityValidator(BaseAgent):
             parts.append(f"- Classification: {previous_result.get('classification', 'N/A')}")
             parts.append(f"- Confidence: {previous_result.get('confidence', 0):.0%}")
         
-        parts.append("\nAnalisis keamanan URL dan berikan stance Anda.")
-        
+        # Jika tidak ada URL, arahkan agent untuk menganalisis pola solicitation
+        if not urls:
+            triage = message_data.get('triage', {})
+            triggered = triage.get('triggered_flags', []) if triage else []
+            no_url_signals = [
+                f for f in (triggered if isinstance(triggered, list) else [])
+                if f in ("first_time_solicitation", "redirect_to_private",
+                         "suspected_impersonation", "phishing_keywords", "urgency_keywords")
+            ]
+            if no_url_signals:
+                parts.append("\n⚠️ Pesan ini tidak mengandung URL tetapi memiliki sinyal risiko langsung:")
+                for sig in no_url_signals:
+                    parts.append(f"  - {sig}")
+                parts.append("Analisis apakah sinyal tersebut cukup untuk mengklasifikasikan sebagai PHISHING/SUSPICIOUS.")
+            else:
+                parts.append("\nTidak ada URL dan tidak ada sinyal triage risiko tinggi. Pertimbangkan LEGITIMATE jika konten sesuai konteks akademik.")
+        else:
+            parts.append("\nAnalisis keamanan URL dan berikan stance Anda.")
+
         return "\n".join(parts)
 
 
@@ -595,16 +673,21 @@ class SocialContextEvaluator(BaseAgent):
     
     @property
     def system_prompt(self) -> str:
-        return """Kamu adalah Social Context Evaluator agent dalam sistem deteksi phishing.
+        return """Kamu adalah Social Context Evaluator agent dalam sistem deteksi phishing untuk grup Telegram akademik Indonesia.
 
-                Peran: Mengevaluasi konteks sosial dan perilaku khusus untuk grup akademik.
+                Peran: Mengevaluasi konteks sosial, perilaku pengirim, dan kewajaran pesan dalam konteks grup mahasiswa.
 
                 Fokus analisis:
-                1. Pola perilaku historis pengirim
-                2. Kesesuaian waktu posting
+                1. Pola perilaku historis pengirim vs konten pesan saat ini
+                2. Kesesuaian waktu posting (jam, hari)
                 3. Relevansi dengan aktivitas akademik yang sedang berlangsung
-                4. Dinamika sosial dalam grup mahasiswa
+                4. Dinamika sosial dalam grup mahasiswa TI UIR
                 5. Apakah konten masuk akal untuk konteks akademik
+                6. Sinyal account takeover: anggota aktif yang tiba-tiba mengirim
+                   permintaan uang/pulsa/transfer — sangat tidak wajar dalam grup akademik
+                7. Sinyal impersonasi: ada flag `suspected_impersonation` berarti username
+                   ini sebelumnya terdaftar dengan user_id berbeda — kemungkinan akun klonan
+                8. Permintaan redirect ke DM/chat pribadi: tidak lazim untuk pesan akademik
 
                 Output JSON:
                 {
@@ -623,7 +706,10 @@ class SocialContextEvaluator(BaseAgent):
                 - Output WAJIB hanya 1 objek JSON valid sesuai schema di atas.
                 - Jangan gunakan markdown/code fence. Jangan tambah teks di luar JSON.
                 - Nilai stance harus salah satu: PHISHING, SUSPICIOUS, LEGITIMATE.
-                - confidence harus angka 0.0-1.0."""
+                - confidence harus angka 0.0-1.0.
+                - Gunakan waktu lokal WIB dari input prompt (jangan asumsi UTC).
+                - Sebut "dini hari" HANYA jika jam lokal WIB < 05:00.
+                - Permintaan uang/pulsa di grup akademik hampir selalu mencurigakan."""
     
     def _construct_prompt(
         self,
@@ -636,6 +722,9 @@ class SocialContextEvaluator(BaseAgent):
         # Message content
         parts.append(f"Pesan: \"{message_data.get('content', '')}\"")
         parts.append(f"Waktu: {message_data.get('timestamp', 'unknown')}")
+        hour_wib = message_data.get("hour_wib")
+        if isinstance(hour_wib, int):
+            parts.append(f"Jam lokal WIB: {hour_wib:02d}:00")
         parts.append("")
         
         # Sender info and history
@@ -663,20 +752,35 @@ class SocialContextEvaluator(BaseAgent):
         if recent:
             parts.append(f"\nTopik grup terkini: {recent}")
         
-        # Behavioral anomalies
+        # Behavioral anomalies — include all relevant flags (not just 'anomaly'/'first_time')
         triage = message_data.get('triage', {})
-        triggered = triage.get('triggered_flags', [])
-        behavioral_flags = [f for f in triggered if 'anomaly' in f or 'first_time' in f]
+        triggered = triage.get('triggered_flags', []) if triage else []
+        BEHAVIORAL_FLAGS = {
+            'time_anomaly', 'length_anomaly', 'emoji_anomaly',
+            'first_time_url', 'first_time_solicitation',
+            'redirect_to_private', 'suspected_impersonation',
+            'recent_suspicious_context',
+        }
+        BEHAVIORAL_DESCRIPTIONS = {
+            'redirect_to_private': 'Pesan meminta penerima balas lewat DM — menghindari pantauan grup.',
+            'suspected_impersonation': 'Username sudah terdaftar dengan user_id berbeda — kemungkinan impersonasi.',
+            'first_time_solicitation': 'Anggota lama pertama kali minta uang/pulsa — sinyal account takeover.',
+            'recent_suspicious_context': 'Pesan ini dikirim <15 menit setelah pesan SUSPICIOUS/PHISHING dari user yang sama — kemungkinan eskalasi percakapan scam.',
+        }
+        behavioral_flags = [f for f in (triggered if isinstance(triggered, list) else []) if f in BEHAVIORAL_FLAGS]
         if behavioral_flags:
-            parts.append(f"\nAnomali perilaku terdeteksi: {behavioral_flags}")
+            parts.append("\nAnomali / Sinyal sosial terdeteksi:")
+            for bf in behavioral_flags:
+                desc = BEHAVIORAL_DESCRIPTIONS.get(bf, "")
+                parts.append(f"  - {bf}" + (f": {desc}" if desc else ""))
         
         # Previous stage
         if previous_result:
             parts.append("\nHasil Single-Shot LLM:")
             parts.append(f"- Classification: {previous_result.get('classification', 'N/A')}")
             parts.append(f"- Confidence: {previous_result.get('confidence', 0):.0%}")
-        
+
         parts.append("\nKonteks: Grup mahasiswa Teknik Informatika UIR")
         parts.append("Evaluasi apakah pesan ini sesuai dengan konteks sosial dan berikan stance Anda.")
-        
+
         return "\n".join(parts)

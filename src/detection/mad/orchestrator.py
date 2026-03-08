@@ -6,10 +6,22 @@ Coordinates the debate between agents across rounds
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from .agents import ContentAnalyzer, SecurityValidator, SocialContextEvaluator, AgentResponse
 from .aggregator import VotingAggregator
+
+
+def _resolve_wib_timezone():
+    """Resolve Asia/Jakarta timezone with safe fallback when tzdata is unavailable."""
+    try:
+        return ZoneInfo("Asia/Jakarta")
+    except ZoneInfoNotFoundError:
+        return timezone(timedelta(hours=7))
+
+
+WIB_TZ = _resolve_wib_timezone()
 
 
 def _is_fatal_llm_error(exc: Exception) -> bool:
@@ -138,12 +150,19 @@ class MultiAgentDebate:
         
         if message_timestamp is None:
             message_timestamp = datetime.now()
+
+        if message_timestamp.tzinfo is not None:
+            try:
+                message_timestamp = message_timestamp.astimezone(WIB_TZ)
+            except Exception:
+                pass
         
         # Prepare message data
         message_data = {
             "content": message_text,
             "length": len(message_text),
-            "timestamp": message_timestamp.strftime("%Y-%m-%d %H:%M"),
+            "timestamp": f"{message_timestamp.strftime('%Y-%m-%d %H:%M')} WIB",
+            "hour_wib": message_timestamp.hour,
             "sender": sender_info or {},
             "urls": triage_result.get("urls_found", []) if triage_result else [],
             "triage": triage_result or {}
