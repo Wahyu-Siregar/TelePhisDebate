@@ -15,7 +15,8 @@ class Config:
     """Application configuration from environment variables"""
 
     # LLM provider
-    # Supported: deepseek, openrouter (default)
+    # Supported: deepseek, openrouter (default provider)
+    # Default openrouter model: google/gemini-2.5-flash-lite
     LLM_PROVIDER: str = os.getenv("LLM_PROVIDER", "openrouter")
     # MAD variant used by bot pipeline.
     # Thesis decision: mad3 is the production default.

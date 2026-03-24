@@ -97,7 +97,7 @@ Supabase  VirusTotal  Dashboard
 | Stage | Method | Purpose |
 |-------|--------|---------|
 | **1. Triage** | Rule-based (whitelist, blacklist, behavioral, URL analysis) | Fast filter — safe messages skip LLM |
-| **2. Single-Shot** | Configurable LLM (OpenRouter default, DeepSeek optional) | AI classification for non-trivial messages |
+| **2. Single-Shot** | Configurable LLM (default: OpenRouter `google/gemini-2.5-flash-lite`, DeepSeek optional) | AI classification for non-trivial messages |
 | **3. MAD** | 3 agents × 2 rounds debate | Resolve ambiguous cases via consensus |
 
 ### MAD Agents
@@ -275,7 +275,7 @@ The web dashboard provides real-time monitoring at `http://localhost:5000`:
 | Component | Technology |
 |-----------|------------|
 | Bot Framework | `python-telegram-bot` 21.x |
-| LLM Router | OpenRouter (default) / DeepSeek (OpenAI-compatible API) |
+| LLM Router | OpenRouter (default model: `google/gemini-2.5-flash-lite`) / DeepSeek (OpenAI-compatible API) |
 | Database | Supabase (PostgreSQL) |
 | URL Security | VirusTotal API, heuristic analysis |
 | Dashboard | Flask, Chart.js, Iconoir Icons |

@@ -92,7 +92,7 @@
 │  │  Rule-Based  │───→│ Single-Shot  │───→│  Multi-Agent     │  │
 │  │   Triage     │    │    LLM       │    │    Debate        │  │
 │  │              │    │              │    │                   │  │
-│  │ • Whitelist  │    │ • DeepSeek   │    │ • Content Agent  │  │
+│  │ • Whitelist  │    │ • OpenRouter │    │ • Content Agent  │  │
 │  │ • Blacklist  │    │ • Prompt Eng │    │ • Security Agent │  │
 │  │ • Behavioral │    │ • JSON Parse │    │ • Social Agent   │  │
 │  │ • URL Analyze│    │ • Escalation │    │ • Aggregator     │  │
@@ -348,6 +348,8 @@ Input: https://bit.ly/PendaftaranSeminarTI
 
 Menggunakan **LLM provider yang terkonfigurasi** (`LLM_PROVIDER`) dengan satu kali panggilan API untuk mengklasifikasi pesan.
 
+Default runtime saat `LLM_PROVIDER=openrouter` adalah model `google/gemini-2.5-flash-lite`.
+
 Provider yang didukung saat ini:
 - `openrouter` (default) → model: `OPENROUTER_MODEL` (default: `google/gemini-2.5-flash-lite`)
 - `deepseek` → model: `deepseek-chat`
@@ -370,7 +372,7 @@ Provider yang didukung saat ini:
 
 | Parameter | Default | Catatan |
 |-----------|---------|--------|
-| `model` | `deepseek-chat` (provider `deepseek`) | Untuk provider `openrouter`, gunakan `OPENROUTER_MODEL` |
+| `model` | `google/gemini-2.5-flash-lite` (provider default `openrouter`) | Jika `LLM_PROVIDER=deepseek`, model yang dipakai adalah `deepseek-chat` |
 | `temperature` | `0.3` | Rendah untuk konsistensi klasifikasi |
 | `max_tokens` | `500` | Cukup untuk reasoning + JSON |
 | `response_format` | `json_object` | Untuk stabilitas parsing, gunakan model yang mendukung structured output/`response_format` (sangat direkomendasikan untuk OpenRouter) |
@@ -501,6 +503,8 @@ Hasil MAD menyertakan metadata untuk audit/debug:
 ### 5.1 LLM Client (DeepSeek + OpenRouter)
 
 Sistem mendukung 2 provider LLM yang dipilih lewat environment variable `LLM_PROVIDER`.
+
+Default runtime bot saat ini: `LLM_PROVIDER=openrouter` dengan `OPENROUTER_MODEL=google/gemini-2.5-flash-lite`.
 
 #### A. DeepSeek
 
