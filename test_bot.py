@@ -7,6 +7,8 @@ import sys
 import asyncio
 from pathlib import Path
 
+import pytest
+
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent))
 
@@ -27,9 +29,8 @@ def test_config():
     print(f"   Supabase Key: {'✅ Set' if config.SUPABASE_KEY else '❌ Missing'}")
     
     missing = config.validate()
-    valid = len(missing) == 0
-    print(f"\n   Config Valid: {'✅ Yes' if valid else '❌ No - Missing: ' + ', '.join(missing)}")
-    return valid
+    print(f"\n   Missing config keys: {missing}")
+    assert isinstance(missing, list)
 
 
 def test_pipeline():
@@ -38,20 +39,17 @@ def test_pipeline():
     print("2. Testing Detection Pipeline")
     print("="*60)
     
-    try:
-        pipeline = PhishingDetectionPipeline()
-        print("   ✅ Pipeline initialized successfully")
-        
-        # Quick test
-        result = pipeline.process_message(
-            "Test message tanpa URL",
-            message_id="test"
-        )
-        print(f"   ✅ Test classification: {result.classification}")
-        return True
-    except Exception as e:
-        print(f"   ❌ Pipeline error: {e}")
-        return False
+    pipeline = PhishingDetectionPipeline()
+    print("   ✅ Pipeline initialized successfully")
+
+    # Quick test
+    result = pipeline.process_message(
+        "Test message tanpa URL",
+        message_id="test"
+    )
+    print(f"   ✅ Test classification: {result.classification}")
+    assert result.classification == "SAFE"
+    assert result.decided_by == "triage"
 
 
 def test_bot_init():
@@ -60,41 +58,47 @@ def test_bot_init():
     print("3. Testing Bot Initialization")
     print("="*60)
     
+    original_token = config.TELEGRAM_BOT_TOKEN
+    if not config.TELEGRAM_BOT_TOKEN:
+        config.TELEGRAM_BOT_TOKEN = "123456:TEST_TOKEN_FOR_PYTEST"
+
     try:
         bot = TelePhisBot(enable_logging=False)
         print("   ✅ Bot initialized successfully")
         print(f"   ✅ Application created: {bot.application is not None}")
         print(f"   ✅ Pipeline ready: {bot.pipeline is not None}")
         print(f"   ✅ Message handler ready: {bot.message_handler is not None}")
-        return True
-    except Exception as e:
-        print(f"   ❌ Bot init error: {e}")
-        return False
+        assert bot.application is not None
+        assert bot.pipeline is not None
+        assert bot.message_handler is not None
+    finally:
+        config.TELEGRAM_BOT_TOKEN = original_token
 
 
+@pytest.mark.integration
+@pytest.mark.asyncio
 async def test_bot_connection():
     """Test bot can connect to Telegram"""
     print("\n" + "="*60)
     print("4. Testing Telegram Connection")
     print("="*60)
     
+    if not config.TELEGRAM_BOT_TOKEN:
+        pytest.skip("TELEGRAM_BOT_TOKEN not configured")
+
+    bot = TelePhisBot(enable_logging=False)
+
+    # Get bot info
+    await bot.application.initialize()
     try:
-        bot = TelePhisBot(enable_logging=False)
-        
-        # Get bot info
-        await bot.application.initialize()
         bot_user = await bot.application.bot.get_me()
-        
         print(f"   ✅ Connected to Telegram")
         print(f"   ✅ Bot username: @{bot_user.username}")
         print(f"   ✅ Bot name: {bot_user.first_name}")
         print(f"   ✅ Bot ID: {bot_user.id}")
-        
+        assert bot_user.id is not None
+    finally:
         await bot.application.shutdown()
-        return True
-    except Exception as e:
-        print(f"   ❌ Connection error: {e}")
-        return False
 
 
 def main():

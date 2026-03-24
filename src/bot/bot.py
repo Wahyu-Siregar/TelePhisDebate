@@ -3,6 +3,8 @@ TelePhisBot - Main Bot Module
 Telegram bot for phishing detection using Multi-Agent Debate
 """
 
+import asyncio
+import html
 import logging
 from telegram import Update, BotCommand
 from telegram.ext import (
@@ -210,41 +212,20 @@ Hubungi admin grup jika pesan valid anda salah ditandai.
         usage_section = ""
         if self.enable_logging:
             try:
-                db = get_supabase_client()
-                
-                # Total messages from database
-                msg_count = db.table("messages").select(
-                    "id", count="exact"
-                ).execute()
-                total_db = msg_count.count or 0
-                
-                # Detection breakdown from DB
-                safe_db = db.table("messages").select(
-                    "id", count="exact"
-                ).eq("classification", "SAFE").execute()
-                suspicious_db = db.table("messages").select(
-                    "id", count="exact"
-                ).eq("classification", "SUSPICIOUS").execute()
-                phishing_db = db.table("messages").select(
-                    "id", count="exact"
-                ).eq("classification", "PHISHING").execute()
+                stats = await asyncio.to_thread(self._fetch_status_db_stats)
+                total_db = stats["total_db"]
                 
                 db_section = f"""
 📦 **Database (All-Time):**
 • Total pesan: {total_db}
-• Safe: {safe_db.count or 0}
-• Suspicious: {suspicious_db.count or 0}
-• Phishing: {phishing_db.count or 0}"""
-                
-                # API usage from api_usage table
-                usage = db.table("api_usage").select(
-                    "total_tokens_input, total_tokens_output, total_requests"
-                ).execute()
-                
-                if usage.data:
-                    total_in = sum(r.get("total_tokens_input", 0) or 0 for r in usage.data)
-                    total_out = sum(r.get("total_tokens_output", 0) or 0 for r in usage.data)
-                    total_reqs = sum(r.get("total_requests", 0) or 0 for r in usage.data)
+• Safe: {stats['safe_db']}
+• Suspicious: {stats['suspicious_db']}
+• Phishing: {stats['phishing_db']}"""
+
+                if stats["usage_rows"]:
+                    total_in = sum(r.get("total_tokens_input", 0) or 0 for r in stats["usage_rows"])
+                    total_out = sum(r.get("total_tokens_output", 0) or 0 for r in stats["usage_rows"])
+                    total_reqs = sum(r.get("total_requests", 0) or 0 for r in stats["usage_rows"])
                     
                     usage_section = f"""
 🧠 **Inference Activity (All-Time):**
@@ -283,26 +264,12 @@ Hubungi admin grup jika pesan valid anda salah ditandai.
         db_stats_text = ""
         if self.enable_logging:
             try:
-                db = get_supabase_client()
-                
-                # Overall counts
-                total_msg = db.table("messages").select(
-                    "id", count="exact"
-                ).execute()
-                safe_msg = db.table("messages").select(
-                    "id", count="exact"
-                ).eq("classification", "SAFE").execute()
-                suspicious_msg = db.table("messages").select(
-                    "id", count="exact"
-                ).eq("classification", "SUSPICIOUS").execute()
-                phishing_msg = db.table("messages").select(
-                    "id", count="exact"
-                ).eq("classification", "PHISHING").execute()
-                
-                total = total_msg.count or 0
-                safe = safe_msg.count or 0
-                suspicious = suspicious_msg.count or 0
-                phishing = phishing_msg.count or 0
+                stats = await asyncio.to_thread(self._fetch_full_db_stats)
+
+                total = stats["total"]
+                safe = stats["safe"]
+                suspicious = stats["suspicious"]
+                phishing = stats["phishing"]
                 
                 if total > 0:
                     safe_pct = safe / total * 100
@@ -310,26 +277,10 @@ Hubungi admin grup jika pesan valid anda salah ditandai.
                     phishing_pct = phishing / total * 100
                 else:
                     safe_pct = suspicious_pct = phishing_pct = 0
-                
-                # Stage breakdown from detection_logs
-                triage_count = db.table("detection_logs").select(
-                    "id", count="exact"
-                ).eq("stage", "triage").execute()
-                ss_count = db.table("detection_logs").select(
-                    "id", count="exact"
-                ).eq("stage", "single_shot").execute()
-                mad_count = db.table("detection_logs").select(
-                    "id", count="exact"
-                ).eq("stage", "mad").execute()
-                
-                # API usage
-                usage = db.table("api_usage").select(
-                    "total_tokens_input, total_tokens_output, total_requests"
-                ).execute()
-                
-                total_in = sum(r.get("total_tokens_input", 0) or 0 for r in (usage.data or []))
-                total_out = sum(r.get("total_tokens_output", 0) or 0 for r in (usage.data or []))
-                total_reqs = sum(r.get("total_requests", 0) or 0 for r in (usage.data or []))
+
+                total_in = sum(r.get("total_tokens_input", 0) or 0 for r in stats["usage_rows"])
+                total_out = sum(r.get("total_tokens_output", 0) or 0 for r in stats["usage_rows"])
+                total_reqs = sum(r.get("total_requests", 0) or 0 for r in stats["usage_rows"])
                 total_tokens = total_in + total_out
                 avg_tokens = total_tokens / total if total > 0 else 0
                 
@@ -346,9 +297,9 @@ PHISHING:   {phishing:>4} ({phishing_pct:>5.1f}%)
 ```
 
 **Stage Breakdown:**
-• Triage (filtered): {triage_count.count or 0}
-• Single-Shot LLM: {ss_count.count or 0}
-• Multi-Agent Debate: {mad_count.count or 0}
+• Triage (filtered): {stats['triage_count']}
+• Single-Shot LLM: {stats['single_shot_count']}
+• Multi-Agent Debate: {stats['mad_count']}
 
 **Inference Activity:**
 • Total requests: {total_reqs:,}
@@ -415,73 +366,77 @@ PHISHING:   {session_stats['phishing_count']:>4} ({phishing_pct:>5.1f}%)
         url_checks = await self.message_handler._check_urls_async(text_to_check)
         
         # Run detection with URL checks
-        result = self.pipeline.process_message(
-            message_text=text_to_check,
-            message_id="manual_check",
-            url_checks=url_checks
+        result = await asyncio.to_thread(
+            self.pipeline.process_message,
+            text_to_check,
+            "manual_check",
+            None,
+            None,
+            None,
+            url_checks,
         )
         
         # Delete "analyzing" message
         try:
             await status_msg.delete()
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("Failed to delete status message in /check: %s", e)
         
         # Format result
         emoji = {"SAFE": "✅", "SUSPICIOUS": "⚠️", "PHISHING": "🚨"}.get(result.classification, "❓")
         stage_name = STAGE_NAMES.get(result.decided_by, result.decided_by)
         
+        safe_text = html.escape(text_to_check[:200] + ('...' if len(text_to_check) > 200 else ''))
         result_text = f"""
-{emoji} **Hasil Analisis**
+    {emoji} <b>Hasil Analisis</b>
 
-**Teks:**
-```
-{text_to_check[:200]}{'...' if len(text_to_check) > 200 else ''}
-```
+    <b>Teks:</b>
+    <pre>{safe_text}</pre>
 
-**Klasifikasi:** {result.classification}
-**Confidence:** {result.confidence:.0%}
-**Dianalisis oleh:** {stage_name}
-**Waktu:** {result.total_processing_time_ms}ms
-**Tokens:** {result.total_tokens_used} (in: {result.tokens_input}, out: {result.tokens_output})
+    <b>Klasifikasi:</b> {html.escape(result.classification)}
+    <b>Confidence:</b> {result.confidence:.0%}
+    <b>Dianalisis oleh:</b> {html.escape(stage_name)}
+    <b>Waktu:</b> {result.total_processing_time_ms}ms
+    <b>Tokens:</b> {result.total_tokens_used} (in: {result.tokens_input}, out: {result.tokens_output})
 
-**Rekomendasi:** {result.action.upper()}
-"""
+    <b>Rekomendasi:</b> {html.escape(result.action.upper())}
+    """
         
         # Add triage details
         if result.triage_result:
             flags = result.triage_result.get("triggered_flags", [])
             risk_score = result.triage_result.get("risk_score", 0)
-            result_text += f"\n**Triage:** Risk score {risk_score}, Flags: {', '.join(flags) if flags else 'None'}"
+            safe_flags = ', '.join(html.escape(str(flag)) for flag in flags) if flags else 'None'
+            result_text += f"\n<b>Triage:</b> Risk score {risk_score}, Flags: {safe_flags}"
         
         # Add URL check details
         if url_checks:
-            result_text += "\n\n**URL Analysis:**"
+            result_text += "\n\n<b>URL Analysis:</b>"
             for url, check in url_checks.items():
                 url_display = url[:50] + "..." if len(url) > 50 else url
                 is_malicious = check.get("is_malicious", False)
                 vt_score = check.get("malicious_count", 0)
                 status_icon = "🔴" if is_malicious else "🟢"
-                result_text += f"\n{status_icon} `{url_display}` (VT: {vt_score} detections)"
+                result_text += f"\n{status_icon} <code>{html.escape(url_display)}</code> (VT: {vt_score} detections)"
         
         # Add single-shot details
         if result.single_shot_result:
             ss = result.single_shot_result
             reasoning = ss.get("reasoning", "")
             if reasoning:
-                result_text += f"\n\n**LLM Reasoning:** {reasoning[:200]}"
+                result_text += f"\n\n<b>LLM Reasoning:</b> {html.escape(str(reasoning)[:200])}"
         
         # Add MAD details
         if result.mad_result:
             mad = result.mad_result
             votes = mad.get("agent_votes", {})
             if votes:
-                result_text += "\n\n**Agent Votes:**"
+                result_text += "\n\n<b>Agent Votes:</b>"
                 for agent, vote in votes.items():
                     agent_label = agent.replace("_", " ").title()
-                    result_text += f"\n• {agent_label}: {vote}"
+                    result_text += f"\n• {html.escape(agent_label)}: {html.escape(str(vote))}"
         
-        await update.message.reply_text(result_text, parse_mode="Markdown")
+        await update.message.reply_text(result_text, parse_mode="HTML")
     
     async def _error_handler(self, update: Update, context):
         """Handle errors"""
@@ -492,8 +447,46 @@ PHISHING:   {session_stats['phishing_count']:>4} ({phishing_pct:>5.1f}%)
                 await update.message.reply_text(
                     "❌ Terjadi error saat memproses pesan. Silakan coba lagi."
                 )
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug("Failed to send error reply to user: %s", e)
+
+    def _fetch_status_db_stats(self) -> dict:
+        """Collect status metrics synchronously (called via asyncio.to_thread)."""
+        db = get_supabase_client()
+        msg_count = db.table("messages").select("id", count="exact").execute()
+        safe_db = db.table("messages").select("id", count="exact").eq("classification", "SAFE").execute()
+        suspicious_db = db.table("messages").select("id", count="exact").eq("classification", "SUSPICIOUS").execute()
+        phishing_db = db.table("messages").select("id", count="exact").eq("classification", "PHISHING").execute()
+        usage = db.table("api_usage").select("total_tokens_input, total_tokens_output, total_requests").execute()
+        return {
+            "total_db": msg_count.count or 0,
+            "safe_db": safe_db.count or 0,
+            "suspicious_db": suspicious_db.count or 0,
+            "phishing_db": phishing_db.count or 0,
+            "usage_rows": usage.data or [],
+        }
+
+    def _fetch_full_db_stats(self) -> dict:
+        """Collect /stats metrics synchronously (called via asyncio.to_thread)."""
+        db = get_supabase_client()
+        total_msg = db.table("messages").select("id", count="exact").execute()
+        safe_msg = db.table("messages").select("id", count="exact").eq("classification", "SAFE").execute()
+        suspicious_msg = db.table("messages").select("id", count="exact").eq("classification", "SUSPICIOUS").execute()
+        phishing_msg = db.table("messages").select("id", count="exact").eq("classification", "PHISHING").execute()
+        triage_count = db.table("detection_logs").select("id", count="exact").eq("stage", "triage").execute()
+        ss_count = db.table("detection_logs").select("id", count="exact").eq("stage", "single_shot").execute()
+        mad_count = db.table("detection_logs").select("id", count="exact").eq("stage", "mad").execute()
+        usage = db.table("api_usage").select("total_tokens_input, total_tokens_output, total_requests").execute()
+        return {
+            "total": total_msg.count or 0,
+            "safe": safe_msg.count or 0,
+            "suspicious": suspicious_msg.count or 0,
+            "phishing": phishing_msg.count or 0,
+            "triage_count": triage_count.count or 0,
+            "single_shot_count": ss_count.count or 0,
+            "mad_count": mad_count.count or 0,
+            "usage_rows": usage.data or [],
+        }
     
     async def set_commands(self):
         """Set bot commands menu"""

@@ -6,10 +6,15 @@ import asyncio
 import sys
 from pathlib import Path
 
+import pytest
+
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent))
 
 from src.config import config
+
+
+pytestmark = [pytest.mark.integration]
 
 
 def print_header(text: str):
@@ -23,84 +28,78 @@ def print_result(name: str, success: bool, message: str = ""):
     print(f"{status} {name}: {message}")
 
 
+@pytest.mark.asyncio
 async def test_telegram():
     """Test Telegram Bot API connection"""
     print_header("Testing Telegram Bot API")
     
-    try:
-        from telegram import Bot
-        
-        bot = Bot(token=config.TELEGRAM_BOT_TOKEN)
-        me = await bot.get_me()
-        
-        print_result("Connection", True, "Connected!")
-        print(f"   Bot Username: @{me.username}")
-        print(f"   Bot Name: {me.first_name}")
-        print(f"   Bot ID: {me.id}")
-        return True
-        
-    except Exception as e:
-        print_result("Connection", False, str(e))
-        return False
+    if not config.TELEGRAM_BOT_TOKEN:
+        pytest.skip("TELEGRAM_BOT_TOKEN not configured")
+
+    from telegram import Bot
+
+    bot = Bot(token=config.TELEGRAM_BOT_TOKEN)
+    me = await bot.get_me()
+
+    print_result("Connection", True, "Connected!")
+    print(f"   Bot Username: @{me.username}")
+    print(f"   Bot Name: {me.first_name}")
+    print(f"   Bot ID: {me.id}")
+    assert me.id is not None
 
 
 def test_deepseek():
     """Test DeepSeek API connection"""
     print_header("Testing DeepSeek API")
     
-    try:
-        from src.llm import deepseek
-        
-        client = deepseek()
-        
-        # Simple test prompt
-        result = client.chat_completion(
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": "Reply with exactly: API connection successful"}
-            ],
-            temperature=0.0,
-            max_tokens=50
-        )
-        
-        print_result("Connection", True, "Connected!")
-        print(f"   Response: {result['content'][:100]}")
-        print(f"   Tokens used: {result['tokens_input']} in, {result['tokens_output']} out")
-        print(f"   Processing time: {result['processing_time_ms']}ms")
-        return True
-        
-    except Exception as e:
-        print_result("Connection", False, str(e))
-        return False
+    if not config.DEEPSEEK_API_KEY and not config.OPENROUTER_API_KEY:
+        pytest.skip("No LLM API key configured")
+
+    from src.llm import deepseek
+
+    client = deepseek()
+
+    # Simple test prompt
+    result = client.chat_completion(
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": "Reply with exactly: API connection successful"}
+        ],
+        temperature=0.0,
+        max_tokens=50
+    )
+
+    print_result("Connection", True, "Connected!")
+    print(f"   Response: {result['content'][:100]}")
+    print(f"   Tokens used: {result['tokens_input']} in, {result['tokens_output']} out")
+    print(f"   Processing time: {result['processing_time_ms']}ms")
+    assert "content" in result
 
 
 def test_supabase():
     """Test Supabase connection"""
     print_header("Testing Supabase Database")
     
-    try:
-        from src.database import db
-        
-        client = db()
-        
-        # Test query - count users (should be 0)
-        result = client.table("users").select("id", count="exact").execute()
-        
-        print_result("Connection", True, "Connected!")
-        print(f"   Users table count: {result.count}")
-        
-        # Test other tables
-        messages_count = client.table("messages").select("id", count="exact").execute()
-        print(f"   Messages table count: {messages_count.count}")
-        
-        url_cache_count = client.table("url_cache").select("id", count="exact").execute()
-        print(f"   URL Cache table count: {url_cache_count.count}")
-        
-        return True
-        
-    except Exception as e:
-        print_result("Connection", False, str(e))
-        return False
+    if not config.SUPABASE_URL or not config.SUPABASE_KEY:
+        pytest.skip("Supabase credentials not configured")
+
+    from src.database import db
+
+    client = db()
+
+    # Test query - count users (should be 0)
+    result = client.table("users").select("id", count="exact").execute()
+
+    print_result("Connection", True, "Connected!")
+    print(f"   Users table count: {result.count}")
+
+    # Test other tables
+    messages_count = client.table("messages").select("id", count="exact").execute()
+    print(f"   Messages table count: {messages_count.count}")
+
+    url_cache_count = client.table("url_cache").select("id", count="exact").execute()
+    print(f"   URL Cache table count: {url_cache_count.count}")
+    assert result is not None
 
 
 def test_virustotal():
@@ -108,8 +107,7 @@ def test_virustotal():
     print_header("Testing VirusTotal API (Optional)")
     
     if not config.VIRUSTOTAL_API_KEY:
-        print("   ⏭️  Skipped (no API key configured)")
-        return None
+        pytest.skip("VIRUSTOTAL_API_KEY not configured")
     
     try:
         import requests
@@ -125,14 +123,12 @@ def test_virustotal():
             data = response.json()
             print(f"   Test domain: google.com")
             print(f"   Reputation: {data.get('data', {}).get('attributes', {}).get('reputation', 'N/A')}")
-            return True
+            assert data.get("data") is not None
         else:
-            print_result("Connection", False, f"Status code: {response.status_code}")
-            return False
+            pytest.fail(f"VirusTotal returned status code: {response.status_code}")
             
     except Exception as e:
-        print_result("Connection", False, str(e))
-        return False
+        pytest.fail(str(e))
 
 
 async def main():

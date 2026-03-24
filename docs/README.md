@@ -420,8 +420,11 @@ Tahap terakhir menggunakan pendekatan **Multi-Agent Debate (MAD)** dan mendukung
 
 | Varian | Agen | Catatan |
 |--------|------|--------|
-| `mad3` | 3 agen (Content/Security/Social) | Lebih ringan, cocok untuk baseline |
-| `mad5` | 5 agen (detector/critic/defender/fact-checker/judge) | Lebih kaya peran, termasuk **judge** |
+| `mad3` | 3 agen (Content/Security/Social) | **Varian utama runtime bot** (dipilih untuk sistem final) |
+| `mad5` | 5 agen (detector/critic/defender/fact-checker/judge) | Varian eksperimen/ablation untuk analisis komparatif skripsi |
+
+> Keputusan implementasi akhir: bot produksi menggunakan `mad3` sebagai default.
+> `mad5` dipertahankan untuk kebutuhan eksperimen dan pembahasan hasil di skripsi.
 
 #### Agen MAD3 (3 Agen Spesialis)
 

@@ -1,0 +1,25 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="shieldGradient" x1="40" y1="24" x2="216" y2="232" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0B3D2E"/>
+      <stop offset="1" stop-color="#116149"/>
+    </linearGradient>
+    <linearGradient id="chatGradient" x1="82" y1="74" x2="174" y2="168" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#EAFBF4"/>
+      <stop offset="1" stop-color="#CDEFE1"/>
+    </linearGradient>
+  </defs>
+
+  <path d="M128 20L216 52V116C216 171.5 180.6 216 128 236C75.4 216 40 171.5 40 116V52L128 20Z" fill="url(#shieldGradient)"/>
+  <path d="M128 34L204 61.8V116C204 165.3 172.7 203.6 128 222.3C83.3 203.6 52 165.3 52 116V61.8L128 34Z" stroke="#8CE0BE" stroke-width="4"/>
+
+  <rect x="78" y="70" width="100" height="72" rx="16" fill="url(#chatGradient)"/>
+  <path d="M108 142L96 166L129 142H108Z" fill="url(#chatGradient)"/>
+
+  <circle cx="106" cy="106" r="8" fill="#116149"/>
+  <circle cx="128" cy="106" r="8" fill="#116149"/>
+  <circle cx="150" cy="106" r="8" fill="#116149"/>
+
+  <path d="M128 154C142.4 154 154 165.6 154 180C154 194.4 142.4 206 128 206C113.6 206 102 194.4 102 180C102 165.6 113.6 154 128 154Z" fill="#0F4E3A"/>
+  <path d="M128 164L131.6 174.4H142.6L133.6 180.8L137 191.2L128 184.8L119 191.2L122.4 180.8L113.4 174.4H124.4L128 164Z" fill="#8CE0BE"/>
+</svg>

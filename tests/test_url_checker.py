@@ -6,6 +6,8 @@ import asyncio
 import sys
 from pathlib import Path
 
+import pytest
+
 # Add project root to path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
@@ -14,6 +16,10 @@ from src.detection.url_checker import URLSecurityChecker, get_url_checker, check
 from src.config import Config
 
 
+pytestmark = [pytest.mark.integration]
+
+
+@pytest.mark.asyncio
 async def test_virustotal_checker():
     """Test VirusTotal URL checker"""
     print("=" * 60)

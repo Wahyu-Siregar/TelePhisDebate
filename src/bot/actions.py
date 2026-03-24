@@ -5,6 +5,7 @@ Handles bot responses: warn, notify admin, flag for review
 
 import asyncio
 import html
+import logging
 import re
 from datetime import datetime
 from telegram import Bot, Message
@@ -12,6 +13,8 @@ from telegram.constants import ParseMode
 from telegram.error import TelegramError
 
 from src.detection.pipeline import DetectionResult
+
+logger = logging.getLogger(__name__)
 
 # Friendly stage names
 STAGE_DISPLAY = {
@@ -187,10 +190,7 @@ Confidence: {confidence:.0%}""",
             action_result["warning_sent"] = True
             
             if self.admin_chat_id:
-                if message.chat.username:
-                    message_link = f"https://t.me/{message.chat.username}/{message.message_id}"
-                else:
-                    message_link = f"https://t.me/c/{str(message.chat_id)[4:]}/{message.message_id}"
+                message_link = self._build_message_link(message) or "N/A (chat link unavailable)"
                 
                 group_name = message.chat.title or "Private Chat"
                 admin_text = self.TEMPLATES["admin_warning_brief"].format(
@@ -271,10 +271,7 @@ Confidence: {confidence:.0%}""",
             stage_details = self._format_stage_details(result)
             
             # Build message link
-            if message.chat.username:
-                message_link = f"https://t.me/{message.chat.username}/{message.message_id}"
-            else:
-                message_link = f"https://t.me/c/{str(message.chat_id)[4:]}/{message.message_id}"
+            message_link = self._build_message_link(message) or "N/A (chat link unavailable)"
             
             try:
                 notification_text = self.TEMPLATES["admin_notification"].format(
@@ -375,5 +372,18 @@ Confidence: {confidence:.0%}""",
         await asyncio.sleep(delay_seconds)
         try:
             await message.delete()
-        except TelegramError:
-            pass  # Message might already be deleted
+        except TelegramError as e:
+            logger.debug("Auto-delete warning failed (already deleted or no permission): %s", e)
+
+    def _build_message_link(self, message: Message) -> str | None:
+        """Build the best-effort Telegram deep-link for a message."""
+        if message.chat.username:
+            return f"https://t.me/{message.chat.username}/{message.message_id}"
+
+        chat_id = str(message.chat_id)
+        if chat_id.startswith("-100") and message.chat.type in {"supergroup", "channel"}:
+            # Telegram internal deep-link format for non-public supergroups/channels.
+            internal_id = chat_id[4:]
+            return f"https://t.me/c/{internal_id}/{message.message_id}"
+
+        return None

@@ -7,6 +7,8 @@ import sys
 import os
 from pathlib import Path
 
+import pytest
+
 # Add project root to path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
@@ -28,6 +30,10 @@ spec.loader.exec_module(url_checker_module)
 URLSecurityChecker = url_checker_module.URLSecurityChecker
 
 
+pytestmark = [pytest.mark.integration]
+
+
+@pytest.mark.asyncio
 async def test_url_checker():
     """Test URL checker standalone"""
     print("=" * 60)

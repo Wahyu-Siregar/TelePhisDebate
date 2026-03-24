@@ -72,6 +72,7 @@ class VotingAggregator:
     # Decision thresholds
     PHISHING_THRESHOLD = 0.70
     LEGITIMATE_THRESHOLD = 0.35
+    UNANIMOUS_MIN_CONFIDENCE = 0.80
     
     def __init__(self, custom_weights: dict | None = None):
         """
@@ -99,7 +100,8 @@ class VotingAggregator:
         # Unanimous agreement
         if len(set(stances)) == 1:
             avg_confidence = sum(r.confidence for r in responses) / len(responses)
-            return True, stances[0], avg_confidence
+            if avg_confidence >= self.UNANIMOUS_MIN_CONFIDENCE:
+                return True, stances[0], avg_confidence
         
         # Check for strong majority (2 out of 3 with high confidence)
         stance_counts = {}

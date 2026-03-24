@@ -3,6 +3,7 @@ Message Handler Module
 Processes incoming Telegram messages through the detection pipeline
 """
 
+import asyncio
 import logging
 from datetime import datetime, date
 from telegram import Update, Message
@@ -142,8 +143,8 @@ class MessageHandler:
                     sender_info["original_sender"] = message.forward_origin.sender_user.username or message.forward_origin.sender_user.first_name
                 elif hasattr(message.forward_origin, 'sender_user_name'):
                     sender_info["original_sender"] = message.forward_origin.sender_user_name
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug("Failed to extract forward origin details for message_id=%s: %s", message.message_id, e)
 
         # Check for username impersonation: username dipakai user_id berbeda dari yang terdaftar
         if self.enable_logging and message.from_user.username:
@@ -181,8 +182,13 @@ class MessageHandler:
                             "Recent suspicious context detected for user_id=%s (%.0fs ago)",
                             message.from_user.id, age_seconds
                         )
-                except Exception:
-                    pass
+                except Exception as e:
+                    logger.debug(
+                        "Failed to parse suspicious context timestamp for user_id=%s, value=%s: %s",
+                        message.from_user.id,
+                        last_sus_at_str,
+                        e,
+                    )
         
         # Ensure user is registered in the database and get internal users.id
         db_user_id = None
@@ -196,13 +202,14 @@ class MessageHandler:
         url_checks = await self._check_urls_async(text_content)
         
         # Run detection pipeline
-        result = self.pipeline.process_message(
-            message_text=text_content,
-            message_id=str(message.message_id),
-            message_timestamp=message.date,
-            sender_info=sender_info,
-            baseline_metrics=baseline_metrics,
-            url_checks=url_checks  # Pass pre-computed URL checks
+        result = await asyncio.to_thread(
+            self.pipeline.process_message,
+            text_content,
+            str(message.message_id),
+            message.date,
+            sender_info,
+            baseline_metrics,
+            url_checks,
         )
         
         # Update statistics
@@ -261,12 +268,13 @@ class MessageHandler:
         try:
             response = self.db.table("users").select(
                 "baseline_metrics"
-            ).eq("telegram_user_id", user_id).execute()
+            ).eq("telegram_user_id", user_id)
+            response = await asyncio.to_thread(response.execute)
             
             if response.data and len(response.data) > 0:
                 return response.data[0].get("baseline_metrics")
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("Failed to fetch baseline for user_id=%s: %s", user_id, e)
         
         return None
 
@@ -283,7 +291,8 @@ class MessageHandler:
         try:
             row = self.db.table("users").select("baseline_metrics").eq(
                 "telegram_user_id", user_id
-            ).execute()
+            )
+            row = await asyncio.to_thread(row.execute)
             if not (row.data and len(row.data) > 0):
                 return
             baseline = dict(row.data[0].get("baseline_metrics") or {})
@@ -293,10 +302,11 @@ class MessageHandler:
             baseline["last_suspicious_message_at"] = datetime.now().isoformat()
             baseline["last_suspicious_flags"] = triggered_flags
             baseline["last_suspicious_classification"] = result.classification
-            self.db.table("users").update({
+            update_query = self.db.table("users").update({
                 "baseline_metrics": baseline,
                 "baseline_updated_at": datetime.now().isoformat()
-            }).eq("telegram_user_id", user_id).execute()
+            }).eq("telegram_user_id", user_id)
+            await asyncio.to_thread(update_query.execute)
             logger.debug(
                 "Suspicious context saved for user_id=%s: classification=%s flags=%s",
                 user_id, result.classification, triggered_flags
@@ -318,15 +328,17 @@ class MessageHandler:
         try:
             row = self.db.table("users").select("baseline_metrics").eq(
                 "telegram_user_id", user_id
-            ).execute()
+            )
+            row = await asyncio.to_thread(row.execute)
             if not (row.data and len(row.data) > 0):
                 return
             baseline = dict(row.data[0].get("baseline_metrics") or {})
             baseline["money_request_count"] = baseline.get("money_request_count", 0) + 1
-            self.db.table("users").update({
+            update_query = self.db.table("users").update({
                 "baseline_metrics": baseline,
                 "baseline_updated_at": datetime.now().isoformat()
-            }).eq("telegram_user_id", user_id).execute()
+            }).eq("telegram_user_id", user_id)
+            await asyncio.to_thread(update_query.execute)
             logger.info(
                 "Baseline updated: money_request_count=%s untuk user_id=%s",
                 baseline["money_request_count"], user_id
@@ -356,7 +368,8 @@ class MessageHandler:
                 "username", user.username
             ).neq(
                 "telegram_user_id", user.id
-            ).limit(1).execute()
+            ).limit(1)
+            result = await asyncio.to_thread(result.execute)
             return bool(result.data and len(result.data) > 0)
         except Exception as e:
             logger.debug("Username impersonation check failed: %s", e)
@@ -383,7 +396,8 @@ class MessageHandler:
             # Check if user exists
             existing = self.db.table("users").select("id, joined_group_at").eq(
                 "telegram_user_id", telegram_user_id
-            ).execute()
+            )
+            existing = await asyncio.to_thread(existing.execute)
             
             now_iso = (observed_at or datetime.now()).isoformat()
             
@@ -399,14 +413,15 @@ class MessageHandler:
                 if not user_row.get("joined_group_at"):
                     update_payload["joined_group_at"] = now_iso
                 
-                self.db.table("users").update(update_payload).eq(
+                update_query = self.db.table("users").update(update_payload).eq(
                     "telegram_user_id", telegram_user_id
-                ).execute()
+                )
+                await asyncio.to_thread(update_query.execute)
                 
                 return int(user_row["id"]) if user_row.get("id") is not None else None
             else:
                 # Insert new user
-                created = self.db.table("users").insert({
+                created_query = self.db.table("users").insert({
                     "telegram_user_id": telegram_user_id,
                     "username": username,
                     "first_name": first_name,
@@ -415,7 +430,8 @@ class MessageHandler:
                     "baseline_metrics": {},
                     "baseline_updated_at": now_iso,
                     "updated_at": now_iso
-                }).execute()
+                })
+                created = await asyncio.to_thread(created_query.execute)
                 logger.info(f"New user registered: @{username} ({telegram_user_id})")
                 
                 if created.data and len(created.data) > 0:
@@ -425,7 +441,8 @@ class MessageHandler:
                 # Fallback fetch for clients that don't return inserted rows
                 fallback = self.db.table("users").select("id").eq(
                     "telegram_user_id", telegram_user_id
-                ).execute()
+                )
+                fallback = await asyncio.to_thread(fallback.execute)
                 if fallback.data and len(fallback.data) > 0:
                     return int(fallback.data[0]["id"])
                 
@@ -509,7 +526,9 @@ class MessageHandler:
             }
             
             # Insert message and get the ID
-            msg_result = self.db.table("messages").insert(message_data).execute()
+            msg_result = await asyncio.to_thread(
+                self.db.table("messages").insert(message_data).execute
+            )
             
             # Get the inserted message ID for detection_logs foreign key
             inserted_msg_id = msg_result.data[0]["id"] if msg_result.data else None
@@ -528,7 +547,9 @@ class MessageHandler:
                 "processing_time_ms": result.total_processing_time_ms
             }
             
-            self.db.table("detection_logs").insert(log_data).execute()
+            await asyncio.to_thread(
+                self.db.table("detection_logs").insert(log_data).execute
+            )
             
             # Log to api_usage table for cost tracking
             if result.total_tokens_used > 0:
@@ -536,7 +557,7 @@ class MessageHandler:
             
         except Exception as e:
             # Log error but don't fail the handler
-            print(f"[DB Error] Could not log detection: {e}")
+            logger.warning("[DB Error] Could not log detection: %s", e)
     
     async def _log_api_usage(self, result: DetectionResult):
         """
@@ -567,7 +588,8 @@ class MessageHandler:
             # Try to update existing record for today
             existing = self.db.table("api_usage").select("*").eq(
                 "date", today
-            ).execute()
+            )
+            existing = await asyncio.to_thread(existing.execute)
             
             if existing.data and len(existing.data) > 0:
                 # Update existing record for today
@@ -592,7 +614,8 @@ class MessageHandler:
                     update_data["mad_requests"] = (record.get("mad_requests", 0) or 0) + 1
                     update_data["mad_tokens"] = (record.get("mad_tokens", 0) or 0) + tokens_in + tokens_out
                 
-                self.db.table("api_usage").update(update_data).eq("date", today).execute()
+                update_query = self.db.table("api_usage").update(update_data).eq("date", today)
+                await asyncio.to_thread(update_query.execute)
             else:
                 # Insert new record for today
                 insert_data = {
@@ -607,9 +630,9 @@ class MessageHandler:
                     "mad_requests": 1 if stage == "mad" else 0,
                     "mad_tokens": (tokens_in + tokens_out) if stage == "mad" else 0
                 }
-                self.db.table("api_usage").insert(insert_data).execute()
+                await asyncio.to_thread(self.db.table("api_usage").insert(insert_data).execute)
         except Exception as e:
-            print(f"[DB Error] Could not log API usage: {e}")
+            logger.warning("[DB Error] Could not log API usage: %s", e)
     
     def get_stats(self) -> dict:
         """Get current handler statistics"""

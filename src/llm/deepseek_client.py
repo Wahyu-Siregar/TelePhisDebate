@@ -20,7 +20,8 @@ class DeepSeekClient:
         
         self.client = OpenAI(
             api_key=config.DEEPSEEK_API_KEY,
-            base_url=config.DEEPSEEK_BASE_URL
+            base_url=config.DEEPSEEK_BASE_URL,
+            timeout=config.DEEPSEEK_TIMEOUT_SECONDS,
         )
 
         # Token usage tracking
@@ -58,6 +59,7 @@ class DeepSeekClient:
             "messages": messages,
             "temperature": temperature,
             "max_tokens": max_tokens,
+            "timeout": config.DEEPSEEK_TIMEOUT_SECONDS,
         }
         
         if json_mode:

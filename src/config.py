@@ -17,8 +17,9 @@ class Config:
     # LLM provider
     # Supported: deepseek, openrouter (default)
     LLM_PROVIDER: str = os.getenv("LLM_PROVIDER", "openrouter")
-    # MAD variant used by bot pipeline
-    # Supported: mad3 (default), mad5
+    # MAD variant used by bot pipeline.
+    # Thesis decision: mad3 is the production default.
+    # mad5 is kept for controlled experiments/ablation only.
     MAD_MODE: str = os.getenv("MAD_MODE", "mad3").strip().lower()
 
     # Telegram
@@ -28,6 +29,10 @@ class Config:
     # DeepSeek API
     DEEPSEEK_API_KEY: str = os.getenv("DEEPSEEK_API_KEY", "")
     DEEPSEEK_BASE_URL: str = os.getenv("DEEPSEEK_BASE_URL", "https://api.deepseek.com")
+    try:
+        DEEPSEEK_TIMEOUT_SECONDS: float = float(os.getenv("DEEPSEEK_TIMEOUT_SECONDS", "30"))
+    except ValueError:
+        DEEPSEEK_TIMEOUT_SECONDS = 30.0
 
     # OpenRouter (default provider)
     OPENROUTER_API_KEY: str = os.getenv("OPENROUTER_API_KEY", "")

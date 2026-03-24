@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">TelePhisDebate Monochrome Icon</title>
+  <desc id="desc">Monochrome shield and chat icon for TelePhisDebate.</desc>
+  <defs>
+    <linearGradient id="mono" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0A0A0A"/>
+      <stop offset="100%" stop-color="#3A3A3A"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="256" height="256" rx="40" fill="#F3F3F3"/>
+  <path d="M128 26L52 56V116c0 50 31 93 76 114 45-21 76-64 76-114V56l-76-30z" fill="url(#mono)"/>
+
+  <rect x="73" y="82" width="110" height="64" rx="14" fill="#FAFAFA"/>
+  <path d="M103 146h50l-20 22h-30z" fill="#FAFAFA"/>
+
+  <circle cx="102" cy="114" r="8" fill="#1A1A1A"/>
+  <circle cx="128" cy="114" r="8" fill="#1A1A1A"/>
+  <circle cx="154" cy="114" r="8" fill="#1A1A1A"/>
+
+  <path d="M128 42L68 66v48c0 39 22 72 60 91 38-19 60-52 60-91V66l-60-24z" fill="none" stroke="#D7D7D7" stroke-width="3"/>
+</svg>
